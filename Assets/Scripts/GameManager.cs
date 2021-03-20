@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 /*
 NOTES:
@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
 
     public ColorOptions colorOptions;
 
+    private AudioSource p1AudioSource;
+    private AudioSource p2AudioSource;
+
     // Material refs
     private Material colorPromptMat;
     //private Material p1ColorMat;
@@ -48,8 +51,8 @@ public class GameManager : MonoBehaviour
     public int p2Score;
 
     // Events
-    public delegate void ColorPromptedDelegate();
-    public static ColorPromptedDelegate OnColorPrompted;
+    public delegate void PlayerInputCorrect(ColorObject player);
+    public event PlayerInputCorrect OnPlayerInputCorrect;
 
     private void Awake()
     {
@@ -57,6 +60,13 @@ public class GameManager : MonoBehaviour
         colorPromptMat = colorPromptGO.GetComponent<MeshRenderer>().material;
         //p1ColorMat = p1ColorInputGO.GetComponent <MeshRenderer>().material;
         //p2ColorMat = p2ColorInputGO.GetComponent<MeshRenderer>().material;
+
+        // Create P1 and P2 Audio Sources.
+        p1AudioSource = p1ColorInputGO.AddComponent<AudioSource>();
+        p1AudioSource.panStereo = -0.6f;
+
+        p2AudioSource = p2ColorInputGO.AddComponent<AudioSource>();
+        p2AudioSource.panStereo = 0.6f;
     }
 
     // Start is called before the first frame update
@@ -71,21 +81,37 @@ public class GameManager : MonoBehaviour
         if (PlayerController.Instance.DisplayRandomColor() != ColorOptions.invalid)
         {
             UpdateColor(colorPromptGO);
+            AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[0]);
         }
 
 
         if (PlayerController.Instance.GetPlayer1Input() != ColorOptions.invalid)
         {
-
             if (CompareInputToPrompt(PlayerController.Instance.GetPlayer1Input()))
+            {
+                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[2], p1AudioSource);
                 print("P1 input correct!");
+            }
+            else
+            {
+                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[1], p1AudioSource);
+            }
+
         }
 
 
         if (PlayerController.Instance.GetPlayer2Input() != ColorOptions.invalid)
         {
             if (CompareInputToPrompt(PlayerController.Instance.GetPlayer2Input()))
+            {
+                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[2], p2AudioSource);
                 print("P2 input correct!");
+            }
+            else
+            {
+                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[1], p2AudioSource);
+            }
+
         }
 
     }
@@ -104,6 +130,7 @@ public class GameManager : MonoBehaviour
             ColorObject colorObject = colorGO.GetComponent<ColorObject>();
             newColorOption = RandomizeColor();
             colorObject.currentColor = newColorOption;
+            colorObject.LightColorPrompt();
         }
 
         Color newColor = Color.black;  
@@ -133,7 +160,7 @@ public class GameManager : MonoBehaviour
 
     public ColorOptions RandomizeColor()
     {
-        int rndInt = Random.Range(1, 5);
+        int rndInt = UnityEngine.Random.Range(1, 5);
 
         ColorOptions rndColor = (ColorOptions)rndInt;
 

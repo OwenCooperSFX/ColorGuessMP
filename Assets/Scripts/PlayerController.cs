@@ -30,16 +30,6 @@ public class PlayerController : ColorObject
         lastColorOrder = colorAssignments;
     }
 
-    private void OnEnable()
-    {
-        GameManager.OnColorPrompted += HandleColorPrompted;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnColorPrompted -= HandleColorPrompted;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -58,21 +48,25 @@ public class PlayerController : ColorObject
         if (Input.GetKeyDown(KeyCode.W))
         {
             // Do top color
+            //OnP1Input();
             return GetColor(p1_controls[0]);
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             // Do left color
+            //OnP1Input();
             return GetColor(p1_controls[1]);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             // Do bottom color
+            //OnP1Input();
             return GetColor(p1_controls[3]);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
             // Do right color
+            //OnP1Input();
             return GetColor(p1_controls[2]);
         }
 
@@ -85,21 +79,25 @@ public class PlayerController : ColorObject
         if (Input.GetKeyDown(KeyCode.I))
         {
             // Do top color
+            //OnP2Input();
             return GetColor(p2_controls[0]);
         }
         if (Input.GetKeyDown(KeyCode.J))
         {
             // Do left color
+            //OnP2Input();
             return GetColor(p2_controls[1]);
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
             // Do bottom color
+            //OnP2Input();
             return GetColor(p2_controls[3]);
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
             // Do right color
+            //OnP2Input();
             return GetColor(p2_controls[2]);
         }
 
@@ -119,7 +117,12 @@ public class PlayerController : ColorObject
         return ColorOptions.invalid;
     }
 
-    void HandleColorPrompted()
+    public void OnP1Input()
+    {
+
+    }
+
+    public void OnP2Input()
     {
 
     }
@@ -204,6 +207,8 @@ public class PlayerController : ColorObject
             playerControlInput.currentColor = ColorOptions.yellow;
         if (color == Color.green)
             playerControlInput.currentColor = ColorOptions.green;
+
+        playerControlInput.FlashButtonLight();
 
         return playerControlInput.currentColor;
     }
