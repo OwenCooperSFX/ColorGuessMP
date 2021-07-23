@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
-using System;
 
 /*
 NOTES:
+    TODO:
+    - Get event system working                      DONE
+
     TODO:
     - automate top prompt random color              
     - give players color control layout             DONE
@@ -51,8 +53,14 @@ public class GameManager : MonoBehaviour
     public int p2Score;
 
     // Events
-    public delegate void PlayerInputCorrect(ColorObject player);
+    public delegate void PromptUpdated();
+    public event PromptUpdated OnPromptUpdated;
+
+    public delegate void PlayerInputCorrect(GameObject playerInputGO);
     public event PlayerInputCorrect OnPlayerInputCorrect;
+
+    public delegate void PlayerInputIncorrect(GameObject playerInputGO);
+    public event PlayerInputIncorrect OnPlayerInputIncorrect;
 
     private void Awake()
     {
@@ -81,7 +89,9 @@ public class GameManager : MonoBehaviour
         if (PlayerController.Instance.DisplayRandomColor() != ColorOptions.invalid)
         {
             UpdateColor(colorPromptGO);
-            AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[0]);
+
+            OnPromptUpdated?.Invoke();
+            Debug.Log("Call Event: " + OnPromptUpdated + ".");
         }
 
 
@@ -89,12 +99,13 @@ public class GameManager : MonoBehaviour
         {
             if (CompareInputToPrompt(PlayerController.Instance.GetPlayer1Input()))
             {
-                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[2], p1AudioSource);
-                print("P1 input correct!");
+                OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
+                Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
             }
             else
             {
-                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[1], p1AudioSource);
+                OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
+                Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p1ColorInputGO.name + ").");
             }
 
         }
@@ -104,12 +115,13 @@ public class GameManager : MonoBehaviour
         {
             if (CompareInputToPrompt(PlayerController.Instance.GetPlayer2Input()))
             {
-                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[2], p2AudioSource);
-                print("P2 input correct!");
+                OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
+                Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
             }
             else
             {
-                AudioManager.Instance.PlayInputSound(AudioManager.Instance.audioClips[1], p2AudioSource);
+                OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
+                Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p2ColorInputGO.name + ").");
             }
 
         }
