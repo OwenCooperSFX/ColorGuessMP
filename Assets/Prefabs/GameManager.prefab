@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorOptions: 0
-  colorPromptGO: {fileID: 0}
-  p1ColorInputGO: {fileID: 0}
-  p2ColorInputGO: {fileID: 0}
+  colorPromptGO: {fileID: 2153661340831200079, guid: 55939db418e244f48bc64cc7d77b9c4d, type: 3}
+  p1ColorInputGO: {fileID: 9053178632480237326, guid: cf48dd80215cff5408efadb046810574, type: 3}
+  p2ColorInputGO: {fileID: 667952140657861526, guid: 119d6c0c49558ee4795ceb28b0e0451a, type: 3}
   p1Score: 0
   p2Score: 0
+  timeToNextColorPrompt: 3

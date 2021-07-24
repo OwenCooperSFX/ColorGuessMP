@@ -36,11 +36,6 @@ public class GameManager : MonoBehaviour
     private AudioSource p1AudioSource;
     private AudioSource p2AudioSource;
 
-    // Material refs
-    private Material colorPromptMat;
-    //private Material p1ColorMat;
-    //private Material p2ColorMat;
-
     [Header("GameObjects")]
     // GameObject refs
     public GameObject colorPromptGO;
@@ -52,9 +47,18 @@ public class GameManager : MonoBehaviour
     public int p1Score;
     public int p2Score;
 
+    private float timer = 0;
+    [SerializeField] private int timeToNextColorPrompt = 3;
+
     // Events
     public delegate void PromptUpdated();
     public event PromptUpdated OnPromptUpdated;
+
+    public delegate void P1Input();
+    public event P1Input OnP1Input;
+
+    public delegate void P2Input();
+    public event P2Input OnP2Input;
 
     public delegate void PlayerInputCorrect(GameObject playerInputGO);
     public event PlayerInputCorrect OnPlayerInputCorrect;
@@ -62,12 +66,19 @@ public class GameManager : MonoBehaviour
     public delegate void PlayerInputIncorrect(GameObject playerInputGO);
     public event PlayerInputIncorrect OnPlayerInputIncorrect;
 
+    private void OnEnable()
+    {
+        // TODO: setup event subscribers
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     private void Awake()
     {
         Init();
-        colorPromptMat = colorPromptGO.GetComponent<MeshRenderer>().material;
-        //p1ColorMat = p1ColorInputGO.GetComponent <MeshRenderer>().material;
-        //p2ColorMat = p2ColorInputGO.GetComponent<MeshRenderer>().material;
 
         // Create P1 and P2 Audio Sources.
         p1AudioSource = p1ColorInputGO.AddComponent<AudioSource>();
@@ -86,6 +97,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (timer < timeToNextColorPrompt)
+            timer++;
+
         if (PlayerController.Instance.DisplayRandomColor() != ColorOptions.invalid)
         {
             UpdateColor(colorPromptGO);
@@ -99,6 +113,7 @@ public class GameManager : MonoBehaviour
         {
             if (CompareInputToPrompt(PlayerController.Instance.GetPlayer1Input()))
             {
+                // Player 1 is correct
                 OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
                 Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
             }
@@ -115,6 +130,7 @@ public class GameManager : MonoBehaviour
         {
             if (CompareInputToPrompt(PlayerController.Instance.GetPlayer2Input()))
             {
+                // Player 2 is correct
                 OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
                 Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
             }
@@ -202,5 +218,15 @@ public class GameManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    int UpdateScore(GameObject playerGO)
+    {
+        return 0;
+    }
+
+    void GoToNextPrompt()
+    {
+        
     }
 }
