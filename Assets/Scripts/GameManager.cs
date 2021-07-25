@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 
 /*
 NOTES:
@@ -43,22 +44,27 @@ public class GameManager : MonoBehaviour
     public GameObject p2ColorInputGO;
 
     [Header("Gameplay")]
-    // Score
-    public int p1Score;
-    public int p2Score;
+    [SerializeField] private float timeBetweenRounds = 3f;
+    private float nextRoundTimer = 0f;
 
-    private float timer = 0;
-    [SerializeField] private int timeToNextColorPrompt = 3;
+    [SerializeField] private float roundTimeLimit = 10f;
+    private float roundTimer = 0f;
+
+    [Header("Scoring: Player 1")]
+    [SerializeField] private TextMeshProUGUI p1ScoreText;
+    public int p1Score = 0000;
+    public int p1Attempts = 0;
+    public float p1CorrectAnswerTime = 0f;
+
+    [Header("Scoring: Player 2")]
+    [SerializeField] private TextMeshProUGUI p2ScoreText;
+    public int p2Score = 0000;
+    public int p2Attempts = 0;
+    public float p2CorrectAnswerTime = 0f;
 
     // Events
     public delegate void PromptUpdated();
     public event PromptUpdated OnPromptUpdated;
-
-    public delegate void P1Input();
-    public event P1Input OnP1Input;
-
-    public delegate void P2Input();
-    public event P2Input OnP2Input;
 
     public delegate void PlayerInputCorrect(GameObject playerInputGO);
     public event PlayerInputCorrect OnPlayerInputCorrect;
@@ -69,11 +75,14 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         // TODO: setup event subscribers
+        //PlayerController.Instance.OnP1Input += HandleP1Input;
+        //PlayerController.Instance.OnP2Input += HandleP2Input;
     }
 
     private void OnDisable()
     {
-        
+        //PlayerController.Instance.OnP1Input -= HandleP1Input;
+        //PlayerController.Instance.OnP2Input -= HandleP2Input;
     }
 
     private void Awake()
@@ -86,6 +95,14 @@ public class GameManager : MonoBehaviour
 
         p2AudioSource = p2ColorInputGO.AddComponent<AudioSource>();
         p2AudioSource.panStereo = 0.6f;
+
+        // Set score texts
+        p1ScoreText.text = p1Score.ToString();
+        p2ScoreText.text = p2Score.ToString();
+
+        // Clear timers
+        roundTimer = roundTimeLimit;
+        nextRoundTimer = timeBetweenRounds;
     }
 
     // Start is called before the first frame update
@@ -97,21 +114,20 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timer < timeToNextColorPrompt)
-            timer++;
+        if (nextRoundTimer < timeBetweenRounds)
+            nextRoundTimer++;
+
+        if (roundTimer < roundTimeLimit)
+            roundTimer++;
 
         if (PlayerController.Instance.DisplayRandomColor() != ColorOptions.invalid)
         {
-            UpdateColor(colorPromptGO);
-
-            OnPromptUpdated?.Invoke();
-            Debug.Log("Call Event: " + OnPromptUpdated + ".");
+            StartNewRound();
         }
-
 
         if (PlayerController.Instance.GetPlayer1Input() != ColorOptions.invalid)
         {
-            if (CompareInputToPrompt(PlayerController.Instance.GetPlayer1Input()))
+            if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
             {
                 // Player 1 is correct
                 OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
@@ -119,16 +135,16 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                // Player 1 is wrong
                 OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
                 Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p1ColorInputGO.name + ").");
             }
-
         }
 
 
         if (PlayerController.Instance.GetPlayer2Input() != ColorOptions.invalid)
         {
-            if (CompareInputToPrompt(PlayerController.Instance.GetPlayer2Input()))
+            if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
             {
                 // Player 2 is correct
                 OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
@@ -136,12 +152,11 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                // Player 2 is wrong
                 OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
                 Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p2ColorInputGO.name + ").");
             }
-
         }
-
     }
 
     public void UpdateColor(GameObject colorGO)
@@ -206,27 +221,52 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    bool  CompareInputToPrompt(ColorOptions input)
+    bool  InputEqualsPrompt(ColorOptions input)
     {
         ColorOptions promptColor = colorPromptGO.GetComponent<ColorObject>().currentColor;
 
         if (input == promptColor)
-        {
             return true;
-        }
 
-        return false;
+        else return false;
     }
 
-    int UpdateScore(GameObject playerGO)
+    int UpdatePlayerScore(int inPlayerScore, TextMeshProUGUI scoreText)
     {
-        return 0;
+        int outPlayerScore = inPlayerScore + DeltaScore();
+
+        scoreText.text = outPlayerScore.ToString();
+
+        return outPlayerScore;
+    }
+
+    int DeltaScore(float time = 0.1f, int attempts = 1)
+    {
+        int deltaScore = 100 * (attempts / (int)time);
+
+        return deltaScore;
     }
 
     void GoToNextPrompt()
     {
         
+    }
+
+    void HandlePlayerCorrect()
+    {
+
+    }
+
+    void StartNewRound()
+    {
+        roundTimer = 0;
+
+        UpdateColor(colorPromptGO);
+
+        OnPromptUpdated?.Invoke();
+        Debug.Log("Call Event: " + OnPromptUpdated + ".");
     }
 }

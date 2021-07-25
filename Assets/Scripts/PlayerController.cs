@@ -16,16 +16,21 @@ public class PlayerController : ColorObject
 
     public List<Color> colorAssignments;
 
+    // Events
+    public delegate void P1Input();
+    public event P1Input OnP1Input;
+
+    public delegate void P2Input();
+    public event P2Input OnP2Input;
+
     private void OnEnable()
     {
-        GameManager.Instance.OnP1Input += OnP1Input;
-        GameManager.Instance.OnP2Input += OnP2Input;
+
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnP1Input -= OnP1Input;
-        GameManager.Instance.OnP2Input -= OnP2Input;
+
     }
 
     private void Awake()
@@ -60,25 +65,25 @@ public class PlayerController : ColorObject
         if (Input.GetKeyDown(KeyCode.W))
         {
             // Do top color
-            OnP1Input();
+            AnnounceP1Input();
             return GetColor(p1_controls[0]);
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             // Do left color
-            OnP1Input();
+            AnnounceP1Input();
             return GetColor(p1_controls[1]);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             // Do bottom color
-            OnP1Input();
+            AnnounceP1Input();
             return GetColor(p1_controls[3]);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
             // Do right color
-            OnP1Input();
+            AnnounceP1Input();
             return GetColor(p1_controls[2]);
         }
 
@@ -91,25 +96,25 @@ public class PlayerController : ColorObject
         if (Input.GetKeyDown(KeyCode.I))
         {
             // Do top color
-            OnP2Input();
+            AnnounceP2Input();
             return GetColor(p2_controls[0]);
         }
         if (Input.GetKeyDown(KeyCode.J))
         {
             // Do left color
-            OnP2Input();
+            AnnounceP2Input();
             return GetColor(p2_controls[1]);
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
             // Do bottom color
-            OnP2Input();
+            AnnounceP2Input();
             return GetColor(p2_controls[3]);
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
             // Do right color
-            OnP2Input();
+            AnnounceP2Input();
             return GetColor(p2_controls[2]);
         }
 
@@ -129,14 +134,14 @@ public class PlayerController : ColorObject
         return ColorOptions.invalid;
     }
 
-    public void OnP1Input()
+    public void AnnounceP1Input()
     {
-
+        OnP1Input?.Invoke();
     }
 
-    public void OnP2Input()
+    public void AnnounceP2Input()
     {
-
+        OnP2Input?.Invoke();
     }
 
     void Init()
