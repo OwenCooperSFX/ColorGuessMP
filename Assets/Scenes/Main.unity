@@ -1241,6 +1241,14 @@ PrefabInstance:
       propertyPath: p2ScoreText
       value: 
       objectReference: {fileID: 707535875}
+    - target: {fileID: 1153374797972718956, guid: 6b788e737563dc74c96a758c3b4f912c, type: 3}
+      propertyPath: roundTimeLimit
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1153374797972718956, guid: 6b788e737563dc74c96a758c3b4f912c, type: 3}
+      propertyPath: timeBetweenRounds
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1153374797972718957, guid: 6b788e737563dc74c96a758c3b4f912c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

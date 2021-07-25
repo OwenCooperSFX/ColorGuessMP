@@ -59,6 +59,16 @@ public class PlayerController : ColorObject
 
     }
 
+    public ColorOptions InitialSpaceInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            return DisplayRandomColor();
+        }
+
+        else return ColorOptions.invalid;
+    }
+
     public ColorOptions GetPlayer1Input()
     {
         // Player 1 -- WASD
@@ -123,15 +133,10 @@ public class PlayerController : ColorObject
 
     public ColorOptions DisplayRandomColor()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AssignControlColors(p1_controls);
-            AssignControlColors(p2_controls);
+        AssignControlColors(p1_controls);
+        AssignControlColors(p2_controls);
 
-            return ColorOptions.random;
-        }
-        
-        return ColorOptions.invalid;
+        return ColorOptions.random;
     }
 
     public void AnnounceP1Input()

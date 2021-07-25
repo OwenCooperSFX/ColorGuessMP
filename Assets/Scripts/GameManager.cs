@@ -45,10 +45,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Gameplay")]
     [SerializeField] private float timeBetweenRounds = 3f;
-    private float nextRoundTimer = 0f;
+    [SerializeField] private float nextRoundTimer = 0f;
 
     [SerializeField] private float roundTimeLimit = 10f;
-    private float roundTimer = 0f;
+    [SerializeField] private float roundTimer = 0f;
+
+    private bool isBetweenRounds = false;
 
     [Header("Scoring: Player 1")]
     [SerializeField] private TextMeshProUGUI p1ScoreText;
@@ -77,12 +79,16 @@ public class GameManager : MonoBehaviour
         // TODO: setup event subscribers
         //PlayerController.Instance.OnP1Input += HandleP1Input;
         //PlayerController.Instance.OnP2Input += HandleP2Input;
+
+        OnPlayerInputCorrect += HandlePlayerCorrect;
     }
 
     private void OnDisable()
     {
         //PlayerController.Instance.OnP1Input -= HandleP1Input;
         //PlayerController.Instance.OnP2Input -= HandleP2Input;
+
+        OnPlayerInputCorrect -= HandlePlayerCorrect;
     }
 
     private void Awake()
@@ -114,13 +120,23 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (nextRoundTimer < timeBetweenRounds)
-            nextRoundTimer++;
+        if (isBetweenRounds)
+        {
+            if (nextRoundTimer < timeBetweenRounds)
+            {
+                nextRoundTimer += Time.deltaTime;
+            }
+            else
+            {
+                StartNewRound();
+            }
+        }
 
         if (roundTimer < roundTimeLimit)
-            roundTimer++;
+            roundTimer += Time.deltaTime;
 
-        if (PlayerController.Instance.DisplayRandomColor() != ColorOptions.invalid)
+        //temp setup to get things going manually
+        if (PlayerController.Instance.InitialSpaceInput() != ColorOptions.invalid)
         {
             StartNewRound();
         }
@@ -130,6 +146,7 @@ public class GameManager : MonoBehaviour
             if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
             {
                 // Player 1 is correct
+                p1Score = UpdatePlayerScore(p1Score, p1ScoreText);
                 OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
                 Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
             }
@@ -147,6 +164,7 @@ public class GameManager : MonoBehaviour
             if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
             {
                 // Player 2 is correct
+                p2Score = UpdatePlayerScore(p2Score, p2ScoreText);
                 OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
                 Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
             }
@@ -236,16 +254,18 @@ public class GameManager : MonoBehaviour
 
     int UpdatePlayerScore(int inPlayerScore, TextMeshProUGUI scoreText)
     {
-        int outPlayerScore = inPlayerScore + DeltaScore();
+        int outPlayerScore = inPlayerScore + DeltaScore(roundTimer);
 
         scoreText.text = outPlayerScore.ToString();
 
         return outPlayerScore;
     }
 
-    int DeltaScore(float time = 0.1f, int attempts = 1)
+    int DeltaScore(float correctAnswerTime = 0.1f, int attempts = 1)
     {
-        int deltaScore = 100 * (attempts / (int)time);
+        float fDeltaScore = 100 * (attempts / correctAnswerTime);
+
+        int deltaScore = (int)fDeltaScore;
 
         return deltaScore;
     }
@@ -255,16 +275,32 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void HandlePlayerCorrect()
+    void HandlePlayerCorrect(GameObject playerGO)
     {
+        isBetweenRounds = true;
+        nextRoundTimer = 0;
 
+        if (playerGO)
+        {
+            if (playerGO == p1ColorInputGO)
+            {
+
+            }
+
+            if (playerGO == p2ColorInputGO)
+            {
+
+            }
+        }
     }
 
     void StartNewRound()
     {
+        isBetweenRounds = false;
         roundTimer = 0;
 
         UpdateColor(colorPromptGO);
+        PlayerController.Instance.DisplayRandomColor();
 
         OnPromptUpdated?.Invoke();
         Debug.Log("Call Event: " + OnPromptUpdated + ".");
