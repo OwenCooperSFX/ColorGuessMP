@@ -141,6 +141,10 @@ public class GameManager : MonoBehaviour
             StartNewRound();
         }
 
+        // Don't continue if we are between rounds
+        if (isBetweenRounds)
+            return;
+
         if (PlayerController.Instance.GetPlayer1Input() != ColorOptions.invalid)
         {
             if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
@@ -277,8 +281,11 @@ public class GameManager : MonoBehaviour
 
     void HandlePlayerCorrect(GameObject playerGO)
     {
-        isBetweenRounds = true;
-        nextRoundTimer = 0;
+        if (!isBetweenRounds)
+        {
+            nextRoundTimer = 0;
+            isBetweenRounds = true;
+        }
 
         if (playerGO)
         {
