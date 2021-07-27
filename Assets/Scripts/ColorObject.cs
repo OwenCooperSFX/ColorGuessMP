@@ -11,7 +11,7 @@ public class ColorObject : MonoBehaviour
     private float lightFlashTime = .2f;
     private bool bIsLightOn = false;
 
-    private float defaultMaxIntensity = 4.0f;
+    [SerializeField] private float defaultMaxIntensity = 5.0f;
     private float maxIntensity;
 
     private void OnEnable()
@@ -94,16 +94,18 @@ public class ColorObject : MonoBehaviour
             {
                 case ColorOptions.blue:
                     colorLight.color = Color.blue;
-                    maxIntensity += 1;
+                    maxIntensity += (.5f * defaultMaxIntensity);
                     break;
                 case ColorOptions.green:
                     colorLight.color = Color.green;
+                    maxIntensity -= (.25f * defaultMaxIntensity);
                     break;
                 case ColorOptions.red:
                     colorLight.color = Color.red;
                     break;
                 case ColorOptions.yellow:
                     colorLight.color = Color.yellow;
+                    maxIntensity -= (.25f * defaultMaxIntensity);
                     break;
                 case ColorOptions.invalid:
                     Debug.LogWarning("Invalid color!");

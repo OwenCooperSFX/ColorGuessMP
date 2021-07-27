@@ -71,30 +71,33 @@ public class PlayerController : ColorObject
 
     public ColorOptions GetPlayer1Input()
     {
-        // Player 1 -- WASD
-        if (Input.GetKeyDown(KeyCode.W))
+        if (GameManager.Instance.p1InputEnabled)
         {
-            // Do top color
-            AnnounceP1Input();
-            return GetColor(p1_controls[0]);
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // Do left color
-            AnnounceP1Input();
-            return GetColor(p1_controls[1]);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            // Do bottom color
-            AnnounceP1Input();
-            return GetColor(p1_controls[3]);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            // Do right color
-            AnnounceP1Input();
-            return GetColor(p1_controls[2]);
+            // Player 1 -- WASD
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                // Do top color
+                AnnounceP1Input();
+                return GetColor(p1_controls[0]);
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                // Do left color
+                AnnounceP1Input();
+                return GetColor(p1_controls[1]);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                // Do bottom color
+                AnnounceP1Input();
+                return GetColor(p1_controls[3]);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                // Do right color
+                AnnounceP1Input();
+                return GetColor(p1_controls[2]);
+            }
         }
 
         return ColorOptions.invalid;
@@ -102,30 +105,33 @@ public class PlayerController : ColorObject
 
     public ColorOptions GetPlayer2Input()
     {
-        // Player 2 -- IJKL
-        if (Input.GetKeyDown(KeyCode.I))
+        if (GameManager.Instance.p2InputEnabled)
         {
-            // Do top color
-            AnnounceP2Input();
-            return GetColor(p2_controls[0]);
-        }
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            // Do left color
-            AnnounceP2Input();
-            return GetColor(p2_controls[1]);
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            // Do bottom color
-            AnnounceP2Input();
-            return GetColor(p2_controls[3]);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            // Do right color
-            AnnounceP2Input();
-            return GetColor(p2_controls[2]);
+            // Player 2 -- IJKL
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                // Do top color
+                AnnounceP2Input();
+                return GetColor(p2_controls[0]);
+            }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                // Do left color
+                AnnounceP2Input();
+                return GetColor(p2_controls[1]);
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                // Do bottom color
+                AnnounceP2Input();
+                return GetColor(p2_controls[3]);
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                // Do right color
+                AnnounceP2Input();
+                return GetColor(p2_controls[2]);
+            }
         }
 
         return ColorOptions.invalid;
@@ -160,6 +166,7 @@ public class PlayerController : ColorObject
         }
 
         Instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     List<Color> ShuffleColors(List<Color> in_colorList)
@@ -230,7 +237,8 @@ public class PlayerController : ColorObject
         if (color == Color.green)
             playerControlInput.currentColor = ColorOptions.green;
 
-        playerControlInput.FlashButtonLight();
+        if (!GameManager.Instance.isBetweenRounds)
+            playerControlInput.FlashButtonLight();
 
         return playerControlInput.currentColor;
     }

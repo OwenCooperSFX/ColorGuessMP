@@ -50,19 +50,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float roundTimeLimit = 10f;
     [SerializeField] private float roundTimer = 0f;
 
-    private bool isBetweenRounds = false;
+    public bool isBetweenRounds { get { return _isBetweenRounds; } }
+    private bool _isBetweenRounds = false;
 
     [Header("Scoring: Player 1")]
-    [SerializeField] private TextMeshProUGUI p1ScoreText;
+    [SerializeField] private TextMeshProUGUI p1ScoreText = null;
+    [SerializeField] private GameObject p1ScorePopup = null;
     public int p1Score = 0000;
     public int p1Attempts = 0;
     public float p1CorrectAnswerTime = 0f;
+    [HideInInspector] public bool p1InputEnabled { get { return _p1InputEnabled; } }
+    private bool _p1InputEnabled = true;
 
     [Header("Scoring: Player 2")]
-    [SerializeField] private TextMeshProUGUI p2ScoreText;
+    [SerializeField] private TextMeshProUGUI p2ScoreText = null;
+    [SerializeField] private GameObject p2ScorePopup = null;
     public int p2Score = 0000;
     public int p2Attempts = 0;
     public float p2CorrectAnswerTime = 0f;
+    [HideInInspector] public bool p2InputEnabled { get { return _p2InputEnabled; } }
+    private bool _p2InputEnabled = true;
 
     // Events
     public delegate void PromptUpdated();
@@ -76,19 +83,14 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // TODO: setup event subscribers
-        //PlayerController.Instance.OnP1Input += HandleP1Input;
-        //PlayerController.Instance.OnP2Input += HandleP2Input;
-
         OnPlayerInputCorrect += HandlePlayerCorrect;
+        OnPlayerInputIncorrect += HandlePlayerIncorrect;
     }
 
     private void OnDisable()
     {
-        //PlayerController.Instance.OnP1Input -= HandleP1Input;
-        //PlayerController.Instance.OnP2Input -= HandleP2Input;
-
         OnPlayerInputCorrect -= HandlePlayerCorrect;
+        OnPlayerInputIncorrect -= HandlePlayerIncorrect;
     }
 
     private void Awake()
@@ -120,7 +122,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isBetweenRounds)
+        if (_isBetweenRounds)
         {
             if (nextRoundTimer < timeBetweenRounds)
             {
@@ -130,6 +132,14 @@ public class GameManager : MonoBehaviour
             {
                 StartNewRound();
             }
+        }
+        else if (!_p1InputEnabled && !_p2InputEnabled)
+        {
+            nextRoundTimer = 0;
+            AudioManager.Instance.HandlePromptUpdated();
+            AnimateScorePopup(p1ScorePopup, 0);
+            AnimateScorePopup(p2ScorePopup, 0);
+            _isBetweenRounds = true;
         }
 
         if (roundTimer < roundTimeLimit)
@@ -142,42 +152,59 @@ public class GameManager : MonoBehaviour
         }
 
         // Don't continue if we are between rounds
-        if (isBetweenRounds)
+        if (_isBetweenRounds)
             return;
 
+        // Handle player inputs
         if (PlayerController.Instance.GetPlayer1Input() != ColorOptions.invalid)
         {
-            if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
+            if (_isBetweenRounds)
+                return;
+
+            IncreaseP1Attempts();
+
+            if (_p1InputEnabled)
             {
-                // Player 1 is correct
-                p1Score = UpdatePlayerScore(p1Score, p1ScoreText);
-                OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
-                Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
+                if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
+                {
+                    // Player 1 is correct
+                    OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
+                    //Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
+                }
+                else
+                {
+                    // Player 1 is wrong
+                    OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
+                    //Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p1ColorInputGO.name + ").");
+                }
             }
-            else
-            {
-                // Player 1 is wrong
-                OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
-                Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p1ColorInputGO.name + ").");
-            }
+
         }
 
 
         if (PlayerController.Instance.GetPlayer2Input() != ColorOptions.invalid)
         {
-            if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
+            if (_isBetweenRounds)
+                return;
+
+            IncreaseP2Attempts();
+
+            if (_p2InputEnabled)
             {
-                // Player 2 is correct
-                p2Score = UpdatePlayerScore(p2Score, p2ScoreText);
-                OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
-                Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
+                if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
+                {
+                    // Player 2 is correct
+                    OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
+                    //Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
+                }
+                else
+                {
+                    // Player 2 is wrong
+                    OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
+                    //Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p2ColorInputGO.name + ").");
+                }
             }
-            else
-            {
-                // Player 2 is wrong
-                OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
-                Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p2ColorInputGO.name + ").");
-            }
+
         }
     }
 
@@ -256,54 +283,117 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
-    int UpdatePlayerScore(int inPlayerScore, TextMeshProUGUI scoreText)
-    {
-        int outPlayerScore = inPlayerScore + DeltaScore(roundTimer);
-
-        scoreText.text = outPlayerScore.ToString();
-
-        return outPlayerScore;
-    }
-
-    int DeltaScore(float correctAnswerTime = 0.1f, int attempts = 1)
-    {
-        float fDeltaScore = 100 * (attempts / correctAnswerTime);
-
-        int deltaScore = (int)fDeltaScore;
-
-        return deltaScore;
-    }
-
     void GoToNextPrompt()
     {
         
     }
 
+    private void AnimateScorePopup(GameObject scorePopup, int deltaScore)
+    {
+        scorePopup.SetActive(false);
+        TextMeshProUGUI scorePopupText = scorePopup.GetComponent<TextMeshProUGUI>();
+        scorePopupText.text = deltaScore.ToString();
+
+        if (deltaScore == 0)
+            scorePopupText.color = Color.red;
+        else
+            scorePopupText.color = Color.green;
+
+        scorePopup.SetActive(true);
+    }
+
     void HandlePlayerCorrect(GameObject playerGO)
     {
-        if (!isBetweenRounds)
+        if (_isBetweenRounds)
+            return;
+        else
         {
             nextRoundTimer = 0;
-            isBetweenRounds = true;
+            _isBetweenRounds = true;
         }
 
         if (playerGO)
         {
             if (playerGO == p1ColorInputGO)
             {
+                AnimateScorePopup(p1ScorePopup, DeltaScore(roundTimer, p1Attempts));
 
+                p1Score = UpdatePlayerScore(p1Score, p1Attempts, p1ScoreText);
             }
 
             if (playerGO == p2ColorInputGO)
             {
+                AnimateScorePopup(p2ScorePopup, DeltaScore(roundTimer, p2Attempts));
 
+                p2Score = UpdatePlayerScore(p2Score, p2Attempts ,p2ScoreText);
             }
         }
     }
 
+    void HandlePlayerIncorrect(GameObject playerGO)
+    {
+        if (_isBetweenRounds)
+            return;
+
+        if (playerGO)
+        {
+            if (playerGO == p1ColorInputGO)
+                AnimateScorePopup(p1ScorePopup, 0);
+
+            if (playerGO == p2ColorInputGO)
+                AnimateScorePopup(p2ScorePopup, 0);
+        }
+    }
+
+    int UpdatePlayerScore(int inPlayerScore, int inAttempts, TextMeshProUGUI scoreText)
+    {
+        int outPlayerScore = inPlayerScore + DeltaScore(roundTimer, inAttempts);
+
+        scoreText.text = outPlayerScore.ToString();
+
+        return outPlayerScore;
+    }
+
+    int DeltaScore(float correctAnswerTime, int attempts)
+    {
+        // TODO: fix broken multiplier switching
+
+        int multiplier = 0;
+        switch (attempts)
+        {
+            case 1:
+                multiplier = 1;
+                break;
+            case 2:
+                multiplier = 3;
+                break;
+            case 3:
+                multiplier = 6;
+                break;
+            default:
+                // for any invalid values.
+                return 0;
+        }
+
+        float fDeltaScore = 2000 / ((2 * correctAnswerTime) + (attempts * multiplier));
+
+        int deltaScore = (int)fDeltaScore;
+
+        // print(multiplier);
+
+        return deltaScore;
+    }
+
     void StartNewRound()
     {
-        isBetweenRounds = false;
+        _p1InputEnabled = true;
+        _p2InputEnabled = true;
+
+        _isBetweenRounds = false;
+
+        p1Attempts = 0;
+        p2Attempts = 0;
+
         roundTimer = 0;
 
         UpdateColor(colorPromptGO);
@@ -311,5 +401,27 @@ public class GameManager : MonoBehaviour
 
         OnPromptUpdated?.Invoke();
         Debug.Log("Call Event: " + OnPromptUpdated + ".");
+    }
+
+    void IncreaseP1Attempts()
+    {
+        if (p1Attempts > 2)
+        {
+            OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
+            _p1InputEnabled = false;
+        }
+        else if (!_isBetweenRounds)
+            p1Attempts++;
+    }
+
+    void IncreaseP2Attempts()
+    {
+        if (p2Attempts > 2)
+        {
+            OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
+            _p2InputEnabled = false;
+        }
+        else if (!_isBetweenRounds)
+            p2Attempts++;
     }
 }

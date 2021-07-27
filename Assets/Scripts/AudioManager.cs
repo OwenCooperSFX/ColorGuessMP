@@ -56,6 +56,7 @@ public class AudioManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public void PlayInputSound(AudioClip in_audioClip, AudioSource in_audioSource = null)
