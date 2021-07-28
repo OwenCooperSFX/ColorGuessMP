@@ -17,7 +17,9 @@ public class PlayerController : ColorObject
 
     public List<Color> colorAssignments;
 
-    private float inputAnimTime = 0.2f;
+    [Header("Button Animation properties")]
+    [SerializeField] private float inputAnimTime = 0.2f;
+    [SerializeField] private float inputAnimDepth = 0.2f;
 
     // Events
     public delegate InputButton P1Input(InputButton inputSelection);
@@ -257,7 +259,7 @@ public class PlayerController : ColorObject
     IEnumerator AnimateButtonDown(InputButton inputButton, List<ColorObject> playerControlList)
     {
         //TODO: animate input object on player input for visual feedback.
-        Vector3 transformPosDelta = new Vector3(0, 0, .2f);
+        Vector3 transformPosDelta = new Vector3(0, 0, inputAnimDepth);
 
         int buttonIndex;
 

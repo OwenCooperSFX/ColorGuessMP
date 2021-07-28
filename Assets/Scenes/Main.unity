@@ -2136,6 +2136,10 @@ PrefabInstance:
       propertyPath: p2_controls.Array.data[3]
       value: 
       objectReference: {fileID: 488350758}
+    - target: {fileID: 9184313430960078035, guid: 5d7d4f5611745b04a96878ebd97471e2, type: 3}
+      propertyPath: inputAnimDepth
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 9184313430960078036, guid: 5d7d4f5611745b04a96878ebd97471e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
