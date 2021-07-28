@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ColorObject : MonoBehaviour
 {
@@ -13,6 +12,8 @@ public class ColorObject : MonoBehaviour
 
     [SerializeField] private float defaultMaxIntensity = 5.0f;
     private float maxIntensity;
+
+    [SerializeField] private float range = 1.8f;
 
     private void OnEnable()
     {
@@ -29,13 +30,7 @@ public class ColorObject : MonoBehaviour
 
         colorLight = colorLightGO.AddComponent<Light>();
         colorLight.intensity = 0;
-        colorLight.range = 1.8f;
-
-        // Unique settings for ColorPrompt
-        if (name == "ColorPrompt")
-        {
-            colorLight.range = 10;
-        }
+        colorLight.range = range;
 
         maxIntensity = defaultMaxIntensity;
 

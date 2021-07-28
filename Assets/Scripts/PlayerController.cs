@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
-public enum InputSelections { Up, Down, Left, Right, invalid }
+public enum InputButton { Up, Down, Left, Right, invalid }
 
 public class PlayerController : ColorObject
 {
@@ -16,11 +17,13 @@ public class PlayerController : ColorObject
 
     public List<Color> colorAssignments;
 
+    private float inputAnimTime = 0.2f;
+
     // Events
-    public delegate void P1Input();
+    public delegate InputButton P1Input(InputButton inputSelection);
     public event P1Input OnP1Input;
 
-    public delegate void P2Input();
+    public delegate InputButton P2Input(InputButton inputSelection);
     public event P2Input OnP2Input;
 
     private void OnEnable()
@@ -47,16 +50,15 @@ public class PlayerController : ColorObject
         lastColorOrder = colorAssignments;
     }
 
+    void Update()
+    {
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         Init();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public ColorOptions InitialSpaceInput()
@@ -77,25 +79,26 @@ public class PlayerController : ColorObject
             if (Input.GetKeyDown(KeyCode.W))
             {
                 // Do top color
-                AnnounceP1Input();
+                P1InputDown(InputButton.Up);
+                
                 return GetColor(p1_controls[0]);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
                 // Do left color
-                AnnounceP1Input();
+                P1InputDown(InputButton.Left);
                 return GetColor(p1_controls[1]);
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
                 // Do bottom color
-                AnnounceP1Input();
+                P1InputDown(InputButton.Down);
                 return GetColor(p1_controls[3]);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 // Do right color
-                AnnounceP1Input();
+                P1InputDown(InputButton.Right);
                 return GetColor(p1_controls[2]);
             }
         }
@@ -111,25 +114,25 @@ public class PlayerController : ColorObject
             if (Input.GetKeyDown(KeyCode.I))
             {
                 // Do top color
-                AnnounceP2Input();
+                P2InputDown(InputButton.Up);
                 return GetColor(p2_controls[0]);
             }
             if (Input.GetKeyDown(KeyCode.J))
             {
                 // Do left color
-                AnnounceP2Input();
+                P2InputDown(InputButton.Left);
                 return GetColor(p2_controls[1]);
             }
             if (Input.GetKeyDown(KeyCode.K))
             {
                 // Do bottom color
-                AnnounceP2Input();
+                P2InputDown(InputButton.Down);
                 return GetColor(p2_controls[3]);
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
                 // Do right color
-                AnnounceP2Input();
+                P2InputDown(InputButton.Right);
                 return GetColor(p2_controls[2]);
             }
         }
@@ -145,14 +148,22 @@ public class PlayerController : ColorObject
         return ColorOptions.random;
     }
 
-    public void AnnounceP1Input()
+    public InputButton P1InputDown(InputButton inputButton)
     {
-        OnP1Input?.Invoke();
+        StartCoroutine(AnimateButtonDown(inputButton, p1_controls));
+
+        OnP1Input?.Invoke(inputButton);
+
+        return inputButton;
     }
 
-    public void AnnounceP2Input()
+    public InputButton P2InputDown(InputButton inputButton)
     {
-        OnP2Input?.Invoke();
+        StartCoroutine(AnimateButtonDown(inputButton, p2_controls));
+
+        OnP2Input?.Invoke(inputButton);
+
+        return inputButton;
     }
 
     void Init()
@@ -243,15 +254,36 @@ public class PlayerController : ColorObject
         return playerControlInput.currentColor;
     }
 
-    void AnimateInputObject(ColorObject inputObject)
+    IEnumerator AnimateButtonDown(InputButton inputButton, List<ColorObject> playerControlList)
     {
         //TODO: animate input object on player input for visual feedback.
+        Vector3 transformPosDelta = new Vector3(0, 0, .2f);
 
-        //Animator animator = inputObject.GetComponent<Animator>();
+        int buttonIndex;
 
-        //if (!animator)
-        //    Debug.LogWarning("No animator component! " + inputObject);
+        switch (inputButton)
+        {
+            case InputButton.Up:
+                buttonIndex = 0;
+                break;
+            case InputButton.Left:
+                buttonIndex = 1;
+                break;
+            case InputButton.Down:
+                buttonIndex = 3;
+                break;
+            case InputButton.Right:
+                buttonIndex = 2;
+                break;
+            default:
+                buttonIndex = 0;
+                break;
+        }
 
-        //animator.Play("InputSwell");
+        playerControlList[buttonIndex].transform.position += transformPosDelta;
+
+        yield return new WaitForSeconds(inputAnimTime);
+
+        playerControlList[buttonIndex].transform.position -= transformPosDelta;
     }
 }

@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentColor: 0
+  defaultMaxIntensity: 10
 --- !u!1 &9053178632480237326
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +287,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 032c933b96021514391829bca61202fa, type: 2}
+  - {fileID: 2100000, guid: a2720eb92834ab04087140eb5442956f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -321,6 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentColor: 0
+  defaultMaxIntensity: 10
 --- !u!1 &9053178633420631406
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +383,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 618774d6dd8bcfd4b8797d34529efc52, type: 2}
+  - {fileID: 2100000, guid: a2720eb92834ab04087140eb5442956f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -416,6 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentColor: 0
+  defaultMaxIntensity: 10
 --- !u!1 &9053178633826583003
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +479,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 91b8942921f2b8745b482b69428c92c1, type: 2}
+  - {fileID: 2100000, guid: a2720eb92834ab04087140eb5442956f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -511,3 +514,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentColor: 0
+  defaultMaxIntensity: 10
