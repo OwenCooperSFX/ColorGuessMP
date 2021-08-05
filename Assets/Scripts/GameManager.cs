@@ -9,14 +9,14 @@ NOTES:
     TODO:
     - automate top prompt random color              
     - give players color control layout             DONE
-    - reward score for matching color               IN PROGRESS       
-    - refresh random color for prompt               
-    - re-randomize the winning player's controls    
+    - reward score for matching color               DONE      
+    - refresh random color for prompt               DONE
+    - re-randomize the winning player's controls    IN PROGRESS
 
     TODO:
-    - Animations for player input
+    - Animations for player input                   DONE
     - Animations for new random color prompt
-    - Animations for reward/penalty
+    - Animations for reward/penalty                 
 
     TODO:
     - Winner screen
