@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public enum InputButton { Up, Down, Left, Right, invalid }
 
@@ -28,6 +29,10 @@ public class PlayerController : ColorObject
     public delegate InputButton P2Input(InputButton inputSelection);
     public event P2Input OnP2Input;
 
+    Vector3 defaultButtonScale;
+    Vector3 punchScale = new Vector3(-.2f, -.2f, 0f);
+    private Tween buttonPressTween;
+
     private void OnEnable()
     {
 
@@ -50,6 +55,9 @@ public class PlayerController : ColorObject
 
         colorAssignments = colors;
         lastColorOrder = colorAssignments;
+
+        // use p1 top button as scale template
+        defaultButtonScale = p1_controls[0].transform.localScale;
     }
 
     void Update()
@@ -152,7 +160,8 @@ public class PlayerController : ColorObject
 
     public InputButton P1InputDown(InputButton inputButton)
     {
-        StartCoroutine(AnimateButtonDown(inputButton, p1_controls));
+        //StartCoroutine(AnimateButtonDown(inputButton, p1_controls));
+        TweenButtonPress(inputButton, p1_controls);
 
         OnP1Input?.Invoke(inputButton);
 
@@ -161,7 +170,8 @@ public class PlayerController : ColorObject
 
     public InputButton P2InputDown(InputButton inputButton)
     {
-        StartCoroutine(AnimateButtonDown(inputButton, p2_controls));
+        //StartCoroutine(AnimateButtonDown(inputButton, p2_controls));
+        TweenButtonPress(inputButton, p2_controls);
 
         OnP2Input?.Invoke(inputButton);
 
@@ -288,5 +298,44 @@ public class PlayerController : ColorObject
         yield return new WaitForSeconds(inputAnimTime);
 
         playerControlList[buttonIndex].transform.position -= transformPosDelta;
+    }
+
+    public void TweenButtonPress(InputButton inputButton, List<ColorObject> playerControlList)
+    {
+        int buttonIndex;
+
+        switch (inputButton)
+        {
+            case InputButton.Up:
+                buttonIndex = 0;
+                break;
+            case InputButton.Left:
+                buttonIndex = 1;
+                break;
+            case InputButton.Down:
+                buttonIndex = 3;
+                break;
+            case InputButton.Right:
+                buttonIndex = 2;
+                break;
+            default:
+                buttonIndex = 0;
+                break;
+        }
+
+        CreateButtonPressTween(playerControlList[buttonIndex].transform);
+    }
+
+    void CreateButtonPressTween(Transform _buttonTransform)
+    {
+        ResetButtonScale(_buttonTransform);
+        _buttonTransform.DOKill();
+        buttonPressTween = _buttonTransform.DOPunchScale(punchScale, 0.2f, 1, 1).SetEase(Ease.OutQuart).SetAutoKill(true);
+        buttonPressTween.OnComplete(() => ResetButtonScale(_buttonTransform));
+    }
+
+    void ResetButtonScale(Transform _buttonTransform)
+    {
+        _buttonTransform.localScale = defaultButtonScale;
     }
 }

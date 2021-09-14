@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 /*
 NOTES:
@@ -310,6 +311,9 @@ public class GameManager : MonoBehaviour
         {
             nextRoundTimer = 0;
             _isBetweenRounds = true;
+
+            colorPromptGO.transform.DOKill();
+            colorPromptGO.transform.DOScale(colorPromptGO.transform.localScale * 1.1f, .3f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         }
 
         if (playerGO)
@@ -397,6 +401,10 @@ public class GameManager : MonoBehaviour
         roundTimer = 0;
 
         UpdateColor(colorPromptGO);
+
+        colorPromptGO.transform.DOKill();
+        colorPromptGO.transform.DOPunchScale(new Vector3(.2f, .2f, 1f), .5f, 10, .5f);
+
         PlayerController.Instance.DisplayRandomColor();
 
         OnPromptUpdated?.Invoke();

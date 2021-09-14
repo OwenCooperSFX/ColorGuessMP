@@ -14,16 +14,22 @@ public class AudioManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.OnPromptUpdated += HandlePromptUpdated;
-        GameManager.Instance.OnPlayerInputCorrect += PlayCorrectSound;
-        GameManager.Instance.OnPlayerInputIncorrect += PlayIncorrectSound;
+        if (GameManager.Instance)
+        {
+            GameManager.Instance.OnPromptUpdated += HandlePromptUpdated;
+            GameManager.Instance.OnPlayerInputCorrect += PlayCorrectSound;
+            GameManager.Instance.OnPlayerInputIncorrect += PlayIncorrectSound;
+        }
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnPromptUpdated -= HandlePromptUpdated;
-        GameManager.Instance.OnPlayerInputCorrect -= PlayCorrectSound;
-        GameManager.Instance.OnPlayerInputIncorrect -= PlayIncorrectSound;
+        if (GameManager.Instance)
+        {
+            GameManager.Instance.OnPromptUpdated -= HandlePromptUpdated;
+            GameManager.Instance.OnPlayerInputCorrect -= PlayCorrectSound;
+            GameManager.Instance.OnPlayerInputIncorrect -= PlayIncorrectSound;
+        }
     }
 
     private void Awake()
