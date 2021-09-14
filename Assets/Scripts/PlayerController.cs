@@ -259,6 +259,7 @@ public class PlayerController : ColorObject
     IEnumerator AnimateButtonDown(InputButton inputButton, List<ColorObject> playerControlList)
     {
         //TODO: animate input object on player input for visual feedback.
+        //TODO: Use DOTween for these for better animation.
         Vector3 transformPosDelta = new Vector3(0, 0, inputAnimDepth);
 
         int buttonIndex;
