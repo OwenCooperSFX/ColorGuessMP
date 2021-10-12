@@ -2,7 +2,7 @@
 
 public class ColorObject : MonoBehaviour
 {
-    public ColorOptions currentColor;
+    public ColorOption currentColor;
     private GameObject colorLightGO;
     private Light colorLight;
 
@@ -87,22 +87,22 @@ public class ColorObject : MonoBehaviour
 
             switch (currentColor)
             {
-                case ColorOptions.blue:
+                case ColorOption.blue:
                     colorLight.color = Color.blue;
                     maxIntensity += (.5f * defaultMaxIntensity);
                     break;
-                case ColorOptions.green:
+                case ColorOption.green:
                     colorLight.color = Color.green;
                     maxIntensity -= (.25f * defaultMaxIntensity);
                     break;
-                case ColorOptions.red:
+                case ColorOption.red:
                     colorLight.color = Color.red;
                     break;
-                case ColorOptions.yellow:
+                case ColorOption.yellow:
                     colorLight.color = Color.yellow;
                     maxIntensity -= (.25f * defaultMaxIntensity);
                     break;
-                case ColorOptions.invalid:
+                case ColorOption.invalid:
                     Debug.LogWarning("Invalid color!");
                     break;
             }

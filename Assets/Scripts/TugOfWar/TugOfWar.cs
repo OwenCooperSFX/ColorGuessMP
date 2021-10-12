@@ -1,33 +1,43 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class TugOfWar : MonoBehaviour
 {
+    public static TugOfWar Instance;
+
     [SerializeField] GameObject _badThing;
     public GameObject badThing { get { return _badThing; } }
 
     [SerializeField] float _pushAmount;
     public float pushAmount { get { return _pushAmount; } }
 
+    [SerializeField] float _pushSpeed;
+    public float pushSpeed { get { return _pushSpeed; } }
+
     [SerializeField] GameObject _track;
     public GameObject track { get { return _track; } }
 
-    [SerializeField] AudioClip _explosionSound;
-    public AudioClip explosionSound { get { return _explosionSound; } }
+    [SerializeField] AudioClip[] _explosionSounds;
+    public AudioClip[] explosionSounds { get { return _explosionSounds; } }
 
+    public float badThing_xPos;
     float horizontalLimit;
-
     MeshRenderer meshRenderer;
-
-    Vector3 startPosition;
-
-    GameObject explosion;
-
+    Vector3 startPos;
+    float last_xPos;
     AudioSource badThingAudioSource;
+    Explosion explosion;
+    Tween pushTween;
+    float pulseSpeed = 1;
 
     bool bEmitting;
 
-    public delegate void ExplosionFinished();
-    public event ExplosionFinished OnExplosionFinished;
+    #region Event dispatchers
+
+    public delegate void TugOfWarEvent();
+    public event TugOfWarEvent OnExplosionFinished;
+    public event TugOfWarEvent OnExceededBoundary;
+    public event TugOfWarEvent OnBadThingMoved;
 
     void RaiseExplosionFinished()
     {
@@ -37,36 +47,77 @@ public class TugOfWar : MonoBehaviour
         }
     }
 
+    void RaiseExceededBoundary()
+    {
+        if (OnExceededBoundary != null)
+        {
+            OnExceededBoundary();
+        }
+    }
+
+    void RaiseBadThingMoved()
+    {
+        if (OnBadThingMoved != null)
+        {
+            OnBadThingMoved();
+        }
+    }
+    #endregion
+
+    #region Event subscribers
+    void OnEnable()
+    {
+        OnBadThingMoved += CheckBoundary;
+        OnExceededBoundary += ShowPlayerWon;
+
+        if (explosion)
+            explosion.OnExplosionFinished += ResetBadThing;
+    }
+
+    void OnDisable()
+    {
+        OnBadThingMoved += CheckBoundary;
+        OnExceededBoundary -= ShowPlayerWon;
+
+        if (explosion)
+            explosion.OnExplosionFinished -= ResetBadThing;
+    }
+    #endregion
+
     void Awake()
     {
-        explosion = badThing.transform.GetChild(0).gameObject;
+        Init();
+
+        explosion = badThing.transform.GetChild(0).GetComponent<Explosion>();
         meshRenderer = badThing.GetComponent<MeshRenderer>();
-        startPosition = badThing.transform.position;
+        startPos = badThing.transform.position;
         horizontalLimit = track.transform.localScale.y;
         badThingAudioSource = badThing.GetComponent<AudioSource>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void Init()
     {
-        
+        // Singleton logic
+
+        if (!Instance)
+        {
+            Instance = FindObjectOfType<TugOfWar>();
+        }
+
+        if (Instance && Instance != this)
+        {
+            Destroy(Instance);
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (explosion.GetComponent<ParticleSystem>().IsAlive())
-        {
-            bEmitting = true;
-        }
-        else if (bEmitting)
-        {
-            RaiseExplosionFinished();
-            bEmitting = false;
-
-            ResetBadThing();
-        }
-
+        #region Input
+        /*
         if (!Input.anyKey)
         {
             return;
@@ -74,49 +125,103 @@ public class TugOfWar : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            MoveBadThing(pushAmount);
+            MoveBadThing(pushAmount, 0.5f);
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            MoveBadThing(-pushAmount);
+            MoveBadThing(-pushAmount, 0.5f);
         }
+        */
+        #endregion
     }
 
-    void MoveBadThing(float amount)
+    public void MoveBadThing(float amount, float speed)
     {
         if (badThing.transform.position.x > -horizontalLimit && badThing.transform.position.x < horizontalLimit)
         {
-            Vector3 translation = new Vector3(amount, 0, 0);
+            float new_xPos = badThing_xPos + amount;
 
-            badThing.transform.Translate(translation);
+            pushTween = badThing.transform.DOLocalMoveX(new_xPos, speed).SetEase(Ease.OutExpo);
+
+            badThing_xPos = new_xPos;
         }
-        else
-        {
-            ShowPlayerWon();
-        }
+
+        RaiseBadThingMoved();
     }
 
     void ShowPlayerWon()
     { 
         if (meshRenderer.enabled)
         {
-            badThingAudioSource.PlayOneShot(explosionSound);
+            foreach (AudioClip clip in explosionSounds)
+            {
+                badThingAudioSource.PlayOneShot(clip);
+            }
         }
 
         meshRenderer.enabled = false;
-        explosion.SetActive(true);
+        explosion.gameObject.SetActive(true);
     }
 
     void ResetBadThing()
     {
-        badThing.transform.position = startPosition;
+        badThing.transform.position = startPos;
         meshRenderer.enabled = true;
-        explosion.SetActive(false);
+        explosion.gameObject.SetActive(false);
+
+        badThing_xPos = badThing.transform.localPosition.x;
+        badThing.GetComponent<BadThing>().KillTweens();
+        badThing.transform.localScale = Vector3.one;
     }
 
-    void InterpTranslate(Vector3 targetPosition)
+    void CheckBoundary()
     {
-        //Mathf.
+        //Animations. TODO: just handle in Update on BadThing
+        if (badThing_xPos >= -horizontalLimit && badThing_xPos < 0)
+        {
+            //float scaleFactor = 2 / Mathf.Abs(-horizontalLimit - badThing_xPos);
+            //Vector3 scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+
+            //if (badThing_xPos < last_xPos)
+            //    badThing.GetComponent<BadThing>().IncreaseSize(scale, Mathf.Clamp((pulseSpeed *= .5f), .1f, 6f));
+            //else if (badThing_xPos > last_xPos)
+            //    badThing.GetComponent<BadThing>().DecreaseSize(scale, Mathf.Clamp((pulseSpeed *= 2f), .1f, 6f));
+
+            last_xPos = badThing_xPos;
+            return;
+        }
+        else if (badThing_xPos <= horizontalLimit && badThing_xPos > 0)
+        {
+            //float scaleFactor = 2 / Mathf.Abs(horizontalLimit - badThing_xPos);
+            //Vector3 scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+
+            //if (badThing_xPos > last_xPos)
+            //    badThing.GetComponent<BadThing>().IncreaseSize(scale, Mathf.Clamp((pulseSpeed *= .5f), .1f, 6f));
+            //else if (badThing_xPos < last_xPos)
+            //    badThing.GetComponent<BadThing>().DecreaseSize(scale, Mathf.Clamp((pulseSpeed *= 2f), .1f, 6f));
+
+            last_xPos = badThing_xPos;
+            return;
+        }
+        else
+        {
+            //badThing.GetComponent<BadThing>().KillTweens();
+        }
+
+        // If moving will exceed a boundary, set position instead to the boundary.
+        if (badThing_xPos < -horizontalLimit)
+        {
+            badThing_xPos = -horizontalLimit;
+        }
+        else if (badThing_xPos > horizontalLimit)
+        {
+            badThing_xPos = horizontalLimit;
+        }
+
+        pushTween.TogglePause();
+        badThing.transform.localPosition = new Vector3(badThing_xPos, badThing.transform.position.y, badThing.transform.position.z);
+
+        RaiseExceededBoundary();
     }
 }

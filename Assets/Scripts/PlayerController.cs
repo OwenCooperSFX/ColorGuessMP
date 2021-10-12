@@ -71,17 +71,17 @@ public class PlayerController : ColorObject
         Init();
     }
 
-    public ColorOptions InitialSpaceInput()
+    public ColorOption InitialSpaceInput()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             return DisplayRandomColor();
         }
 
-        else return ColorOptions.invalid;
+        else return ColorOption.invalid;
     }
 
-    public ColorOptions GetPlayer1Input()
+    public ColorOption GetPlayer1Input()
     {
         if (GameManager.Instance.p1InputEnabled)
         {
@@ -113,10 +113,10 @@ public class PlayerController : ColorObject
             }
         }
 
-        return ColorOptions.invalid;
+        return ColorOption.invalid;
     }
 
-    public ColorOptions GetPlayer2Input()
+    public ColorOption GetPlayer2Input()
     {
         if (GameManager.Instance.p2InputEnabled)
         {
@@ -147,15 +147,15 @@ public class PlayerController : ColorObject
             }
         }
 
-        return ColorOptions.invalid;
+        return ColorOption.invalid;
     }
 
-    public ColorOptions DisplayRandomColor()
+    public ColorOption DisplayRandomColor()
     {
         AssignControlColors(p1_controls);
         AssignControlColors(p2_controls);
 
-        return ColorOptions.random;
+        return ColorOption.random;
     }
 
     public InputButton P1InputDown(InputButton inputButton)
@@ -243,22 +243,22 @@ public class PlayerController : ColorObject
         }
     }
 
-    public ColorOptions GetColor(ColorObject playerControlInput)
+    public ColorOption GetColor(ColorObject playerControlInput)
     {
         // When player inputs a control, check its color and assign it a ColorOptions value,
         // TBD: Used for comparing against colorPrompt.
 
         Color color = playerControlInput.GetComponent<MeshRenderer>().material.color;
-        playerControlInput.currentColor = ColorOptions.invalid;
+        playerControlInput.currentColor = ColorOption.invalid;
 
         if (color == Color.red)
-            playerControlInput.currentColor = ColorOptions.red;
+            playerControlInput.currentColor = ColorOption.red;
         if (color == Color.blue)
-            playerControlInput.currentColor = ColorOptions.blue;
+            playerControlInput.currentColor = ColorOption.blue;
         if (color == Color.yellow)
-            playerControlInput.currentColor = ColorOptions.yellow;
+            playerControlInput.currentColor = ColorOption.yellow;
         if (color == Color.green)
-            playerControlInput.currentColor = ColorOptions.green;
+            playerControlInput.currentColor = ColorOption.green;
 
         if (!GameManager.Instance.isBetweenRounds)
             playerControlInput.FlashButtonLight();

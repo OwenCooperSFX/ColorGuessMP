@@ -27,13 +27,13 @@ NOTES:
     - Sound design, music
 */
 
-public enum ColorOptions { invalid, red, blue, yellow, green, random }
+public enum ColorOption { invalid, red, blue, yellow, green, random }
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public ColorOptions colorOptions;
+    public ColorOption colorOption;
 
     private AudioSource p1AudioSource;
     private AudioSource p2AudioSource;
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
             roundTimer += Time.deltaTime;
 
         //temp setup to get things going manually
-        if (PlayerController.Instance.InitialSpaceInput() != ColorOptions.invalid)
+        if (PlayerController.Instance.InitialSpaceInput() != ColorOption.invalid)
         {
             StartNewRound();
         }
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
             return;
 
         // Handle player inputs
-        if (PlayerController.Instance.GetPlayer1Input() != ColorOptions.invalid)
+        if (PlayerController.Instance.GetPlayer1Input() != ColorOption.invalid)
         {
             if (_isBetweenRounds)
                 return;
@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (PlayerController.Instance.GetPlayer2Input() != ColorOptions.invalid)
+        if (PlayerController.Instance.GetPlayer2Input() != ColorOption.invalid)
         {
             if (_isBetweenRounds)
                 return;
@@ -211,8 +211,8 @@ public class GameManager : MonoBehaviour
 
     public void UpdateColor(GameObject colorGO)
     {
-        ColorOptions inputColor = 0;
-        ColorOptions newColorOption = 0;
+        ColorOption inputColor = 0;
+        ColorOption newColorOption = 0;
         Material targetMaterial = colorGO.GetComponent<MeshRenderer>().material;
 
         // Check which type of input we received NOTE: this is now redundant. Only used for prompt.
@@ -230,19 +230,19 @@ public class GameManager : MonoBehaviour
 
         switch (newColorOption)
         {
-            case ColorOptions.blue:
+            case ColorOption.blue:
                 newColor = Color.blue;
                 break;
-            case ColorOptions.green:
+            case ColorOption.green:
                 newColor = Color.green;
                 break;
-            case ColorOptions.red:
+            case ColorOption.red:
                 newColor = Color.red;
                 break;
-            case ColorOptions.yellow:
+            case ColorOption.yellow:
                 newColor = Color.yellow;
                 break;
-            case ColorOptions.invalid:
+            case ColorOption.invalid:
                 Debug.LogWarning("Invalid color!");
                 break;
         }
@@ -251,11 +251,11 @@ public class GameManager : MonoBehaviour
             targetMaterial.color = newColor;
     }
 
-    public ColorOptions RandomizeColor()
+    public ColorOption RandomizeColor()
     {
         int rndInt = UnityEngine.Random.Range(1, 5);
 
-        ColorOptions rndColor = (ColorOptions)rndInt;
+        ColorOption rndColor = (ColorOption)rndInt;
 
         return rndColor;
     }
@@ -263,7 +263,11 @@ public class GameManager : MonoBehaviour
     void Init()
     {
         // Singleton logic
-        Instance = FindObjectOfType<GameManager>();
+
+        if (!Instance)
+        {
+            Instance = FindObjectOfType<GameManager>();
+        }
         
         if (Instance && Instance != this)
         {
@@ -274,9 +278,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    bool  InputEqualsPrompt(ColorOptions input)
+    bool  InputEqualsPrompt(ColorOption input)
     {
-        ColorOptions promptColor = colorPromptGO.GetComponent<ColorObject>().currentColor;
+        ColorOption promptColor = colorPromptGO.GetComponent<ColorObject>().currentColor;
 
         if (input == promptColor)
             return true;
@@ -293,7 +297,7 @@ public class GameManager : MonoBehaviour
     {
         scorePopup.SetActive(false);
         TextMeshProUGUI scorePopupText = scorePopup.GetComponent<TextMeshProUGUI>();
-        scorePopupText.text = deltaScore.ToString();
+        scorePopupText.text = RoundFloat(roundTimer, 3).ToString();//deltaScore.ToString();
 
         if (deltaScore == 0)
             scorePopupText.color = Color.red;
@@ -301,6 +305,37 @@ public class GameManager : MonoBehaviour
             scorePopupText.color = Color.green;
 
         scorePopup.SetActive(true);
+    }
+
+    /// <summary>
+    /// Rounds to the closest decimal place, defined by value of decimalPlaces.
+    /// decimalPlaces must be a positive value less than or equal to 10.
+    /// </summary>
+    float RoundFloat(float inFloat, int decimalPlaces = 1)
+    {
+        #region Error handling
+        if (decimalPlaces > 10)
+        {
+            Debug.LogWarning("10 is the maximum decimal places allowed.");
+
+            decimalPlaces = 10;
+        }
+        else if (decimalPlaces <= 0)
+        {
+            Debug.LogError("decimalPlaces argument must be a positive value.");
+        }
+        #endregion
+
+        int factor = 10;
+
+        for (int i = 1; i < decimalPlaces; i++)
+        {
+            factor *= 10;
+        }
+
+        inFloat = Mathf.Round(inFloat * factor) / factor;
+
+        return inFloat;
     }
 
     void HandlePlayerCorrect(GameObject playerGO)
@@ -323,6 +358,8 @@ public class GameManager : MonoBehaviour
                 AnimateScorePopup(p1ScorePopup, DeltaScore(roundTimer, p1Attempts));
 
                 p1Score = UpdatePlayerScore(p1Score, p1Attempts, p1ScoreText);
+
+                TugOfWar.Instance.MoveBadThing(TugOfWar.Instance.pushAmount/roundTimer, TugOfWar.Instance.pushSpeed);
             }
 
             if (playerGO == p2ColorInputGO)
@@ -330,6 +367,8 @@ public class GameManager : MonoBehaviour
                 AnimateScorePopup(p2ScorePopup, DeltaScore(roundTimer, p2Attempts));
 
                 p2Score = UpdatePlayerScore(p2Score, p2Attempts ,p2ScoreText);
+
+                TugOfWar.Instance.MoveBadThing(-TugOfWar.Instance.pushAmount / roundTimer, TugOfWar.Instance.pushSpeed);
             }
         }
     }
