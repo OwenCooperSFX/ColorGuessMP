@@ -6,6 +6,8 @@ public class Explosion : MonoBehaviour
 
     bool enable;
 
+    public float shakeLength, shakePower;
+
     public delegate void ExplosionEvent();
     public event ExplosionEvent OnExplosionStarted;
     public event ExplosionEvent OnExplosionFinished;
@@ -22,6 +24,10 @@ public class Explosion : MonoBehaviour
             OnExplosionFinished();
     }
 
+    private void Awake()
+    {
+    }
+
     void Start()
     {
         particleSystem = GetComponent<ParticleSystem>();
@@ -33,18 +39,20 @@ public class Explosion : MonoBehaviour
 
         if (!enable)
         {
-            OnExplosionFinished();
-            OnDisable();
+            RaiseExplosionFinished();
+            gameObject.SetActive(false);
         }
     }
 
     private void OnEnable()
     {
-        RaiseExplosionStarted();
+        Explode();
     }
 
-    private void OnDisable()
+    void Explode()
     {
-        
+        ScreenshakeController.Instance.StartShake(shakeLength, shakePower);
+
+        RaiseExplosionStarted();
     }
 }

@@ -11,8 +11,8 @@ public class TugOfWar : MonoBehaviour
     [SerializeField] float _pushAmount;
     public float pushAmount { get { return _pushAmount; } }
 
-    [SerializeField] float _pushSpeed;
-    public float pushSpeed { get { return _pushSpeed; } }
+    [SerializeField] float _pushDuration;
+    public float pushSpeed { get { return _pushDuration; } }
 
     [SerializeField] GameObject _track;
     public GameObject track { get { return _track; } }
@@ -20,8 +20,10 @@ public class TugOfWar : MonoBehaviour
     [SerializeField] AudioClip[] _explosionSounds;
     public AudioClip[] explosionSounds { get { return _explosionSounds; } }
 
+    float _horizontalLimit;
+    public float horizontalLimit { get { return _horizontalLimit; } }
+
     public float badThing_xPos;
-    float horizontalLimit;
     MeshRenderer meshRenderer;
     Vector3 startPos;
     float last_xPos;
@@ -91,7 +93,7 @@ public class TugOfWar : MonoBehaviour
         explosion = badThing.transform.GetChild(0).GetComponent<Explosion>();
         meshRenderer = badThing.GetComponent<MeshRenderer>();
         startPos = badThing.transform.position;
-        horizontalLimit = track.transform.localScale.y;
+        _horizontalLimit = track.transform.localScale.y;
         badThingAudioSource = badThing.GetComponent<AudioSource>();
     }
 
@@ -101,16 +103,15 @@ public class TugOfWar : MonoBehaviour
 
         if (!Instance)
         {
-            Instance = FindObjectOfType<TugOfWar>();
+            Instance = this;
         }
-
-        if (Instance && Instance != this)
+        else
         {
             Destroy(Instance);
+            Instance = this;
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this);
     }
 
     // Update is called once per frame
@@ -138,7 +139,7 @@ public class TugOfWar : MonoBehaviour
 
     public void MoveBadThing(float amount, float speed)
     {
-        if (badThing.transform.position.x > -horizontalLimit && badThing.transform.position.x < horizontalLimit)
+        if (badThing.transform.position.x > -_horizontalLimit && badThing.transform.position.x < _horizontalLimit)
         {
             float new_xPos = badThing_xPos + amount;
 
@@ -178,7 +179,7 @@ public class TugOfWar : MonoBehaviour
     void CheckBoundary()
     {
         //Animations. TODO: just handle in Update on BadThing
-        if (badThing_xPos >= -horizontalLimit && badThing_xPos < 0)
+        if (badThing_xPos >= -_horizontalLimit && badThing_xPos < 0)
         {
             //float scaleFactor = 2 / Mathf.Abs(-horizontalLimit - badThing_xPos);
             //Vector3 scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
@@ -191,7 +192,7 @@ public class TugOfWar : MonoBehaviour
             last_xPos = badThing_xPos;
             return;
         }
-        else if (badThing_xPos <= horizontalLimit && badThing_xPos > 0)
+        else if (badThing_xPos <= _horizontalLimit && badThing_xPos > 0)
         {
             //float scaleFactor = 2 / Mathf.Abs(horizontalLimit - badThing_xPos);
             //Vector3 scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
@@ -207,16 +208,17 @@ public class TugOfWar : MonoBehaviour
         else
         {
             //badThing.GetComponent<BadThing>().KillTweens();
+            //return;
         }
 
         // If moving will exceed a boundary, set position instead to the boundary.
-        if (badThing_xPos < -horizontalLimit)
+        if (badThing_xPos < -_horizontalLimit)
         {
-            badThing_xPos = -horizontalLimit;
+            badThing_xPos = -_horizontalLimit;
         }
-        else if (badThing_xPos > horizontalLimit)
+        else if (badThing_xPos > _horizontalLimit)
         {
-            badThing_xPos = horizontalLimit;
+            badThing_xPos = _horizontalLimit;
         }
 
         pushTween.TogglePause();
