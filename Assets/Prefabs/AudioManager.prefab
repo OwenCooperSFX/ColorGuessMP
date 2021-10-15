@@ -141,9 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackPlaying: 0
-  gameplayMusic: {fileID: 8300000, guid: db686c2d245912345b20335990ebd371, type: 3}
-  mainMenuMusic: {fileID: 0}
-  creditsMusic: {fileID: 0}
+  gameplayMusic: {fileID: 8300000, guid: 369952ccfde404b4fa5d9c011c5a0f10, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: 369952ccfde404b4fa5d9c011c5a0f10, type: 3}
+  creditsMusic: {fileID: 8300000, guid: 369952ccfde404b4fa5d9c011c5a0f10, type: 3}
 --- !u!1 &5325424008773625392
 GameObject:
   m_ObjectHideFlags: 0

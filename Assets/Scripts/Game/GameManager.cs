@@ -72,6 +72,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool p2InputEnabled { get { return _p2InputEnabled; } }
     private bool _p2InputEnabled = true;
 
+    private Vector3 _colorPromptStartScale;
+    public Vector3 colorPromptStartScale { get { return _colorPromptStartScale; } }
+
     // Events
     public delegate void PromptUpdated();
     public event PromptUpdated OnPromptUpdated;
@@ -112,6 +115,8 @@ public class GameManager : MonoBehaviour
         // Clear timers
         roundTimer = roundTimeLimit;
         nextRoundTimer = timeBetweenRounds;
+
+        _colorPromptStartScale = colorPromptGO.transform.localScale;
     }
 
     // Start is called before the first frame update
@@ -311,8 +316,7 @@ public class GameManager : MonoBehaviour
             nextRoundTimer = 0;
             _isBetweenRounds = true;
 
-            colorPromptGO.transform.DOKill();
-            colorPromptGO.transform.DOScale(colorPromptGO.transform.localScale * 1.1f, .3f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+            colorPromptGO.transform.DOKill();            
         }
 
         if (playerGO)
@@ -333,6 +337,20 @@ public class GameManager : MonoBehaviour
                 p2Score = UpdatePlayerScore(p2Score, p2Attempts ,p2ScoreText);
 
                 TugOfWar.Instance.MoveBadThing(-TugOfWar.Instance.pushAmount * (.001f * DeltaScore(roundTimer, p2Attempts)), TugOfWar.Instance.pushSpeed);
+            }
+
+            // Set the speed or the colorPrompt pulsing tween.
+            // TODO: use events to simplify this.
+            if (Mathf.Abs(TugOfWar.Instance.badThing_xPos) >= TugOfWar.Instance.horizontalLimit)
+            {
+                // Go back to default speed if boundary was exceeded.
+                colorPromptGO.transform.DOScale(colorPromptGO.transform.localScale * 1.1f, .3f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+            }
+            else
+            {
+                // Scale Tween speed based on BadThing position if boundary not exceeded.
+                colorPromptGO.transform.DOScale(colorPromptGO.transform.localScale * 1.1f, (Mathf.Clamp(.5f / Mathf.Abs(TugOfWar.Instance.badThing_xPos), .01f, .3f)))
+                .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
             }
         }
     }
@@ -406,6 +424,7 @@ public class GameManager : MonoBehaviour
         UpdateColor(colorPromptGO);
 
         colorPromptGO.transform.DOKill();
+        colorPromptGO.transform.localScale = _colorPromptStartScale;
         colorPromptGO.transform.DOPunchScale(new Vector3(.2f, .2f, 1f), .5f, 10, .5f);
 
         PlayerController.Instance.DisplayRandomColor();

@@ -71,7 +71,7 @@ public class MusicPlayer : MonoBehaviour
         float percentage = Mathf.Abs(xPos / limit);
         float scaledPitch = _maxPitch * percentage;
 
-        print(scaledPitch);
+        //print(scaledPitch);
 
         if (scaledPitch > 1f)
         {

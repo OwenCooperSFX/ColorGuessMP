@@ -28,7 +28,10 @@ public class TugOfWar : MonoBehaviour
     Vector3 startPos;
     float last_xPos;
     AudioSource badThingAudioSource;
-    Explosion explosion;
+
+    Explosion _explosion;
+    public Explosion explosion { get { return _explosion; } }
+
     Tween pushTween;
     float pulseSpeed = 1;
 
@@ -72,8 +75,8 @@ public class TugOfWar : MonoBehaviour
         OnBadThingMoved += CheckBoundary;
         OnExceededBoundary += ShowPlayerWon;
 
-        if (explosion)
-            explosion.OnExplosionFinished += ResetBadThing;
+        if (_explosion)
+            _explosion.OnExplosionFinished += ResetBadThing;
     }
 
     void OnDisable()
@@ -81,8 +84,8 @@ public class TugOfWar : MonoBehaviour
         OnBadThingMoved += CheckBoundary;
         OnExceededBoundary -= ShowPlayerWon;
 
-        if (explosion)
-            explosion.OnExplosionFinished -= ResetBadThing;
+        if (_explosion)
+            _explosion.OnExplosionFinished -= ResetBadThing;
     }
     #endregion
 
@@ -90,7 +93,7 @@ public class TugOfWar : MonoBehaviour
     {
         Init();
 
-        explosion = badThing.transform.GetChild(0).GetComponent<Explosion>();
+        _explosion = badThing.transform.GetChild(0).GetComponent<Explosion>();
         meshRenderer = badThing.GetComponent<MeshRenderer>();
         startPos = badThing.transform.position;
         _horizontalLimit = track.transform.localScale.y;
@@ -139,14 +142,14 @@ public class TugOfWar : MonoBehaviour
 
     public void MoveBadThing(float amount, float speed)
     {
+        float new_xPos = badThing_xPos + amount;
+
         if (badThing.transform.position.x > -_horizontalLimit && badThing.transform.position.x < _horizontalLimit)
         {
-            float new_xPos = badThing_xPos + amount;
-
             pushTween = badThing.transform.DOLocalMoveX(new_xPos, speed).SetEase(Ease.OutExpo);
-
-            badThing_xPos = new_xPos;
         }
+
+        badThing_xPos = new_xPos;
 
         RaiseBadThingMoved();
     }
@@ -162,14 +165,14 @@ public class TugOfWar : MonoBehaviour
         }
 
         meshRenderer.enabled = false;
-        explosion.gameObject.SetActive(true);
+        _explosion.gameObject.SetActive(true);
     }
 
     void ResetBadThing()
     {
         badThing.transform.position = startPos;
         meshRenderer.enabled = true;
-        explosion.gameObject.SetActive(false);
+        _explosion.gameObject.SetActive(false);
 
         badThing_xPos = badThing.transform.localPosition.x;
         badThing.GetComponent<BadThing>().KillTweens();
@@ -207,23 +210,20 @@ public class TugOfWar : MonoBehaviour
         }
         else
         {
-            //badThing.GetComponent<BadThing>().KillTweens();
-            //return;
-        }
+            // If moving will exceed a boundary, set position instead to the boundary.
+            RaiseExceededBoundary();
 
-        // If moving will exceed a boundary, set position instead to the boundary.
-        if (badThing_xPos < -_horizontalLimit)
-        {
-            badThing_xPos = -_horizontalLimit;
-        }
-        else if (badThing_xPos > _horizontalLimit)
-        {
-            badThing_xPos = _horizontalLimit;
+            if (badThing_xPos < -_horizontalLimit)
+            {
+                _badThing.transform.localPosition = new Vector3(-_horizontalLimit, 0f, 0f);
+            }
+            else if (badThing_xPos > _horizontalLimit)
+            {
+                _badThing.transform.localPosition = new Vector3(_horizontalLimit, 0f, 0f);
+            }
         }
 
         pushTween.TogglePause();
-        badThing.transform.localPosition = new Vector3(badThing_xPos, badThing.transform.position.y, badThing.transform.position.z);
-
-        RaiseExceededBoundary();
+        //badThing.transform.localPosition = new Vector3(badThing_xPos, badThing.transform.position.y, badThing.transform.position.z);
     }
 }
