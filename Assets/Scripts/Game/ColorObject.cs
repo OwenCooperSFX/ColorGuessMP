@@ -15,11 +15,6 @@ public class ColorObject : MonoBehaviour
 
     [SerializeField] private float range = 1.8f;
 
-    private void OnEnable()
-    {
-        //GameManager.Instance.OnPlayerInputCorrect += 
-    }
-
     private void Awake()
     {
         // Light Construction

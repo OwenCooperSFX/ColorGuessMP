@@ -37,57 +37,25 @@ public class TugOfWar : MonoBehaviour
 
     bool bEmitting;
 
-    #region Event dispatchers
-
-    public delegate void TugOfWarEvent();
-    public event TugOfWarEvent OnExplosionFinished;
-    public event TugOfWarEvent OnExceededBoundary;
-    public event TugOfWarEvent OnBadThingMoved;
-
-    void RaiseExplosionFinished()
-    {
-        if (OnExplosionFinished != null)
-        {
-            OnExplosionFinished();
-        }
-    }
-
-    void RaiseExceededBoundary()
-    {
-        if (OnExceededBoundary != null)
-        {
-            OnExceededBoundary();
-        }
-    }
-
-    void RaiseBadThingMoved()
-    {
-        if (OnBadThingMoved != null)
-        {
-            OnBadThingMoved();
-        }
-    }
-    #endregion
-
-    #region Event subscribers
     void OnEnable()
     {
-        OnBadThingMoved += CheckBoundary;
-        OnExceededBoundary += ShowPlayerWon;
+        EventManager.RaiseTugOfWarEnabled();
 
-        if (_explosion)
-            _explosion.OnExplosionFinished += ResetBadThing;
+        EventManager.OnBadThingMoved += CheckBoundary;
+        EventManager.OnExceededBoundary += ShowPlayerWon;
+
+        EventManager.OnExplosionFinished += ResetBadThing;
     }
 
     void OnDisable()
     {
-        OnBadThingMoved += CheckBoundary;
-        OnExceededBoundary -= ShowPlayerWon;
+        EventManager.RaiseTugOfWarDisabled();
 
-        if (_explosion)
-            _explosion.OnExplosionFinished -= ResetBadThing;
+        EventManager.OnBadThingMoved += CheckBoundary;
+        EventManager.OnExceededBoundary -= ShowPlayerWon;
+
+        EventManager.OnExplosionFinished -= ResetBadThing;
     }
-    #endregion
 
     void Awake()
     {
@@ -120,7 +88,7 @@ public class TugOfWar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        #region Input
+        #region Input (for testing)
         /*
         if (!Input.anyKey)
         {
@@ -151,7 +119,7 @@ public class TugOfWar : MonoBehaviour
 
         badThing_xPos = new_xPos;
 
-        RaiseBadThingMoved();
+        EventManager.RaiseBadThingMoved();
     }
 
     void ShowPlayerWon()
@@ -211,7 +179,7 @@ public class TugOfWar : MonoBehaviour
         else
         {
             // If moving will exceed a boundary, set position instead to the boundary.
-            RaiseExceededBoundary();
+            EventManager.RaiseExceededBoundary();
 
             if (badThing_xPos < -_horizontalLimit)
             {

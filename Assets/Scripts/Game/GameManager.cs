@@ -75,26 +75,16 @@ public class GameManager : MonoBehaviour
     private Vector3 _colorPromptStartScale;
     public Vector3 colorPromptStartScale { get { return _colorPromptStartScale; } }
 
-    // Events
-    public delegate void PromptUpdated();
-    public event PromptUpdated OnPromptUpdated;
-
-    public delegate void PlayerInputCorrect(GameObject playerInputGO);
-    public event PlayerInputCorrect OnPlayerInputCorrect;
-
-    public delegate void PlayerInputIncorrect(GameObject playerInputGO);
-    public event PlayerInputIncorrect OnPlayerInputIncorrect;
-
     private void OnEnable()
     {
-        OnPlayerInputCorrect += HandlePlayerCorrect;
-        OnPlayerInputIncorrect += HandlePlayerIncorrect;
+        EventManager.OnPlayerInputCorrect += HandlePlayerCorrect;
+        EventManager.OnPlayerInputWrong += HandlePlayerIncorrect;
     }
 
     private void OnDisable()
     {
-        OnPlayerInputCorrect -= HandlePlayerCorrect;
-        OnPlayerInputIncorrect -= HandlePlayerIncorrect;
+        EventManager.OnPlayerInputCorrect -= HandlePlayerCorrect;
+        EventManager.OnPlayerInputWrong -= HandlePlayerIncorrect;
     }
 
     private void Awake()
@@ -174,13 +164,15 @@ public class GameManager : MonoBehaviour
                 if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
                 {
                     // Player 1 is correct
-                    OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
+                    EventManager.RaisePlayerInputCorrect(p1ColorInputGO);
+                    //OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
                     //Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
                 }
                 else
                 {
                     // Player 1 is wrong
-                    OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
+                    EventManager.RaisePlayerInputWrong(p1ColorInputGO);
+                    //OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
                     //Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p1ColorInputGO.name + ").");
                 }
             }
@@ -200,13 +192,15 @@ public class GameManager : MonoBehaviour
                 if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
                 {
                     // Player 2 is correct
-                    OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
+                    EventManager.RaisePlayerInputCorrect(p2ColorInputGO);
+                    //OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
                     //Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
                 }
                 else
                 {
                     // Player 2 is wrong
-                    OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
+                    EventManager.RaisePlayerInputWrong(p2ColorInputGO);
+                    //OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
                     //Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p2ColorInputGO.name + ").");
                 }
             }
@@ -268,19 +262,15 @@ public class GameManager : MonoBehaviour
     void Init()
     {
         // Singleton logic
-
-        if (!Instance)
-        {
-            Instance = FindObjectOfType<GameManager>();
-        }
-        
         if (Instance && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(this);
         }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
 
     bool  InputEqualsPrompt(ColorOption input)
@@ -429,7 +419,8 @@ public class GameManager : MonoBehaviour
 
         PlayerController.Instance.DisplayRandomColor();
 
-        OnPromptUpdated?.Invoke();
+        EventManager.RaisePromptUpdated();
+        // OnPromptUpdated?.Invoke();
         // Debug.Log("Call Event: " + OnPromptUpdated + ".");
     }
 
@@ -437,7 +428,8 @@ public class GameManager : MonoBehaviour
     {
         if (p1Attempts > 2)
         {
-            OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
+            EventManager.RaisePlayerInputWrong(p1ColorInputGO);
+            // OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
             _p1InputEnabled = false;
         }
         else if (!_isBetweenRounds)
@@ -448,7 +440,8 @@ public class GameManager : MonoBehaviour
     {
         if (p2Attempts > 2)
         {
-            OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
+            EventManager.RaisePlayerInputWrong(p1ColorInputGO);
+            // OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
             _p2InputEnabled = false;
         }
         else if (!_isBetweenRounds)

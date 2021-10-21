@@ -18,9 +18,9 @@ public class AudioManager : MonoBehaviour
     {
         if (GameManager.Instance)
         {
-            GameManager.Instance.OnPromptUpdated += HandlePromptUpdated;
-            GameManager.Instance.OnPlayerInputCorrect += PlayCorrectSound;
-            GameManager.Instance.OnPlayerInputIncorrect += PlayIncorrectSound;
+            EventManager.OnPromptUpdated += HandlePromptUpdated;
+            EventManager.OnPlayerInputCorrect += PlayCorrectSound;
+            EventManager.OnPlayerInputWrong += PlayIncorrectSound;
         }
     }
 
@@ -28,9 +28,9 @@ public class AudioManager : MonoBehaviour
     {
         if (GameManager.Instance)
         {
-            GameManager.Instance.OnPromptUpdated -= HandlePromptUpdated;
-            GameManager.Instance.OnPlayerInputCorrect -= PlayCorrectSound;
-            GameManager.Instance.OnPlayerInputIncorrect -= PlayIncorrectSound;
+            EventManager.OnPromptUpdated -= HandlePromptUpdated;
+            EventManager.OnPlayerInputCorrect -= PlayCorrectSound;
+            EventManager.OnPlayerInputWrong -= PlayIncorrectSound;
         }
     }
 
@@ -57,16 +57,15 @@ public class AudioManager : MonoBehaviour
 
     void Init()
     {
-        // Singleton logic
-        Instance = FindObjectOfType<AudioManager>();
-
         if (Instance && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(this);
         }
-
-        Instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
 
     public void PlayInputSound(AudioClip in_audioClip, AudioSource in_audioSource = null)

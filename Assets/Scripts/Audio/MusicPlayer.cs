@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum MusicTrack { Gameplay, MainMenu, Credits }
@@ -28,18 +27,19 @@ public class MusicPlayer : MonoBehaviour
     void OnEnable()
     {
        //TugOfWar.Instance.OnBadThingMoved += SetPitchByPosition;
-        TugOfWar.Instance.OnExceededBoundary += ResetPitch;
+        EventManager.OnExceededBoundary += ResetPitch;
     }
 
     void OnDisable()
     {
         //TugOfWar.Instance.OnBadThingMoved -= SetPitchByPosition;
-        TugOfWar.Instance.OnExceededBoundary -= ResetPitch;
+        EventManager.OnExceededBoundary -= ResetPitch;
     }
 
     private void Update()
     {
-        SetPitchByPosition();
+        if (TugOfWar.Instance)
+            SetPitchByPosition();
     }
 
     public void SetMusicTrack(MusicTrack trackToPlay)

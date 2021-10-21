@@ -181,15 +181,15 @@ public class PlayerController : ColorObject
     void Init()
     {
         // Singleton logic
-        Instance = FindObjectOfType<PlayerController>();
-
         if (Instance && Instance != this)
         {
-            Destroy(Instance);
+            Destroy(this);
         }
-
-        Instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
 
     List<Color> ShuffleColors(List<Color> in_colorList)

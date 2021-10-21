@@ -34,15 +34,14 @@ public class ScreenshakeController : MonoBehaviour
     void Init()
     {
         // Singleton logic
-
-        if (!Instance)
+        if (Instance && Instance != this)
         {
-            Instance = this;
+            Destroy(this);
         }
         else
         {
-            Destroy(Instance);
             Instance = this;
+            DontDestroyOnLoad(this);
         }
     }
 
