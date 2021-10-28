@@ -35,6 +35,12 @@ public class BadThing : MonoBehaviour
         scaleMagnitude = Mathf.Pow(1 + (Mathf.Abs(transform.position.x)/5f), 2);
         currentScale = new Vector3(scaleMagnitude, scaleMagnitude, scaleMagnitude);
         transform.localScale = currentScale;
+
+        // This can work, but we need a holder to maintain the x-position so it's unaffected by the shaking.
+        //transform.localPosition = Shake(Mathf.Abs(transform.position.x));
+
+        // Doesnt work :(
+        //UpdateDangerTween(Mathf.Abs(transform.position.x));
     }
 
     void CreateTweens()
@@ -68,5 +74,26 @@ public class BadThing : MonoBehaviour
     {
         sizeIncreaseTween.Kill();
         sizeDecreaseTween.Kill();
+    }
+
+
+    // Doesn't work :(
+    public void UpdateDangerTween(float in_DangerAmount)
+    {
+        float vibration = Mathf.Clamp(Random.Range(0f, 1f) * in_DangerAmount, 0f, 2f);
+
+        Vector3 newPosition = new Vector3(vibration, vibration, 0f);
+        dangerPulseTween = transform.DOLocalMove(newPosition, 1 / in_DangerAmount);
+    }
+
+
+    // This can work, but we need a holder to maintain the x-position so it's unaffected by the shaking.
+    Vector3 Shake(float in_DangerAmount)
+    {
+        float vibration = Mathf.Clamp(Random.Range(0f, 1f) * in_DangerAmount, 0f, 2f);
+
+        Vector3 newPosition = new Vector3(vibration, vibration, 0f);
+
+        return newPosition;
     }
 }

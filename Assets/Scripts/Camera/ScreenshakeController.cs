@@ -41,7 +41,6 @@ public class ScreenshakeController : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
     }
 

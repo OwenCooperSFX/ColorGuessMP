@@ -22,26 +22,9 @@ public class PlayerController : ColorObject
     [SerializeField] private float inputAnimTime = 0.2f;
     [SerializeField] private float inputAnimDepth = 0.2f;
 
-    // Events
-    public delegate InputButton P1Input(InputButton inputSelection);
-    public event P1Input OnP1Input;
-
-    public delegate InputButton P2Input(InputButton inputSelection);
-    public event P2Input OnP2Input;
-
     Vector3 defaultButtonScale;
     Vector3 punchScale = new Vector3(-.2f, -.2f, 0f);
     private Tween buttonPressTween;
-
-    private void OnEnable()
-    {
-
-    }
-
-    private void OnDisable()
-    {
-
-    }
 
     private void Awake()
     {
@@ -58,11 +41,6 @@ public class PlayerController : ColorObject
 
         // use p1 top button as scale template
         defaultButtonScale = p1_controls[0].transform.localScale;
-    }
-
-    void Update()
-    {
-
     }
 
     // Start is called before the first frame update
@@ -93,19 +71,19 @@ public class PlayerController : ColorObject
                 
                 return GetColor(p1_controls[0]);
             }
-            if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.A))
             {
                 // Do left color
                 P1InputDown(InputButton.Left);
                 return GetColor(p1_controls[1]);
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.S))
             {
                 // Do bottom color
                 P1InputDown(InputButton.Down);
                 return GetColor(p1_controls[3]);
             }
-            if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.D))
             {
                 // Do right color
                 P1InputDown(InputButton.Right);
@@ -127,19 +105,19 @@ public class PlayerController : ColorObject
                 P2InputDown(InputButton.Up);
                 return GetColor(p2_controls[0]);
             }
-            if (Input.GetKeyDown(KeyCode.J))
+            else if (Input.GetKeyDown(KeyCode.J))
             {
                 // Do left color
                 P2InputDown(InputButton.Left);
                 return GetColor(p2_controls[1]);
             }
-            if (Input.GetKeyDown(KeyCode.K))
+            else if (Input.GetKeyDown(KeyCode.K))
             {
                 // Do bottom color
                 P2InputDown(InputButton.Down);
                 return GetColor(p2_controls[3]);
             }
-            if (Input.GetKeyDown(KeyCode.L))
+            else if (Input.GetKeyDown(KeyCode.L))
             {
                 // Do right color
                 P2InputDown(InputButton.Right);
@@ -163,7 +141,8 @@ public class PlayerController : ColorObject
         //StartCoroutine(AnimateButtonDown(inputButton, p1_controls));
         TweenButtonPress(inputButton, p1_controls);
 
-        OnP1Input?.Invoke(inputButton);
+        EventManager.RaiseP1Input(inputButton);
+        //OnP1Input?.Invoke(inputButton);
 
         return inputButton;
     }
@@ -173,7 +152,7 @@ public class PlayerController : ColorObject
         //StartCoroutine(AnimateButtonDown(inputButton, p2_controls));
         TweenButtonPress(inputButton, p2_controls);
 
-        OnP2Input?.Invoke(inputButton);
+        EventManager.RaiseP2Input(inputButton);
 
         return inputButton;
     }

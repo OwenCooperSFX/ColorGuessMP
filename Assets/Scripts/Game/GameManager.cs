@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using System;
 
 /*
 NOTES:
@@ -25,6 +26,9 @@ NOTES:
 
     TODO:
     - Sound design, music
+    
+    TODO:
+    - Use InputEvents to get away from using the Update method here...
 */
 
 public enum ColorOption { invalid, red, blue, yellow, green, random }
@@ -79,12 +83,18 @@ public class GameManager : MonoBehaviour
     {
         EventManager.OnPlayerInputCorrect += HandlePlayerCorrect;
         EventManager.OnPlayerInputWrong += HandlePlayerIncorrect;
+
+        EventManager.OnP1Input += HandleP1Input;
+        EventManager.OnP2Input += HandleP2Input;
     }
 
     private void OnDisable()
     {
         EventManager.OnPlayerInputCorrect -= HandlePlayerCorrect;
         EventManager.OnPlayerInputWrong -= HandlePlayerIncorrect;
+
+        EventManager.OnP1Input -= HandleP1Input;
+        EventManager.OnP2Input -= HandleP2Input;
     }
 
     private void Awake()
@@ -447,4 +457,17 @@ public class GameManager : MonoBehaviour
         else if (!_isBetweenRounds)
             p2Attempts++;
     }
+
+    private InputButton HandleP2Input(InputButton in_Button)
+    {
+        //TODO: Use this to get away from handling things in Update.
+        return InputButton.invalid;
+    }
+
+    private InputButton HandleP1Input(InputButton in_Button)
+    {
+        //TODO: Use this to get away from handling things in Update.
+        return InputButton.invalid;
+    }
+
 }

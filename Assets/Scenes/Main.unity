@@ -700,7 +700,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111345271}
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1720053547}
@@ -5502,7 +5502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shakeLength: 2.5
   shakePower: 3
-  _light: {fileID: 0}
+  _explosionLight: {fileID: 0}
 --- !u!108 &1111345276
 Light:
   m_ObjectHideFlags: 0
@@ -6228,6 +6228,10 @@ PrefabInstance:
       propertyPath: m_Pitch
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5325424008773625358, guid: c265f65ba8015a745b4a975efa31cdb9, type: 3}
+      propertyPath: InputWrongSound
+      value: 
+      objectReference: {fileID: 8300000, guid: fa37749a95d82d34ebfdf6e725246626, type: 3}
     - target: {fileID: 5325424008773625359, guid: c265f65ba8015a745b4a975efa31cdb9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

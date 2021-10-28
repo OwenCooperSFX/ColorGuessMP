@@ -141,6 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackPlaying: 0
+  _maxPitch: 1.6
+  _pitch: 1
+  _pitchInterpSpeed: 0.5
   gameplayMusic: {fileID: 8300000, guid: 369952ccfde404b4fa5d9c011c5a0f10, type: 3}
   mainMenuMusic: {fileID: 8300000, guid: 369952ccfde404b4fa5d9c011c5a0f10, type: 3}
   creditsMusic: {fileID: 8300000, guid: 369952ccfde404b4fa5d9c011c5a0f10, type: 3}
@@ -288,4 +291,4 @@ MonoBehaviour:
   audioSource: {fileID: 5325424008773625393}
   PromptUpdatedSound: {fileID: 8300000, guid: b558ef4bea15dde4bb8ae8928bb5846f, type: 3}
   InputCorrectSound: {fileID: 8300000, guid: b7861e738ccd7dc4a8d7949203ab07e8, type: 3}
-  InputIncorrectSound: {fileID: 8300000, guid: fa37749a95d82d34ebfdf6e725246626, type: 3}
+  InputWrongSound: {fileID: 8300000, guid: fa37749a95d82d34ebfdf6e725246626, type: 3}

@@ -34,6 +34,9 @@ public class ColorObject : MonoBehaviour
 
     private void Update()
     {
+        if (!colorLight)
+            return;
+
         if (timer < lightFlashTime)
         {
             if (!bIsLightOn)

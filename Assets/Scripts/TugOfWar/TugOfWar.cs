@@ -33,13 +33,12 @@ public class TugOfWar : MonoBehaviour
     public Explosion explosion { get { return _explosion; } }
 
     Tween pushTween;
-    float pulseSpeed = 1;
 
     bool bEmitting;
 
     void OnEnable()
     {
-        EventManager.RaiseTugOfWarEnabled();
+        //EventManager.RaiseTugOfWarEnabled();
 
         EventManager.OnBadThingMoved += CheckBoundary;
         EventManager.OnExceededBoundary += ShowPlayerWon;
@@ -49,7 +48,7 @@ public class TugOfWar : MonoBehaviour
 
     void OnDisable()
     {
-        EventManager.RaiseTugOfWarDisabled();
+        //EventManager.RaiseTugOfWarDisabled();
 
         EventManager.OnBadThingMoved += CheckBoundary;
         EventManager.OnExceededBoundary -= ShowPlayerWon;
@@ -115,6 +114,7 @@ public class TugOfWar : MonoBehaviour
         if (badThing.transform.position.x > -_horizontalLimit && badThing.transform.position.x < _horizontalLimit)
         {
             pushTween = badThing.transform.DOLocalMoveX(new_xPos, speed).SetEase(Ease.OutExpo);
+
         }
 
         badThing_xPos = new_xPos;
@@ -149,30 +149,13 @@ public class TugOfWar : MonoBehaviour
 
     void CheckBoundary()
     {
-        //Animations. TODO: just handle in Update on BadThing
         if (badThing_xPos >= -_horizontalLimit && badThing_xPos < 0)
         {
-            //float scaleFactor = 2 / Mathf.Abs(-horizontalLimit - badThing_xPos);
-            //Vector3 scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
-
-            //if (badThing_xPos < last_xPos)
-            //    badThing.GetComponent<BadThing>().IncreaseSize(scale, Mathf.Clamp((pulseSpeed *= .5f), .1f, 6f));
-            //else if (badThing_xPos > last_xPos)
-            //    badThing.GetComponent<BadThing>().DecreaseSize(scale, Mathf.Clamp((pulseSpeed *= 2f), .1f, 6f));
-
             last_xPos = badThing_xPos;
             return;
         }
         else if (badThing_xPos <= _horizontalLimit && badThing_xPos > 0)
         {
-            //float scaleFactor = 2 / Mathf.Abs(horizontalLimit - badThing_xPos);
-            //Vector3 scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
-
-            //if (badThing_xPos > last_xPos)
-            //    badThing.GetComponent<BadThing>().IncreaseSize(scale, Mathf.Clamp((pulseSpeed *= .5f), .1f, 6f));
-            //else if (badThing_xPos < last_xPos)
-            //    badThing.GetComponent<BadThing>().DecreaseSize(scale, Mathf.Clamp((pulseSpeed *= 2f), .1f, 6f));
-
             last_xPos = badThing_xPos;
             return;
         }
@@ -192,6 +175,5 @@ public class TugOfWar : MonoBehaviour
         }
 
         pushTween.TogglePause();
-        //badThing.transform.localPosition = new Vector3(badThing_xPos, badThing.transform.position.y, badThing.transform.position.z);
     }
 }

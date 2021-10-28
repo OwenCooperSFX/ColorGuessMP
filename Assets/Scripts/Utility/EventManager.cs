@@ -16,6 +16,37 @@ public static class EventManager
 
     /*
     ============================
+    INPUT EVENTS
+    ============================
+    */
+
+    public delegate InputButton InputEvent(InputButton in_Button);
+    public static event InputEvent OnP1Input;
+    public static event InputEvent OnP2Input;
+
+    static void RaiseEventInput(InputEvent in_Event, InputButton in_Button)
+    {
+        if (in_Event != null)
+        {
+            in_Event(in_Button);
+        }
+        else
+        {
+            PrintNullEventWarning("InputEvent");
+        }
+    }
+
+    public static void RaiseP1Input(InputButton in_Button)
+    {
+        RaiseEventInput(OnP1Input, in_Button);
+    }
+    public static void RaiseP2Input(InputButton in_Button)
+    {
+        RaiseEventInput(OnP2Input, in_Button);
+    }
+
+    /*
+    ============================
     TUG OF WAR EVENTS
     ============================
     */

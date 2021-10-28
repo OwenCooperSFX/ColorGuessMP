@@ -7,13 +7,22 @@ public class MusicPlayer : MonoBehaviour
 {
     public MusicTrack trackPlaying;
 
-    private float _maxPitch = 1.6f;
+    [SerializeField]
+    [Range(1f, 2f)]
+    float _maxPitch = 1.6f;
     public float maxPitch { get { return _maxPitch; } set { _maxPitch = maxPitch; } }
 
+    [SerializeField]
     private float _pitch = 1f;
     public float pitch { get { return _pitch; } set { _pitch = pitch; } }
 
-    [SerializeField] AudioClip gameplayMusic, mainMenuMusic, creditsMusic;
+    [SerializeField]
+    [Range(0f,2f)]
+    private float _pitchInterpSpeed = 0.5f;
+    public float pitchInterpSpeed { get { return _pitchInterpSpeed; } set { _pitchInterpSpeed = pitchInterpSpeed; } }
+
+    [SerializeField]
+    AudioClip gameplayMusic, mainMenuMusic, creditsMusic;
 
     AudioSource audioSource;
 
@@ -26,20 +35,14 @@ public class MusicPlayer : MonoBehaviour
 
     void OnEnable()
     {
-       //TugOfWar.Instance.OnBadThingMoved += SetPitchByPosition;
+        EventManager.OnBadThingMoved += SetPitchByPosition;
         EventManager.OnExceededBoundary += ResetPitch;
     }
 
     void OnDisable()
     {
-        //TugOfWar.Instance.OnBadThingMoved -= SetPitchByPosition;
+        EventManager.OnBadThingMoved -= SetPitchByPosition;
         EventManager.OnExceededBoundary -= ResetPitch;
-    }
-
-    private void Update()
-    {
-        if (TugOfWar.Instance)
-            SetPitchByPosition();
     }
 
     public void SetMusicTrack(MusicTrack trackToPlay)
@@ -50,10 +53,10 @@ public class MusicPlayer : MonoBehaviour
                 PlayAudioClip(gameplayMusic);
                 break;
             case MusicTrack.MainMenu:
-                PlayAudioClip(null);
+                PlayAudioClip(mainMenuMusic);
                 break;
             case MusicTrack.Credits:
-                PlayAudioClip(null);
+                PlayAudioClip(creditsMusic);
                 break;
         }
     }
@@ -64,19 +67,34 @@ public class MusicPlayer : MonoBehaviour
         audioSource.Play();
     }
 
-    void SetPitchByPosition()
+    IEnumerator SetPitchByPositionCoroutine()
     {
-        float limit = TugOfWar.Instance.horizontalLimit;
-        float xPos = TugOfWar.Instance.badThing.transform.localPosition.x;
-        float percentage = Mathf.Abs(xPos / limit);
-        float scaledPitch = _maxPitch * percentage;
-
-        //print(scaledPitch);
-
-        if (scaledPitch > 1f)
+        if (TugOfWar.Instance)
         {
-            // StartCoroutine(LerpToPitch(scaledPitch, .01f));
-            audioSource.pitch = scaledPitch;
+            float limit = TugOfWar.Instance.horizontalLimit;
+            float xPos = TugOfWar.Instance.badThing_xPos;
+            float percentage = Mathf.Abs(xPos / limit);
+            float scaledPitch = _maxPitch * percentage;
+
+            //print(scaledPitch);
+
+            if (scaledPitch < 1f)
+            {
+                scaledPitch = 1f;
+            }
+
+            if (percentage >= .5f)
+            {
+                while (_pitch != scaledPitch)
+                {
+                    _pitch = Mathf.MoveTowards(_pitch, scaledPitch, _pitchInterpSpeed * Time.deltaTime);
+
+                    audioSource.pitch = _pitch;
+
+                    yield return null;
+                }
+            }
+            yield break;
         }
     }
 
@@ -84,23 +102,22 @@ public class MusicPlayer : MonoBehaviour
     {
         while (audioSource.pitch != 1f)
         {
-            audioSource.pitch = Mathf.MoveTowards(audioSource.pitch, 1f, 1f);
+            audioSource.pitch = Mathf.MoveTowards(audioSource.pitch, 1f, 3 * _pitchInterpSpeed * Time.deltaTime);
             yield return null;
         }
-    }
 
-    IEnumerator LerpToPitch(float targetPitch, float maxDelta)
-    {
-        while (audioSource.pitch != targetPitch)
-        {
-            audioSource.pitch = Mathf.MoveTowards(audioSource.pitch, targetPitch, maxDelta);
-            yield return null;
-        }
+        yield break;
     }
 
     void ResetPitch()
     {
-        print("ResetPitch");
+        //print("Reset Pitch");
         StartCoroutine(ResetPitchCoroutine());
+    }
+
+    void SetPitchByPosition()
+    {
+        //print("Set Pitch");
+        StartCoroutine(SetPitchByPositionCoroutine());
     }
 }

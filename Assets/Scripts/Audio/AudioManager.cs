@@ -9,29 +9,23 @@ public class AudioManager : MonoBehaviour
     public AudioSource audioSource;
 
     [Header("Audio Clips")]
-    [SerializeField] private AudioClip PromptUpdatedSound = null;
-    [SerializeField] private AudioClip InputCorrectSound = null;
-    [SerializeField] private AudioClip InputIncorrectSound = null;
+    [SerializeField] AudioClip PromptUpdatedSound;
+    [SerializeField] AudioClip InputCorrectSound;
+    [SerializeField] AudioClip InputWrongSound;
 
 
     private void OnEnable()
     {
-        if (GameManager.Instance)
-        {
-            EventManager.OnPromptUpdated += HandlePromptUpdated;
-            EventManager.OnPlayerInputCorrect += PlayCorrectSound;
-            EventManager.OnPlayerInputWrong += PlayIncorrectSound;
-        }
+        EventManager.OnPromptUpdated += HandlePromptUpdated;
+        EventManager.OnPlayerInputCorrect += PlayCorrectSound;
+        EventManager.OnPlayerInputWrong += PlayWrongSound;
     }
 
     private void OnDisable()
     {
-        if (GameManager.Instance)
-        {
-            EventManager.OnPromptUpdated -= HandlePromptUpdated;
-            EventManager.OnPlayerInputCorrect -= PlayCorrectSound;
-            EventManager.OnPlayerInputWrong -= PlayIncorrectSound;
-        }
+        EventManager.OnPromptUpdated -= HandlePromptUpdated;
+        EventManager.OnPlayerInputCorrect -= PlayCorrectSound;
+        EventManager.OnPlayerInputWrong -= PlayWrongSound;
     }
 
     private void Awake()
@@ -89,10 +83,10 @@ public class AudioManager : MonoBehaviour
         PlayInputSound(InputCorrectSound, playerAudioSource);
     }
 
-    public void PlayIncorrectSound(GameObject playerGO)
+    public void PlayWrongSound(GameObject playerGO)
     {
         AudioSource playerAudioSource = playerGO.GetComponent<AudioSource>();
 
-        PlayInputSound(InputIncorrectSound, playerAudioSource);
+        PlayInputSound(InputWrongSound, playerAudioSource);
     }
 }

@@ -8,8 +8,8 @@ public class Explosion : MonoBehaviour
 
     public float shakeLength, shakePower;
 
-    [SerializeField] Light _light;
-    public Light light { get { return _light; } set { _light = light; } }
+    [SerializeField] Light _explosionLight;
+    public Light explosionLight { get { return _explosionLight; } set { _explosionLight = explosionLight; } }
 
     private float startIntensity;
 
@@ -17,13 +17,8 @@ public class Explosion : MonoBehaviour
     {
         particleSystem = GetComponent<ParticleSystem>();
 
-        _light = transform.GetChild(0).GetComponent<Light>();
-        startIntensity = _light.intensity;
-    }
-
-    void Start()
-    {
-
+        _explosionLight = transform.GetChild(0).GetComponent<Light>();
+        startIntensity = _explosionLight.intensity;
     }
 
     private void Update()
@@ -32,7 +27,7 @@ public class Explosion : MonoBehaviour
 
         if (enable)
         {
-            light.intensity -= 100 * Time.deltaTime;
+            _explosionLight.intensity -= 100 * Time.deltaTime;
         }
 
         if (!enable)
@@ -49,7 +44,7 @@ public class Explosion : MonoBehaviour
 
     void Explode()
     {
-        light.intensity = startIntensity;
+        _explosionLight.intensity = startIntensity;
 
         ScreenshakeController.Instance.StartShake(shakeLength, shakePower);
 
