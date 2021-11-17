@@ -1,17 +1,24 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader: MonoBehaviour
 {
-    public static void LoadMainScene()
+    public void LoadMainScene()
     {
-        SceneManager.LoadScene("Main");
-        SceneManager.UnloadSceneAsync("FrontEnd");
+        StartCoroutine(LoadSceneWithDelay("FrontEnd", "Main", .3f));
     }
 
-    public static void UnloadMainScene()
+    public void UnloadMainScene()
     {
-        SceneManager.UnloadSceneAsync("Main");
-        SceneManager.LoadScene("FrontEnd");
+        StartCoroutine(LoadSceneWithDelay("Main", "FrontEnd", .3f));
+    }
+
+    private IEnumerator LoadSceneWithDelay(string currentScene, string nextScene, float delay = 0f)
+    {
+        yield return new WaitForSeconds(delay);
+
+        SceneManager.LoadScene(nextScene);
+        SceneManager.UnloadSceneAsync(currentScene);
     }
 }

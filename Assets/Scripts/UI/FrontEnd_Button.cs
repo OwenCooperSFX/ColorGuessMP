@@ -3,6 +3,9 @@ using DG.Tweening;
 
 public class FrontEnd_Button : MonoBehaviour
 {
+    RectTransform startTransform;
+    Vector3 startScale;
+
     Tween hoverTween;
     Tween selectTween;
 
@@ -17,7 +20,12 @@ public class FrontEnd_Button : MonoBehaviour
     [SerializeField][Range(0,5)] float punchDuration;
     [SerializeField] int punchVibrato;
     [SerializeField] float punchElasticity;
-   
+
+    private void Awake()
+    {
+        startTransform = GetComponent<RectTransform>();
+        startScale = startTransform.localScale;
+    }
 
     void OnEnable()
     {
@@ -27,6 +35,7 @@ public class FrontEnd_Button : MonoBehaviour
     void OnDisable()
     {
         KillTweens();
+        transform.localScale = startScale;
     }
 
     private void KillTweens()
