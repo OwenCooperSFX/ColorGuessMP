@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using System;
+using System.Collections;
 
 /*
 NOTES:
@@ -79,6 +79,9 @@ public class GameManager : MonoBehaviour
     private Vector3 _colorPromptStartScale;
     public Vector3 colorPromptStartScale { get { return _colorPromptStartScale; } }
 
+    public delegate void ObjectInitialized();
+    public event ObjectInitialized OnGameManagerInitialized;
+
     private void OnEnable()
     {
         EventManager.OnPlayerInputCorrect += HandlePlayerCorrect;
@@ -86,6 +89,8 @@ public class GameManager : MonoBehaviour
 
         EventManager.OnP1Input += HandleP1Input;
         EventManager.OnP2Input += HandleP2Input;
+
+        OnGameManagerInitialized += StartFirstRound;
     }
 
     private void OnDisable()
@@ -95,6 +100,8 @@ public class GameManager : MonoBehaviour
 
         EventManager.OnP1Input -= HandleP1Input;
         EventManager.OnP2Input -= HandleP2Input;
+
+        OnGameManagerInitialized -= StartFirstRound;
     }
 
     private void Awake()
@@ -119,13 +126,23 @@ public class GameManager : MonoBehaviour
         _colorPromptStartScale = colorPromptGO.transform.localScale;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-
+        if (OnGameManagerInitialized != null)
+            OnGameManagerInitialized();
     }
 
-    // Update is called once per frame
+    IEnumerator StartNewRoundWithDelay(float _delay = 0f)
+    {
+        yield return new WaitForSeconds(_delay);
+        StartNewRound();
+    }
+
+    void StartFirstRound()
+    {
+        StartCoroutine(StartNewRoundWithDelay());
+    }
+
     void Update()
     {
         if (_isBetweenRounds)

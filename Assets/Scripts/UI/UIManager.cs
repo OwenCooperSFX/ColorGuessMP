@@ -19,7 +19,6 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] float menuTransitionTime = 0.5f;
 
-
     private void Awake()
     {
         Init();

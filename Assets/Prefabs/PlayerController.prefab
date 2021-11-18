@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentColor: 0
+  defaultMaxIntensity: 5
+  range: 1.8
   p1_controls:
   - {fileID: 0}
   - {fileID: 0}
@@ -55,3 +57,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   colorAssignments: []
+  inputAnimTime: 0.2
+  inputAnimDepth: -2
