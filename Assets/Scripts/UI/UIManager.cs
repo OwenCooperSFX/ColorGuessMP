@@ -4,27 +4,60 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
+
     [SerializeField] AudioMixer audioMixer;
 
     float musicVolume;
     float sfxVolume;
 
     [SerializeField] GameObject screenMainMenu;
+    [SerializeField] GameObject screenHowTo;
     [SerializeField] GameObject screenSettings;
 
-    public void OpenSettingsMenu()
+    private GameObject currentScreen;
+
+    [SerializeField] float menuTransitionTime = 0.5f;
+
+
+    private void Awake()
     {
-        StartCoroutine(ChangeMenuWithDelay(screenMainMenu, screenSettings, .3f));
+        Init();
+
+        currentScreen = screenMainMenu;
     }
+    void Init()
+    {
+        if (Instance && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
+    }
+
 
     public void OpenMainMenu()
     {
-        StartCoroutine(ChangeMenuWithDelay(screenSettings, screenMainMenu, .3f));
+        StartCoroutine(ChangeMenuWithDelay(currentScreen, screenMainMenu, menuTransitionTime));
+    }
+
+    public void OpenSettingsMenu()
+    {
+        StartCoroutine(ChangeMenuWithDelay(currentScreen, screenSettings, menuTransitionTime));
+    }
+
+    public void OpenHowToMenu()
+    {
+        StartCoroutine(ChangeMenuWithDelay(currentScreen, screenHowTo, menuTransitionTime));
     }
 
     public void QuitGame()
     {
-        
+        QuitWithDelay(menuTransitionTime);
     }
 
     public void SetMusicVolume(float inValue)
@@ -37,34 +70,48 @@ public class UIManager : MonoBehaviour
         SetBusVolume("SFX_Volume", sfxVolume, inValue);
     }
 
-    private void SetBusVolume(string paramName, float volumeFloat, float inValue)
+    private void SetBusVolume(string _paramName, float _volumeFloat, float _value)
     {
         if (audioMixer)
         {
             // Divide currentValue by (minimumValue/currentValue) to get more linear response
 
-            volumeFloat = inValue / (-80/inValue);
+            _volumeFloat = _value / (-80/_value);
 
-            audioMixer.SetFloat(paramName, volumeFloat);
+            audioMixer.SetFloat(_paramName, _volumeFloat);
         }
     }
 
-    private void ChangeMenu(GameObject currentMenu, GameObject nextMenu)
+    private void ChangeMenu(GameObject _currentMenu, GameObject _nextMenu)
     {
-        if (!nextMenu.activeSelf)
+        // Enable the target menu
+        if (!_nextMenu.activeSelf)
         {
-            nextMenu.SetActive(true);
+            _nextMenu.SetActive(true);
         }
 
-        if (currentMenu.activeSelf)
+        // Disable the current menu
+        if (_currentMenu.activeSelf)
         {
-            currentMenu.SetActive(false);
+            _currentMenu.SetActive(false);
+        }
+
+        // Store reference to the target menu
+        if (currentScreen != _nextMenu)
+        {
+            currentScreen = _nextMenu;
         }
     }
 
-    IEnumerator ChangeMenuWithDelay(GameObject currentMenu, GameObject nextMenu, float delay = 0f)
+    IEnumerator ChangeMenuWithDelay(GameObject _currentMenu, GameObject _nextMenu, float _delay = 0f)
     {
-        yield return new WaitForSeconds(delay);
-        ChangeMenu(currentMenu, nextMenu);
+        yield return new WaitForSeconds(_delay);
+        ChangeMenu(_currentMenu, _nextMenu);
+    }
+
+    IEnumerator QuitWithDelay(float _delay = 0f)
+    {
+        yield return new WaitForSeconds(_delay);
+        Application.Quit();
     }
 }

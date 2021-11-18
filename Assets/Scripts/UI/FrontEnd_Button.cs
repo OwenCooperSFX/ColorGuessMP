@@ -10,16 +10,16 @@ public class FrontEnd_Button : MonoBehaviour
     Tween selectTween;
 
     [Header("Hover Tween")]
-    [SerializeField] Ease pulseEaseType;
-    [SerializeField] Vector3 pulseScale;
-    [SerializeField][Range(0,5)] float pulseDuration;
+    [SerializeField] Ease pulseEaseType = Ease.InOutSine;
+    [SerializeField] Vector3 pulseScale = new Vector3(1.05f, 1.1f ,0f);
+    [SerializeField][Range(0,5)] float pulseDuration = 0.5f;
 
     [Header("Select Tween")]
-    [SerializeField] Ease punchEaseType;
-    [SerializeField] Vector3 punchScale;
-    [SerializeField][Range(0,5)] float punchDuration;
-    [SerializeField] int punchVibrato;
-    [SerializeField] float punchElasticity;
+    [SerializeField] Ease punchEaseType = Ease.InExpo;
+    [SerializeField] Vector3 punchScale = new Vector3(-0.2f, -0.2f, 0f);
+    [SerializeField][Range(0,5)] float punchDuration = 0.3f;
+    [SerializeField] int punchVibrato = 8;
+    [SerializeField] float punchElasticity = 10f;
 
     private void Awake()
     {
@@ -27,12 +27,12 @@ public class FrontEnd_Button : MonoBehaviour
         startScale = startTransform.localScale;
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         CreateTweens();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         KillTweens();
         transform.localScale = startScale;
@@ -43,7 +43,7 @@ public class FrontEnd_Button : MonoBehaviour
         transform.DOKill();
     }
 
-    void CreateTweens()
+    private void CreateTweens()
     {
         hoverTween = transform.DOScale(pulseScale, pulseDuration).SetEase(pulseEaseType).SetLoops(-1, LoopType.Yoyo).SetAutoKill(false);
         hoverTween.Pause();
