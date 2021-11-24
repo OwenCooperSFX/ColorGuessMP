@@ -47,6 +47,50 @@ public static class EventManager
 
     /*
     ============================
+    GUI EVENTS
+    ============================
+    */
+
+    public delegate void GUIEvent();
+    public static event GUIEvent OnSliderMoved;
+    public static event GUIEvent OnSliderLocked;
+    public static event GUIEvent OnSelectPressed;
+    public static event GUIEvent OnBackPressed;
+
+    static void RaiseEvent(GUIEvent in_Event)
+    {
+        if (in_Event != null)
+        {
+            in_Event();
+        }
+        else
+        {
+            PrintNullEventWarning("GUIEvent");
+        }
+    }
+
+    public static void RaiseGUIOnSliderMoved()
+    {
+        RaiseEvent(OnSliderMoved);
+    }
+
+    public static void RaiseGUIOnSliderLocked()
+    {
+        RaiseEvent(OnSliderLocked);
+    }
+
+    public static void RaiseGUIOnSelectPressed()
+    {
+        RaiseEvent(OnSelectPressed);
+    }
+
+    public static void RaiseGUIOnBackPressed()
+    {
+        RaiseEvent(OnBackPressed);
+    }
+
+    /*
+    ============================
     TUG OF WAR EVENTS
     ============================
     */

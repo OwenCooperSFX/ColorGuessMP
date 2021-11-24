@@ -66,5 +66,16 @@ public class FrontEnd_Button : MonoBehaviour
     {
         selectTween.Restart();
     }
+    public void GUISelectPressed(AudioClip in_selectSound = null)
+    {
+        // PlaySelectAnimation(); // Why doesn't this work?
+        AudioManager.Instance.PlayInputSound(in_selectSound);
+    }
+
+    public void GUIBackPressed(AudioClip in_backSound = null)
+    {
+        // PlaySelectAnimation(); // Why doesn't this work?
+        AudioManager.Instance.PlayInputSound(in_backSound);
+    }
 
 }

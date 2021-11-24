@@ -6,8 +6,8 @@ MonoImporter:
   defaultReferences:
   - audioSource: {instanceID: 0}
   - PromptUpdatedSound: {fileID: 8300000, guid: b558ef4bea15dde4bb8ae8928bb5846f, type: 3}
-  - InputCorrectSound: {instanceID: 0}
-  - InputWrongSound: {instanceID: 0}
+  - InputCorrectSound: {fileID: 8300000, guid: b7861e738ccd7dc4a8d7949203ab07e8, type: 3}
+  - InputWrongSound: {fileID: 8300000, guid: fa37749a95d82d34ebfdf6e725246626, type: 3}
   executionOrder: 20
   icon: {instanceID: 0}
   userData: 

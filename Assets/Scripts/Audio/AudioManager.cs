@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
 
     static MusicPlayer musicPlayer;
 
-    public AudioSource audioSource;
+    private AudioSource audioSource;
 
     [Header("Audio Clips")]
     [SerializeField] AudioClip PromptUpdatedSound;
@@ -43,12 +43,6 @@ public class AudioManager : MonoBehaviour
         musicPlayer.SetMusicTrack(MusicTrack.Gameplay);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void Init()
     {
         if (Instance && Instance != this)
@@ -62,11 +56,15 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayInputSound(AudioClip in_audioClip, AudioSource in_audioSource = null)
+    public void PlayInputSound(AudioClip in_audioClip = null, AudioSource in_audioSource = null)
     {
-        // if no audioSource is assigned, use the one attached to the AudioManager
+        // if no audioSource is specified, use the one attached to the AudioManager
         if (!in_audioSource)
             in_audioSource = audioSource;
+
+        // if no audioClip is specified, use a default
+        if (!in_audioClip)
+            in_audioClip = PromptUpdatedSound;
 
         in_audioSource.PlayOneShot(in_audioClip);
     }
@@ -88,5 +86,15 @@ public class AudioManager : MonoBehaviour
         AudioSource playerAudioSource = playerGO.GetComponent<AudioSource>();
 
         PlayInputSound(InputWrongSound, playerAudioSource);
+    }
+
+    public void PlayUISliderMoveSound()
+    {
+        PlayInputSound();
+    }
+
+    public void PlayUISliderLockSound()
+    {
+        PlayInputSound();
     }
 }
