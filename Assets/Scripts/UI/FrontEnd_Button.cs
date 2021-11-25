@@ -78,4 +78,9 @@ public class FrontEnd_Button : MonoBehaviour
         AudioManager.Instance.PlayInputSound(in_backSound);
     }
 
+    public void GUIQuitApplication()
+    {
+        EventManager.QuitApplication();
+    }
+
 }

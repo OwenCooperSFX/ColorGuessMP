@@ -167,7 +167,6 @@ public class PlayerController : ColorObject
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
     }
 

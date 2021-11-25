@@ -209,6 +209,11 @@ public static class EventManager
     {
         RaiseEvent(OnExplosionFinished);
     }
+
+    public static void QuitApplication()
+    {
+        Application.Quit();
+    }
 }
 
 

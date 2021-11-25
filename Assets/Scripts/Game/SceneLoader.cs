@@ -6,18 +6,18 @@ public class SceneLoader: MonoBehaviour
 {
     public void LoadMainScene()
     {
-        StartCoroutine(LoadSceneWithDelay("FrontEnd", "Main", .3f));
+        StartCoroutine(LoadSceneWithDelay("Main", .3f));
     }
 
     public void UnloadMainScene()
     {
-        StartCoroutine(LoadSceneWithDelay("Main", "FrontEnd", .3f));
+        StartCoroutine(LoadSceneWithDelay("FrontEnd", .3f));
     }
 
-    private IEnumerator LoadSceneWithDelay(string currentScene, string nextScene, float delay = 0f)
+    private IEnumerator LoadSceneWithDelay(string nextScene, float delay = 0f)
     {
         yield return new WaitForSeconds(delay);
 
-        SceneManager.LoadScene(nextScene);
+        SceneManager.LoadSceneAsync(nextScene);
     }
 }

@@ -34,7 +34,6 @@ public class UIManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
     }
 
@@ -52,6 +51,11 @@ public class UIManager : MonoBehaviour
     public void OpenHowToMenu()
     {
         StartCoroutine(ChangeMenuWithDelay(currentScreen, screenHowTo, menuTransitionTime));
+    }
+
+    public void CloseCurrentMenu()
+    {
+        currentScreen.SetActive(false);
     }
 
     public void QuitGame()
@@ -90,10 +94,11 @@ public class UIManager : MonoBehaviour
         }
 
         // Disable the current menu
-        if (_currentMenu.activeSelf)
-        {
-            _currentMenu.SetActive(false);
-        }
+        if (_currentMenu)
+            if (_currentMenu.activeSelf)
+            {
+                _currentMenu.SetActive(false);
+            }
 
         // Store reference to the target menu
         if (currentScreen != _nextMenu)
