@@ -103,6 +103,7 @@ public class MusicPlayer : MonoBehaviour
         while (audioSource.pitch != 1f)
         {
             audioSource.pitch = Mathf.MoveTowards(audioSource.pitch, 1f, 3 * _pitchInterpSpeed * Time.deltaTime);
+            _pitch = 1f;
             yield return null;
         }
 

@@ -378,8 +378,6 @@ public class GameManager : MonoBehaviour
             // Scale Tween speed based on player reaction time.
             colorPromptSpinDir *= 180f;
             colorPromptGO.transform.DOLocalRotate(new Vector3(0f, 0f, colorPromptSpinDir), colorPromptSpinSpd).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);
-
-            print(colorPromptSpinSpd);
         }
     }
 
