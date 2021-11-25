@@ -18,15 +18,6 @@ public class BadThing : MonoBehaviour
 
     private TugOfWar tugOfWarRef;
 
-    private void OnEnable()
-    {
-        EventManager.OnBadThingMoved += Pulse;
-    }
-    private void OnDisable()
-    {
-        EventManager.OnBadThingMoved -= Pulse;
-    }
-
     private void Awake()
     {
         //CreateTweens();
@@ -46,7 +37,7 @@ public class BadThing : MonoBehaviour
         transform.localScale = currentScale;
 
         // This can work, but it's too much.
-        transform.parent.localPosition = Shake(Mathf.Abs(transform.position.x));
+        //transform.parent.localPosition = Shake(Mathf.Abs(transform.position.x));
 
         // Doesnt work :(
         //UpdateDangerTween(Mathf.Abs(transform.position.x));
@@ -107,21 +98,5 @@ public class BadThing : MonoBehaviour
         Vector3 newPosition = new Vector3(vibrationX, vibrationY, 0f);
 
         return newPosition;
-    }
-
-    void Pulse()
-    {
-        //// TODO: use events to simplify this.
-        //if (Mathf.Abs(TugOfWar.Instance.badThing_xPos) >= TugOfWar.Instance.horizontalLimit)
-        //{
-        //    // Go back to default speed if boundary was exceeded.
-        //    transform.parent.DOScale(transform.localScale * 1.1f, .3f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-        //}
-        //else
-        //{
-        //    // Scale Tween speed based on BadThing position if boundary not exceeded.
-        //    transform.parent.DOScale(transform.localScale * 1.1f, (Mathf.Clamp(.5f / Mathf.Abs(TugOfWar.Instance.badThing_xPos), .01f, .3f)))
-        //        .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-        //}
     }
 }
