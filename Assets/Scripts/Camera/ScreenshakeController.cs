@@ -77,9 +77,6 @@ public class ScreenshakeController : MonoBehaviour
         float moveY = Mathf.MoveTowards(transform.position.y, startPos.y, shakeFadeTime);
 
         transform.position = new Vector3(moveX, moveY, startPos.z);
-
-        //transform.position = Vector3.zero;
-        //transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 
     public void StartShake(float length, float power)
