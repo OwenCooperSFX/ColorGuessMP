@@ -24,6 +24,8 @@ public class TugOfWar : MonoBehaviour
     public float horizontalLimit { get { return _horizontalLimit; } }
 
     public float badThing_xPos;
+    public Ease badThingEase = Ease.InOutSine;
+
     MeshRenderer meshRenderer;
     Vector3 startPos;
     float last_xPos;
@@ -110,7 +112,7 @@ public class TugOfWar : MonoBehaviour
 
         if (badThing.transform.position.x > -_horizontalLimit && badThing.transform.position.x < _horizontalLimit)
         {
-            pushTween = badThing.transform.DOLocalMoveX(new_xPos, speed).SetEase(Ease.OutExpo);
+            pushTween = badThing.transform.DOLocalMoveX(new_xPos, speed).SetEase(badThingEase);
 
         }
 

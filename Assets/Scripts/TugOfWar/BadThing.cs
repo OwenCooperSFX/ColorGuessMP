@@ -7,24 +7,42 @@ public class BadThing : MonoBehaviour
     Tween sizeIncreaseTween;
     Tween sizeDecreaseTween;
 
-    Vector3 startScale = Vector3.one;
-    //public Vector3 growAmount = new Vector3(1,1,1);
+    Vector3 startScale;
+    Vector3 parentStartPos;
 
-    float scaleMagnitude =  0f;
+    float scale =  0f;
     float maxScaleMagnitude = 5f;
-    Vector3 currentScale = Vector3.one;
+    Vector3 currentScale;
 
     public float defaultGrowSpeed = 1;
 
     private TugOfWar tugOfWarRef;
+    
+    bool exploded;
+
+    private void OnEnable()
+    {
+        EventManager.OnExplosionStarted += UpdateExplodedBool;
+        EventManager.OnExplosionFinished += UpdateExplodedBool;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnExplosionStarted -= UpdateExplodedBool;
+        EventManager.OnExplosionFinished -= UpdateExplodedBool;
+    }
 
     private void Awake()
     {
         //CreateTweens();
         tugOfWarRef = FindObjectOfType<TugOfWar>();
-        scaleMagnitude = startScale.magnitude;
-        maxScaleMagnitude *= 1 + (tugOfWarRef.horizontalLimit/10f);
-        currentScale = transform.localScale;
+        startScale = transform.localScale;
+        scale = startScale.x; // scale will always be uniform so any x/y/z value works
+        maxScaleMagnitude *= 1 + (tugOfWarRef.horizontalLimit / 10f);
+        currentScale = startScale;
+
+        parentStartPos = transform.parent.localPosition;
+        print(currentScale);
     }
 
     private void Update()
@@ -32,15 +50,16 @@ public class BadThing : MonoBehaviour
         //TODO:Just determine scaling with update -- relative to center vs horizontal limit. 
 
         // TODO: Optimize and smooth out. Get away from update if possible. Should be able to scale with Tweening.
-        scaleMagnitude = Mathf.Pow(1 + (Mathf.Abs(transform.position.x)/10f), 2);
-        currentScale = new Vector3(scaleMagnitude, scaleMagnitude, scaleMagnitude);
+        scale = Mathf.Clamp(startScale.x + Mathf.Pow((Mathf.Abs(transform.localPosition.x)/50f), 2), startScale.x, maxScaleMagnitude);
+        currentScale = new Vector3(scale, scale, scale);
         transform.localScale = currentScale;
 
         // This can work, but it's too much.
-        //transform.parent.localPosition = Shake(Mathf.Abs(transform.position.x));
+        if (Mathf.Abs(transform.position.x) > 2.5f && !exploded)
+            transform.parent.localPosition = Shake(Mathf.Abs(transform.position.x));
 
         // Doesnt work :(
-        //UpdateDangerTween(Mathf.Abs(transform.position.x));
+        //UpdateDangerTween(Mathf.Abs(transform.localPosition.x));
     }
 
     void CreateTweens()
@@ -80,10 +99,11 @@ public class BadThing : MonoBehaviour
     // Doesn't work :(
     public void UpdateDangerTween(float in_DangerAmount)
     {
-        float vibration = Mathf.Clamp(Random.Range(0f, 1f) * in_DangerAmount, 0f, 2f);
+        float vibration = Mathf.Clamp(Random.Range(1f, 2f) * in_DangerAmount, 0f, 2f);
 
         Vector3 newPosition = new Vector3(vibration, vibration, 0f);
-        dangerPulseTween = transform.DOLocalMove(newPosition, 1 / in_DangerAmount);
+        dangerPulseTween = transform.DOLocalMove(newPosition, .05f);
+        dangerPulseTween.Play();
     }
 
 
@@ -92,11 +112,21 @@ public class BadThing : MonoBehaviour
     {
         in_DangerAmount *= 0.01f;
 
-        float vibrationX = Mathf.Clamp(Random.Range(-1f, 1f) * in_DangerAmount, -2f, 2f);
-        float vibrationY = Mathf.Clamp(Random.Range(-1f, 1f) * in_DangerAmount, -2f, 2f);
+        float vibrationX = parentStartPos.x + Mathf.Clamp(Random.Range(-1f, 1f) * in_DangerAmount, -2f, 2f);
+        float vibrationY = parentStartPos.y + Mathf.Clamp(Random.Range(-1f, 1f) * in_DangerAmount, -2f, 2f);
 
-        Vector3 newPosition = new Vector3(vibrationX, vibrationY, 0f);
+        Vector3 newPosition = new Vector3(vibrationX, vibrationY, transform.position.z);
 
         return newPosition;
+    }
+
+    void UpdateExplodedBool()
+    {
+        if (exploded)
+            exploded = false;
+        else
+            exploded = !GetComponent<MeshRenderer>().enabled;
+
+        print(exploded);
     }
 }

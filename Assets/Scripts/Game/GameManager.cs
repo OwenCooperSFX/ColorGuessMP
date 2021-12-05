@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Gameplay")]
     [SerializeField] private float timeBetweenRounds = 3f;
+    private float newTimeBetweenRounds = 3f;
     [SerializeField] private float nextRoundTimer = 0f;
 
     [SerializeField] private float roundTimeLimit = 10f;
@@ -93,6 +94,9 @@ public class GameManager : MonoBehaviour
         EventManager.OnP1Input += HandleP1Input;
         EventManager.OnP2Input += HandleP2Input;
 
+        EventManager.OnExplosionStarted += ResetGame;
+        EventManager.OnExplosionFinished += StartFirstRound;
+
         OnGameManagerInitialized += StartFirstRound;
     }
 
@@ -103,6 +107,9 @@ public class GameManager : MonoBehaviour
 
         EventManager.OnP1Input -= HandleP1Input;
         EventManager.OnP2Input -= HandleP2Input;
+
+        EventManager.OnExplosionStarted -= ResetGame;
+        EventManager.OnExplosionFinished -= StartFirstRound;
 
         OnGameManagerInitialized -= StartFirstRound;
     }
@@ -123,8 +130,7 @@ public class GameManager : MonoBehaviour
         p2ScoreText.text = p2Score.ToString();
 
         // Clear timers
-        roundTimer = roundTimeLimit;
-        nextRoundTimer = timeBetweenRounds;
+        ResetGame();
 
         // Cache initial transform values
         _colorPromptStartScale = colorPromptGO.transform.localScale;
@@ -145,6 +151,7 @@ public class GameManager : MonoBehaviour
 
     void StartFirstRound()
     {
+        ResetGame();
         StartCoroutine(StartNewRoundWithDelay());
     }
 
@@ -152,7 +159,7 @@ public class GameManager : MonoBehaviour
     {
         if (_isBetweenRounds)
         {
-            if (nextRoundTimer < timeBetweenRounds)
+            if (nextRoundTimer < newTimeBetweenRounds)
             {
                 nextRoundTimer += Time.deltaTime;
             }
@@ -351,7 +358,7 @@ public class GameManager : MonoBehaviour
 
                 p1Score = UpdatePlayerScore(p1Score, p1Attempts, p1ScoreText);
 
-                TugOfWar.Instance.MoveBadThing(TugOfWar.Instance.pushAmount * (.001f * DeltaScore(roundTimer, p1Attempts)), TugOfWar.Instance.pushSpeed);
+                TugOfWar.Instance.MoveBadThing(TugOfWar.Instance.pushAmount * (.001f * DeltaScore(roundTimer, p1Attempts)), newTimeBetweenRounds);
 
                 colorPromptSpinDir = -1;
                 colorPromptSpinSpd *= 100/(float)DeltaScore(roundTimer, p1Attempts);
@@ -363,7 +370,7 @@ public class GameManager : MonoBehaviour
 
                 p2Score = UpdatePlayerScore(p2Score, p2Attempts ,p2ScoreText);
 
-                TugOfWar.Instance.MoveBadThing(-TugOfWar.Instance.pushAmount * (.001f * DeltaScore(roundTimer, p2Attempts)), TugOfWar.Instance.pushSpeed);
+                TugOfWar.Instance.MoveBadThing(-TugOfWar.Instance.pushAmount * (.001f * DeltaScore(roundTimer, p2Attempts)), newTimeBetweenRounds);
 
                 colorPromptSpinDir = 1;
                 colorPromptSpinSpd *= 100/(float)DeltaScore(roundTimer, p2Attempts);
@@ -447,6 +454,8 @@ public class GameManager : MonoBehaviour
 
         roundTimer = 0;
 
+        newTimeBetweenRounds = timeBetweenRounds - Mathf.Abs(.5f * TugOfWar.Instance.badThing_xPos);
+
         UpdateColor(colorPromptGO);
 
         colorPromptGO.transform.DOKill();
@@ -507,6 +516,14 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Use this to get away from handling things in Update.
         return InputButton.invalid;
+    }
+
+    public void ResetGame()
+    {
+        // Clear timers
+        roundTimer = roundTimeLimit;
+        nextRoundTimer = timeBetweenRounds;
+        newTimeBetweenRounds = timeBetweenRounds;
     }
 
 }

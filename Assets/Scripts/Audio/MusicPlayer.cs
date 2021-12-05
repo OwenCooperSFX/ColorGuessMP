@@ -36,13 +36,19 @@ public class MusicPlayer : MonoBehaviour
     void OnEnable()
     {
         EventManager.OnBadThingMoved += SetPitchByPosition;
+
         EventManager.OnExceededBoundary += ResetPitch;
+        EventManager.OnExplosionStarted += ResetPitch;
+        EventManager.OnExplosionFinished += ResetPitch;
     }
 
     void OnDisable()
     {
         EventManager.OnBadThingMoved -= SetPitchByPosition;
+
         EventManager.OnExceededBoundary -= ResetPitch;
+        EventManager.OnExplosionStarted -= ResetPitch;
+        EventManager.OnExplosionFinished -= ResetPitch;
     }
 
     public void SetMusicTrack(MusicTrack trackToPlay)
@@ -94,6 +100,7 @@ public class MusicPlayer : MonoBehaviour
                     yield return null;
                 }
             }
+            print(_pitch);
             yield break;
         }
     }

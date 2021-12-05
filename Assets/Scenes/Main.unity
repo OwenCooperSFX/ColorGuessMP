@@ -1051,7 +1051,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342967237}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1174293131}
@@ -1337,17 +1337,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: BadThing
       objectReference: {fileID: 0}
+    - target: {fileID: 4947027093146979262, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: d6d6a960df51c5446a739eb62d37348b, type: 3}
     - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1380,6 +1384,18 @@ PrefabInstance:
     - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4947027093146979263, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.005
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5737012fee26ed84da0e375aa33d494f, type: 3}
@@ -1442,6 +1458,10 @@ PrefabInstance:
       propertyPath: _track
       value: 
       objectReference: {fileID: 357977934}
+    - target: {fileID: 5159587001367454914, guid: 0d155d6a86c062940921c0f245ea176c, type: 3}
+      propertyPath: badThingEase
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5159587001367454915, guid: 0d155d6a86c062940921c0f245ea176c, type: 3}
       propertyPath: m_Name
       value: TugOfWar
