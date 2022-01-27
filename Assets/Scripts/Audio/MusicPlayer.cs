@@ -83,6 +83,7 @@ public class MusicPlayer : MonoBehaviour
             float scaledPitch = _maxPitch * percentage;
 
             //print(scaledPitch);
+            print(xPos);
 
             if (scaledPitch < 1f)
             {
@@ -98,9 +99,15 @@ public class MusicPlayer : MonoBehaviour
                     audioSource.pitch = _pitch;
 
                     yield return null;
+
+                    if (_pitch - .001f < 1f)
+                    {
+                        _pitch = 1f;
+                        yield break;
+                    }
                 }
             }
-            print(_pitch);
+            //print(_pitch);
             yield break;
         }
     }
@@ -109,8 +116,8 @@ public class MusicPlayer : MonoBehaviour
     {
         while (audioSource.pitch != 1f)
         {
-            audioSource.pitch = Mathf.MoveTowards(audioSource.pitch, 1f, 3 * _pitchInterpSpeed * Time.deltaTime);
             _pitch = 1f;
+            audioSource.pitch = Mathf.MoveTowards(audioSource.pitch, _pitch, 3 * _pitchInterpSpeed * Time.deltaTime);
             yield return null;
         }
 
