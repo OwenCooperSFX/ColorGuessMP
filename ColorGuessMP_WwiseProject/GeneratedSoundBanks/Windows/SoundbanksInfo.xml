@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="135">
+	<RootPaths>
+		<ProjectRoot>D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Language="SFX" Hash="4204904655">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="3157003241" Language="SFX" Hash="2130024248">
+			<ObjectPath>\SoundBanks\Default Work Unit\Test</ObjectPath>
+			<ShortName>Test</ShortName>
+			<Path>Test.bnk</Path>
+			<IncludedEvents>
+				<Event Id="4199636437" Name="Play_sx_int_badThing_explode" ObjectPath="\Events\INT\Play_sx_int_badThing_explode" DurationType="OneShot" DurationMin="5.195251" DurationMax="5.195251">
+					<IncludedMemoryFiles>
+						<File Id="261301911" Language="SFX">
+							<ShortName>INT\sx_int_badThing_explode_high_01.wav</ShortName>
+							<Path>SFX\INT\sx_int_badThing_explode_high_01_54D9B2FF.wem</Path>
+						</File>
+						<File Id="581279405" Language="SFX">
+							<ShortName>INT\sx_int_badThing_explode_low_01.wav</ShortName>
+							<Path>SFX\INT\sx_int_badThing_explode_low_01_907344BD.wem</Path>
+						</File>
+						<File Id="809276640" Language="SFX">
+							<ShortName>INT\sx_int_badThing_explode_low_01.wav</ShortName>
+							<Path>SFX\INT\sx_int_badThing_explode_low_01_7FD48F45.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="3519669739" Name="Play_sx_ui_button_answer_right" ObjectPath="\Events\UI\Play_sx_ui_button_answer_right" DurationType="OneShot" DurationMin="0.718571" DurationMax="0.718571">
+					<IncludedMemoryFiles>
+						<File Id="231072774" Language="SFX">
+							<ShortName>UI\sx_ui_button_answer_right_01.wav</ShortName>
+							<Path>SFX\UI\sx_ui_button_answer_right_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1097332262" Name="Play_sx_ui_button_answer_wrong" ObjectPath="\Events\UI\Play_sx_ui_button_answer_wrong" DurationType="OneShot" DurationMin="0.718571" DurationMax="0.718571">
+					<IncludedMemoryFiles>
+						<File Id="510769899" Language="SFX">
+							<ShortName>UI\sx_ui_button_answer_wrong_01.wav</ShortName>
+							<Path>SFX\UI\sx_ui_button_answer_wrong_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="4070080871" Name="Play_sx_ui_button_neutral" ObjectPath="\Events\UI\Play_sx_ui_button_neutral" DurationType="OneShot" DurationMin="0.718571" DurationMax="0.718571">
+					<IncludedMemoryFiles>
+						<File Id="467218338" Language="SFX">
+							<ShortName>UI\sx_ui_button_neutral_01.wav</ShortName>
+							<Path>SFX\UI\sx_ui_button_neutral_01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="2271342251" Name="Stop_sx_int_badThing_explode" ObjectPath="\Events\UI\Stop_sx_int_badThing_explode" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
+			</IncludedEvents>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>

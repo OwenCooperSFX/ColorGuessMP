@@ -1,0 +1,15 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1097332262	Play_sx_ui_button_answer_wrong			\UI\Play_sx_ui_button_answer_wrong	
+	2271342251	Stop_sx_int_badThing_explode			\UI\Stop_sx_int_badThing_explode	
+	3519669739	Play_sx_ui_button_answer_right			\UI\Play_sx_ui_button_answer_right	
+	4070080871	Play_sx_ui_button_neutral			\UI\Play_sx_ui_button_neutral	
+	4199636437	Play_sx_int_badThing_explode			\INT\Play_sx_int_badThing_explode	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	231072774	sx_ui_button_answer_right_01	D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\SFX\UI\sx_ui_button_answer_right_01_10C4C929.wem		\Actor-Mixer Hierarchy\SX\UI\UI\GameplayActions\sx_ui_button_answer_right\sx_ui_button_answer_right_01		126820
+	261301911	sx_int_badThing_explode_high_01	D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\SFX\INT\sx_int_badThing_explode_high_01_54D9B2FF.wem		\Actor-Mixer Hierarchy\SX\INT\INT\BadThing\sx_int_badThing_explode\sx_int_badThing_explode_high_01		353868
+	467218338	sx_ui_button_neutral_01	D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\SFX\UI\sx_ui_button_neutral_01_10C4C929.wem		\Actor-Mixer Hierarchy\SX\UI\UI\GameplayActions\sx_ui_button_neutral\sx_ui_button_neutral_01		126820
+	510769899	sx_ui_button_answer_wrong_01	D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\SFX\UI\sx_ui_button_answer_wrong_01_10C4C929.wem		\Actor-Mixer Hierarchy\SX\UI\UI\GameplayActions\sx_ui_button_answer_wrong\sx_ui_button_answer_wrong_01		126820
+	581279405	sx_int_badThing_explode_punch_01	D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\SFX\INT\sx_int_badThing_explode_low_01_907344BD.wem		\Actor-Mixer Hierarchy\SX\INT\INT\BadThing\sx_int_badThing_explode\sx_int_badThing_explode_punch_01		17744
+	809276640	sx_int_badThing_explode_low_01	D:\Programs\Unity Projects\RemoteRepos\OC_ColorGuess\ColorGuessMP\ColorGuessMP_WwiseProject\.cache\Windows\SFX\INT\sx_int_badThing_explode_low_01_7FD48F45.wem		\Actor-Mixer Hierarchy\SX\INT\INT\BadThing\sx_int_badThing_explode\sx_int_badThing_explode_low_01		997552
+
