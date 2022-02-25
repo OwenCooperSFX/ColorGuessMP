@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{5175DE89-516D-45A8-8141-FEB2354592F2}" SchemaVersion="97" RootDocumentID="{08CEE1AC-AE58-41A6-BB72-F75586DEF818}">
+	<AudioObjects>
+		<WorkUnit Name="UI" ID="{5175DE89-516D-45A8-8141-FEB2354592F2}" OwnerID="{08CEE1AC-AE58-41A6-BB72-F75586DEF818}" PersistMode="Nested">
+			<ChildrenList>
+				<ActorMixer Name="UI" ID="{D341B6FD-41E8-4EB9-92DD-5BF0C43F7B2C}" ShortID="1022146683">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<ActorMixer Name="GameplayActions" ID="{3E927170-D896-43E6-8FD3-F269A72906F6}" ShortID="530187625">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<RandomSequenceContainer Name="sx_ui_button_neutral" ID="{37892151-8FCF-43C4-9A59-70E2D98F679B}" ShortID="580633830">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="sx_ui_button_neutral_01" ID="{32068845-43E8-4F38-8FF1-04CAA7CBFAEC}" ShortID="1038671771">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="sx_ui_button_neutral_01" ID="{9A67922E-2E33-4475-91CB-D1D6764CB384}">
+													<Language>SFX</Language>
+													<AudioFile>UI\sx_ui_button_neutral_01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="467218338"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="sx_ui_button_neutral_01" ID="{9A67922E-2E33-4475-91CB-D1D6764CB384}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="sx_ui_button_answer_right" ID="{BD2496EF-BF38-4DB5-AAA3-CE74F1780B59}" ShortID="614290413">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="sx_ui_button_answer_right_01" ID="{7B3F34CC-9FF0-4767-AC68-0F5398B6AE22}" ShortID="893907029">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="sx_ui_button_answer_right_01" ID="{91968027-6343-4A4E-B8CC-C7F3E49C95C1}">
+													<Language>SFX</Language>
+													<AudioFile>UI\sx_ui_button_answer_right_01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="231072774"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="sx_ui_button_answer_right_01" ID="{91968027-6343-4A4E-B8CC-C7F3E49C95C1}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="sx_ui_button_answer_wrong" ID="{7885B55D-EC5B-4C6E-8E81-BBCAD74B8ADA}" ShortID="949765052">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="sx_ui_button_answer_wrong_01" ID="{EF2843C5-4BE5-4AFF-A8A2-92464331C2A3}" ShortID="1055024946">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="sx_ui_button_answer_wrong_01" ID="{57BF5FB8-08B4-40BC-9F4B-2CD8A092675A}">
+													<Language>SFX</Language>
+													<AudioFile>UI\sx_ui_button_answer_wrong_01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="510769899"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="sx_ui_button_answer_wrong_01" ID="{57BF5FB8-08B4-40BC-9F4B-2CD8A092675A}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+							</ChildrenList>
+						</ActorMixer>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

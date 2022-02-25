@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{E585F258-8501-4674-9FD5-5CED8ABD6400}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="UI" ID="{E585F258-8501-4674-9FD5-5CED8ABD6400}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_sx_ui_button_answer_right" ID="{155BDA37-16C5-44F5-83D2-C95C2E0F45CF}">
+					<ChildrenList>
+						<Action Name="" ID="{0DAD8AC2-BE92-4E92-A81C-5F84BE663226}" ShortID="981038414">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sx_ui_button_answer_right" ID="{BD2496EF-BF38-4DB5-AAA3-CE74F1780B59}" WorkUnitID="{5175DE89-516D-45A8-8141-FEB2354592F2}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_sx_ui_button_answer_wrong" ID="{22EE0DDA-C484-4F42-8C4C-87DA3D48DC75}">
+					<ChildrenList>
+						<Action Name="" ID="{870AE1E4-A3A0-4F8F-82F7-0EC5A38B6451}" ShortID="521561982">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sx_ui_button_answer_wrong" ID="{7885B55D-EC5B-4C6E-8E81-BBCAD74B8ADA}" WorkUnitID="{5175DE89-516D-45A8-8141-FEB2354592F2}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_sx_ui_button_neutral" ID="{457A3A12-7973-4A67-A78A-B1651BA8CC96}">
+					<ChildrenList>
+						<Action Name="" ID="{609307E3-2926-457C-8D4D-085EE95A0689}" ShortID="726351261">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sx_ui_button_neutral" ID="{37892151-8FCF-43C4-9A59-70E2D98F679B}" WorkUnitID="{5175DE89-516D-45A8-8141-FEB2354592F2}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_sx_int_badThing_explode" ID="{1D7F6EFC-14A3-4C01-9165-CB995657D02E}">
+					<ChildrenList>
+						<Action Name="" ID="{2650D64E-9E18-42D9-A827-369B738A70BE}" ShortID="182536153">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="FadeTime" Type="Real64" Value="0.2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sx_int_badThing_explode" ID="{0DFD0DBE-38ED-4958-8B66-63A89C8A2A9D}" WorkUnitID="{7F573F1E-C186-4E3D-BBCE-0A7731CD3D24}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

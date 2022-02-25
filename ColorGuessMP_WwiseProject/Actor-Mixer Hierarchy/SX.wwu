@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{08CEE1AC-AE58-41A6-BB72-F75586DEF818}" SchemaVersion="97">
+	<AudioObjects>
+		<WorkUnit Name="SX" ID="{08CEE1AC-AE58-41A6-BB72-F75586DEF818}" PersistMode="Standalone">
+			<ChildrenList>
+				<WorkUnit Name="UI" ID="{5175DE89-516D-45A8-8141-FEB2354592F2}" PersistMode="Reference"/>
+				<WorkUnit Name="INT" ID="{7F573F1E-C186-4E3D-BBCE-0A7731CD3D24}" PersistMode="Reference"/>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

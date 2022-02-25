@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{7F573F1E-C186-4E3D-BBCE-0A7731CD3D24}" SchemaVersion="97" RootDocumentID="{08CEE1AC-AE58-41A6-BB72-F75586DEF818}">
+	<AudioObjects>
+		<WorkUnit Name="INT" ID="{7F573F1E-C186-4E3D-BBCE-0A7731CD3D24}" OwnerID="{08CEE1AC-AE58-41A6-BB72-F75586DEF818}" PersistMode="Nested">
+			<ChildrenList>
+				<ActorMixer Name="INT" ID="{AF809DB2-AEF1-4040-92A7-986659D4D7C0}" ShortID="850065179">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<ActorMixer Name="BadThing" ID="{7976B0FE-5AB4-45FD-9321-387A0FFB5DB3}" ShortID="381413504">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<BlendContainer Name="sx_int_badThing_explode" ID="{0DFD0DBE-38ED-4958-8B66-63A89C8A2A9D}" ShortID="190552651">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="sx_int_badThing_explode_high_01" ID="{56F8BB5D-7D8E-49EF-8782-C62B76D27F65}" ShortID="62144344">
+											<PropertyList>
+												<Property Name="Pitch" Type="int32">
+													<ValueList>
+														<Value>-200</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="sx_int_badThing_explode_high_01" ID="{EC93787A-2A69-4341-B14E-B5DAE0214DC0}">
+													<PropertyList>
+														<Property Name="LoopBegin" Type="Real64" Value="0"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="2.00568601583114"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>INT\sx_int_badThing_explode_high_01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="261301911"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="sx_int_badThing_explode_high_01" ID="{EC93787A-2A69-4341-B14E-B5DAE0214DC0}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="sx_int_badThing_explode_low_01" ID="{58AEE49A-25A4-4102-98B9-D4ED8E43CACC}" ShortID="135347535">
+											<PropertyList>
+												<Property Name="Lowpass" Type="int16">
+													<ValueList>
+														<Value>24</Value>
+													</ValueList>
+												</Property>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="sx_int_badThing_explode_low_01" ID="{CF50F45D-1A1F-4C0F-A319-CF480D58017C}">
+													<PropertyList>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.304749340369393"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>INT\sx_int_badThing_explode_low_01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="809276640"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="sx_int_badThing_explode_low_01" ID="{CF50F45D-1A1F-4C0F-A319-CF480D58017C}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="sx_int_badThing_explode_punch_01" ID="{A972D641-1D90-43FC-9408-FACA5034E9E9}" ShortID="614334532">
+											<PropertyList>
+												<Property Name="InitialDelay" Type="Real64">
+													<ValueList>
+														<Value>0.1</Value>
+													</ValueList>
+												</Property>
+												<Property Name="Lowpass" Type="int16">
+													<ValueList>
+														<Value>55</Value>
+													</ValueList>
+												</Property>
+												<Property Name="Pitch" Type="int32">
+													<ValueList>
+														<Value>-960</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{CD0F15E9-CCEB-4CD4-BD78-F28E08F79B98}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{615DC7CF-60D9-4B8C-99E0-5117A795789A}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="sx_int_badThing_explode_low_01" ID="{B4DEDD65-6049-4D77-88F6-A127EFA73122}">
+													<PropertyList>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.0599084324406354"/>
+														<Property Name="FadeOutShape" Type="int16" Value="0"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.415842557611941"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.507915567282321"/>
+														<Property Name="VolumeOffset" Type="Real64">
+															<ValueList>
+																<Value>6.7</Value>
+															</ValueList>
+														</Property>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>INT\sx_int_badThing_explode_low_01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="581279405"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="sx_int_badThing_explode_low_01" ID="{B4DEDD65-6049-4D77-88F6-A127EFA73122}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</BlendContainer>
+							</ChildrenList>
+						</ActorMixer>
+					</ChildrenList>
+				</ActorMixer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

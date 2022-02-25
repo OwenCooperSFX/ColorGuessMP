@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{D7B44077-09B0-40E9-95A4-4BFA3DEC69A5}" SchemaVersion="97">
+	<Events>
+		<WorkUnit Name="INT" ID="{D7B44077-09B0-40E9-95A4-4BFA3DEC69A5}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_sx_int_badThing_explode" ID="{16B66FB0-8851-4790-8223-B472D53D6F0F}">
+					<ChildrenList>
+						<Action Name="" ID="{A2B5902B-0176-4841-B1F2-E14CE0C19A2D}" ShortID="819312112">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="sx_int_badThing_explode" ID="{0DFD0DBE-38ED-4958-8B66-63A89C8A2A9D}" WorkUnitID="{7F573F1E-C186-4E3D-BBCE-0A7731CD3D24}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>
