@@ -62,7 +62,10 @@ crashlytics-build.properties
 *.prof
 *.akd
 **/.cache/
-**.validationcache
+*.validationcache
+*.wsettings
+**/IncrementalSoundBankData.xml
+**/AkWwiseProjectData.asset
 
 WwiseUnityIntegration_Mac_Src.zip
 WwiseUnityIntegration_Windows_Src.zip
