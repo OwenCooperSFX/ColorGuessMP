@@ -181,11 +181,12 @@ MonoBehaviour:
   _downControl:
     _assignment: 1
     _button: 115
-    _colorObject: {fileID: 358790155}
+    _colorObject: {fileID: 635220898}
   _rightControl:
     _assignment: 3
     _button: 100
-    _colorObject: {fileID: 635220898}
+    _colorObject: {fileID: 358790155}
+  _colors: []
 --- !u!1 &206920516
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,10 +502,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 19237363}
     m_Modifications:
-    - target: {fileID: 5524706130020782979, guid: d88a4f21d8c6ec94a917d9c564334ecf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7957708070622338064, guid: d88a4f21d8c6ec94a917d9c564334ecf, type: 3}
       propertyPath: m_Name
       value: ColorObject_new (2)
@@ -562,10 +559,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 19237363}
     m_Modifications:
-    - target: {fileID: 5524706130020782979, guid: d88a4f21d8c6ec94a917d9c564334ecf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7957708070622338064, guid: d88a4f21d8c6ec94a917d9c564334ecf, type: 3}
       propertyPath: m_Name
       value: ColorObject_new (3)
@@ -1565,10 +1558,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 19237363}
     m_Modifications:
-    - target: {fileID: 5524706130020782979, guid: d88a4f21d8c6ec94a917d9c564334ecf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7957708070622338064, guid: d88a4f21d8c6ec94a917d9c564334ecf, type: 3}
       propertyPath: m_Name
       value: ColorObject_new (1)
