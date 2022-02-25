@@ -6,24 +6,34 @@ public enum ButtonInput { Up, Down, Left, Right, invalid }
 public class PlayerController_new : MonoBehaviour
 {
     [SerializeField] private Control _upControl, _leftControl, _downControl, _rightControl;
-    //public List<ColorObject_new> Controls { get => _controls; }
+
     public Control UpControl => _upControl;
     public Control LeftControl => _leftControl;
     public Control DownControl => _downControl;
     public Control RightControl => _rightControl;
 
-    private List<Color> _colors = new List<Color>();
+    private List<Control> _controls = new List<Control>();
+    public List<Control> Controls => _controls;
+
+    [SerializeField] private List<Color> _colors = new List<Color>();
     private List<Color> _lastColorOrder = new List<Color>();
-    public List<Color> ColorAssignments => _colors;
+
+    private List<Color> _colorAssignments = new List<Color>();
+    public List<Color> ColorAssignments => _colorAssignments;
+
+    // TODO: Fix color rendering. Separate color logic into separate component so that this class only handles inputs.
+    // New component can respond to raised input events.
 
     private void Awake()
     {
         InitializeColors();
+        InitializeControls();
     }
 
     private void Update()
     {
-        GetInput();
+        if (Input.anyKey)
+            GetInput();
     }
 
     private void OnEnable()
@@ -44,6 +54,17 @@ public class PlayerController_new : MonoBehaviour
         _colors.Add(Color.yellow);
 
         _lastColorOrder = _colors;
+        _colorAssignments = _colors;
+
+        AssignControlColors();
+    }
+
+    void InitializeControls()
+    {
+        _controls.Add(_upControl);
+        _controls.Add(_leftControl);
+        _controls.Add(_downControl);
+        _controls.Add(_rightControl);
     }
 
     public ColorOption DoInput(ButtonInput buttonInput)
@@ -55,29 +76,33 @@ public class PlayerController_new : MonoBehaviour
 
     private ColorOption GetInput()
     {
+        ButtonInput buttonInput = ButtonInput.invalid;
+
         if (Input.GetKeyDown(_upControl.Button))
         {
             // Do top color
-            return DoInput(ButtonInput.Up);
+            buttonInput = ButtonInput.Up;
         }
         if (Input.GetKeyDown(_leftControl.Button))
         {
             // Do left color
-            return DoInput(ButtonInput.Left);
+            buttonInput = ButtonInput.Left;
         }
         if (Input.GetKeyDown(_rightControl.Button))
         {
             // Do bottom color
-            return DoInput(ButtonInput.Down);
+            buttonInput = ButtonInput.Right;
         }
         if (Input.GetKeyDown(_downControl.Button))
         {
             // Do right color
-            return DoInput(ButtonInput.Right);
+            buttonInput = ButtonInput.Down;
         }
 
-        // No input - return no color. 
-        return ColorOption.invalid;
+        if (Input.GetKeyDown(KeyCode.Space))
+            ShuffleColors(_colorAssignments);
+
+        return DoInput(buttonInput);
     }
 
     void HandleButtonInput(ButtonInput buttonInput)
@@ -100,7 +125,47 @@ public class PlayerController_new : MonoBehaviour
                 break;
         }
 
-        control.ColorObjectNew.Pressed();
+        if (control.ColorObjectNew)
+            control.ColorObjectNew.Pressed();
+    }
+
+    List<Color> ShuffleColors(List<Color> colorList)
+    {
+        List<Color> assignments = colorList;
+
+        int colorsCount = _colors.Count;
+
+        for (int i = 0; i < colorsCount; i++)
+        {
+            Color color = _colors[i];
+            int rndInt = Random.Range(0, i);
+
+            assignments[i] = _colors[rndInt];
+            assignments[rndInt] = color;
+        }
+
+        return assignments;
+    }
+
+    void AssignControlColors()
+    {
+        // logic for shuffling player control colors. Avoids repeating pattern most of the time (~85% different from last).
+        // TODO: implement true avoid-last-pattern logic.
+
+        _colorAssignments = ShuffleColors(_colors);
+
+        if (_colorAssignments == _lastColorOrder)
+        {
+            _colorAssignments = ShuffleColors(_colors);
+            _lastColorOrder = _colorAssignments;
+        }
+
+        //Rendering
+        for (int i = 0; i < _controls.Count; i++)
+        {
+            Material material = _controls[i].ColorObjectNew.GetComponent<MeshRenderer>().material;
+            material.color = _colorAssignments[i];
+        }
     }
 
     [System.Serializable]

@@ -9,6 +9,8 @@ public class ColorLight : MonoBehaviour
     private float _timer = 0;
 
     [SerializeField] private float _lightFlashTime = 0.2f;
+    public float LightFlashTime { get => _lightFlashTime; set => _lightFlashTime = value; }
+
     private bool _lightOn;
 
     [SerializeField] private float _defaultMaxIntensity = 5.0f;
@@ -25,8 +27,8 @@ public class ColorLight : MonoBehaviour
     {
         if (_lightOn)
             _timer += Time.deltaTime;
-        else
-            EndLight();
+        else { }
+            //EndLight();
     }
 
     private void Update()
@@ -72,11 +74,11 @@ public class ColorLight : MonoBehaviour
 
     public void FlashLight()
     {
-        _timer = 0;
-
         if (_light)
         {
             _maxIntensity = _defaultMaxIntensity;
+
+            _currentColor = transform.GetComponentInParent<ColorObject_new>().CurrentColor;
 
             switch (_currentColor)
             {
@@ -103,14 +105,20 @@ public class ColorLight : MonoBehaviour
             StartCoroutine(FlashLightCR());
         }
     }
-    private IEnumerator FlashLightCR(float delay = 0)
+    private IEnumerator FlashLightCR()
     {
+        WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
+
         while (_light.intensity < _maxIntensity)
+        {
             _light.intensity += (_maxIntensity / _lightFlashTime) * Time.deltaTime;
-
-        yield return new WaitForEndOfFrame();
-
-        StartCoroutine(EndLightCR());
+            yield return waitForEndOfFrame;
+        }
+        if (_light.intensity >= _maxIntensity)
+        {
+            _light.intensity = 0;
+            yield break;
+        }
     }
 
     private IEnumerator EndLightCR(float delay = 0)

@@ -18,9 +18,18 @@ public class ColorObject_new : MonoBehaviour
 
     public void Pressed()
     {
-        if(_colorLight)
-            _colorLight.FlashLight();
-        if(_tweenerSimple)
+        float flashDuration = 0.2f;
+
+        if (_tweenerSimple)
+        {
             _tweenerSimple.PlayTween();
+            flashDuration = 2 * _tweenerSimple.duration;
+        }
+
+        if (_colorLight)
+        {
+            _colorLight.LightFlashTime = flashDuration;
+            _colorLight.FlashLight();
+        }
     }
 }

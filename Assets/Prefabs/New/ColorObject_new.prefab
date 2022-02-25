@@ -174,7 +174,7 @@ MonoBehaviour:
   startOffset: {x: 1, y: 1, z: 1}
   destination: {x: 0.8, y: 0.8, z: 0.8}
   duration: 0.1
-  ease: 32
+  ease: 9
   loopType: 1
   loops: 2
   startDelay: 0
