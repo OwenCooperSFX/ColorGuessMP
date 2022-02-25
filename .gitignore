@@ -64,3 +64,5 @@ crashlytics-build.properties
 **/.cache/
 **.validationcache
 
+WwiseUnityIntegration_Mac_Src.zip
+WwiseUnityIntegration_Windows_Src.zip
