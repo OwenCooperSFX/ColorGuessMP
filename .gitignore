@@ -60,3 +60,7 @@ crashlytics-build.properties
 
 # Wwise
 *.prof
+*.akd
+**/.cache/
+**.validationcache
+
