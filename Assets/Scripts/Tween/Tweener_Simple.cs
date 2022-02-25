@@ -13,9 +13,9 @@ public class Tweener_Simple : MonoBehaviour
     public TweenAnimType tweenAnimType { get { return _tweenAnimType; } }
 
     [Tooltip("Scale: start transform scale, Move: start transform position, Rotate: start transform rotation.")]
-    public Vector3 startOffset;
+    public Vector3 startOffset = Vector3.one;
     [Tooltip("Scale: end transform scale, Move: end transform position, Rotate: end transform rotation.")]
-    public Vector3 destination;
+    public Vector3 destination = Vector3.one;
     [Tooltip("Time in seconds for tween to complete one loop.")]
     public float duration = 1f;
 
@@ -46,22 +46,6 @@ public class Tweener_Simple : MonoBehaviour
         startScale = startTransform.localScale;
         startPosition = startTransform.localPosition;
         startRotation = startTransform.localRotation.eulerAngles;
-
-        //if (from == Vector3.zero)
-        //{
-        //    switch (_tweenAnimType)
-        //    {
-        //        case TweenAnimType.Scale:
-        //            from = startScale;
-        //            break;
-        //        case TweenAnimType.Move:
-        //            from = startPosition;
-        //            break;
-        //        case TweenAnimType.Rotate:
-        //            from = startRotation;
-        //            break;
-        //    }
-        //}
     }
 
     private void OnEnable()
@@ -82,19 +66,19 @@ public class Tweener_Simple : MonoBehaviour
 
     void CreateScaleTween()
     {
-        tween = targetObject.transform.DOScale(destination, duration).SetEase(ease).SetLoops(loops, loopType);
+        tween = targetObject.transform.DOScale(destination, duration).SetEase(ease).SetLoops(loops, loopType).SetAutoKill(false);
         tween.Pause();
     }
 
     void CreateMoveTween()
     {
-        tween = targetObject.transform.DOLocalMove(destination, duration).SetEase(ease).SetLoops(loops, loopType);
+        tween = targetObject.transform.DOLocalMove(destination, duration).SetEase(ease).SetLoops(loops, loopType).SetAutoKill(false);
         tween.Pause();
     }
 
     void CreateRotateTween()
     {
-        tween = targetObject.transform.DOLocalRotate(destination, duration).SetEase(ease).SetLoops(loops, loopType);
+        tween = targetObject.transform.DOLocalRotate(destination, duration).SetEase(ease).SetLoops(loops, loopType).SetAutoKill(false);
         tween.Pause();
     }
 
@@ -118,7 +102,13 @@ public class Tweener_Simple : MonoBehaviour
 
     public void PlayTween()
     {
-        StartCoroutine(PlayTweenWithDelay(startDelay));
+        if (startDelay > 0)
+            StartCoroutine(PlayTweenWithDelay(startDelay));
+        else
+        {
+            tween.Rewind();
+            tween.Play();
+        }
     }
 
     public void PauseTween()

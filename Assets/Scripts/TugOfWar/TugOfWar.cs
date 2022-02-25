@@ -123,13 +123,13 @@ public class TugOfWar : MonoBehaviour
 
     void ShowPlayerWon()
     { 
-        if (meshRenderer.enabled)
-        {
-            foreach (AudioClip clip in explosionSounds)
-            {
-                badThingAudioSource.PlayOneShot(clip);
-            }
-        }
+        //if (meshRenderer.enabled)
+        //{
+        //    foreach (AudioClip clip in explosionSounds)
+        //    {
+        //        badThingAudioSource.PlayOneShot(clip);
+        //    }
+        //}
 
         meshRenderer.enabled = false;
         _explosion.gameObject.SetActive(true);

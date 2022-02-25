@@ -41,14 +41,29 @@ public static class EventManager
         }
     }
 
-    public static void RaiseP1Input(InputButton in_Button)
+    public static void RaiseP1Input(InputButton in_Button)=> RaiseEventInput(OnP1Input, in_Button);
+    public static void RaiseP2Input(InputButton in_Button)=> RaiseEventInput(OnP2Input, in_Button);
+
+
+    public delegate void ButtonInputEvent(ButtonInput in_button);
+    public static event ButtonInputEvent OnButtonInput;
+
+    static void RaiseEventButtonInput(ButtonInputEvent in_Event, ButtonInput in_Button)
     {
-        RaiseEventInput(OnP1Input, in_Button);
+        if (in_Event != null)
+        {
+            in_Event(in_Button);
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event);
+        }
+        else
+        {
+            PrintNullEventWarning("InputEvent");
+        }
     }
-    public static void RaiseP2Input(InputButton in_Button)
-    {
-        RaiseEventInput(OnP2Input, in_Button);
-    }
+
+    public static void RaiseButtonInput(ButtonInput buttonInput) => RaiseEventButtonInput(OnButtonInput, buttonInput);
 
     /*
     ============================
@@ -77,25 +92,10 @@ public static class EventManager
         }
     }
 
-    public static void RaiseGUIOnSliderMoved()
-    {
-        RaiseEvent(OnSliderMoved);
-    }
-
-    public static void RaiseGUIOnSliderLocked()
-    {
-        RaiseEvent(OnSliderLocked);
-    }
-
-    public static void RaiseGUIOnSelectPressed()
-    {
-        RaiseEvent(OnSelectPressed);
-    }
-
-    public static void RaiseGUIOnBackPressed()
-    {
-        RaiseEvent(OnBackPressed);
-    }
+    public static void RaiseGUIOnSliderMoved()=> RaiseEvent(OnSliderMoved);
+    public static void RaiseGUIOnSliderLocked()=> RaiseEvent(OnSliderLocked);
+    public static void RaiseGUIOnSelectPressed()=> RaiseEvent(OnSelectPressed);
+    public static void RaiseGUIOnBackPressed()=> RaiseEvent(OnBackPressed);
 
     /*
     ============================
@@ -120,26 +120,14 @@ public static class EventManager
         }
         else
         {
-            PrintNullEventWarning("TugOfWarEvent");
+            PrintNullEventWarning(in_Event.ToString());
         }
     }
 
-    public static void RaiseTugOfWarEnabled()
-    {
-        RaiseEvent(OnTugOfWarEnabled);
-    }
-    public static void RaiseTugOfWarDisabled()
-    {
-        RaiseEvent(OnTugOfWarDisabled);
-    }
-    public static void RaiseExceededBoundary()
-    {
-        RaiseEvent(OnExceededBoundary);
-    }
-    public static void RaiseBadThingMoved()
-    {
-        RaiseEvent(OnBadThingMoved);
-    }
+    public static void RaiseTugOfWarEnabled()=> RaiseEvent(OnTugOfWarEnabled);
+    public static void RaiseTugOfWarDisabled()=> RaiseEvent(OnTugOfWarDisabled);
+    public static void RaiseExceededBoundary()=> RaiseEvent(OnExceededBoundary);
+    public static void RaiseBadThingMoved()=> RaiseEvent(OnBadThingMoved);
 
     /*
     ============================
@@ -165,7 +153,7 @@ public static class EventManager
         }
         else
         {
-            PrintNullEventWarning("GameManagerEvent");
+            PrintNullEventWarning(in_Event.ToString());
         }
     }
     static void RaiseEventGO(GameManagerEventGO in_Event, GameObject in_GO)
@@ -179,22 +167,13 @@ public static class EventManager
         }
         else
         {
-            PrintNullEventWarning("GameManagerEventGO");
+            PrintNullEventWarning(in_Event.ToString());
         }
     }
 
-    public static void RaisePromptUpdated()
-    {
-        RaiseEvent(OnPromptUpdated);
-    }
-    public static void RaisePlayerInputCorrect(GameObject in_GO)
-    {
-        RaiseEventGO(OnPlayerInputCorrect, in_GO);
-    }
-    public static void RaisePlayerInputWrong(GameObject in_GO)
-    {
-        RaiseEventGO(OnPlayerInputWrong, in_GO);
-    }
+    public static void RaisePromptUpdated()=> RaiseEvent(OnPromptUpdated);
+    public static void RaisePlayerInputCorrect(GameObject in_GO)=> RaiseEventGO(OnPlayerInputCorrect, in_GO);
+    public static void RaisePlayerInputWrong(GameObject in_GO)=> RaiseEventGO(OnPlayerInputWrong, in_GO);
 
     /*
     ============================
@@ -217,23 +196,41 @@ public static class EventManager
         }
         else
         {
-            PrintNullEventWarning("ExplosionEvent");
+            PrintNullEventWarning(in_Event.ToString());
         }
     }
 
-    public static void RaiseExplosionStarted()
+    public static void RaiseExplosionStarted()=> RaiseEvent(OnExplosionStarted);
+    public static void RaiseExplosionFinished()=> RaiseEvent(OnExplosionFinished);
+
+    public static void QuitApplication()=> Application.Quit();
+
+    /*
+    ============================
+    COLOR OBJECT EVENTS 
+    ============================
+    */
+
+    public delegate void ColorObjectEvent(ColorObject callingColorObject);
+    public static event ColorObjectEvent OnChangeColor;
+    public static event ColorObjectEvent OnLightStart;
+
+    static void RaiseEvent(ColorObjectEvent in_Event, ColorObject callingColorObject)
     {
-        RaiseEvent(OnExplosionStarted);
-    }
-    public static void RaiseExplosionFinished()
-    {
-        RaiseEvent(OnExplosionFinished);
+        if (in_Event != null)
+        {
+            in_Event(callingColorObject);
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
+        }
+        else
+        {
+            PrintNullEventWarning(in_Event.ToString());
+        }
     }
 
-    public static void QuitApplication()
-    {
-        Application.Quit();
-    }
+    public static void RaiseColorObjectEvent(ColorObjectEvent colorObjectEvent, ColorObject callingColorObject)=> RaiseEvent(colorObjectEvent, callingColorObject);
 }
 
 

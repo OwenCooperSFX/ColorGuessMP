@@ -138,18 +138,15 @@ public class PlayerController : ColorObject
 
     public InputButton P1InputDown(InputButton inputButton)
     {
-        //StartCoroutine(AnimateButtonDown(inputButton, p1_controls));
         TweenButtonPress(inputButton, p1_controls);
 
         EventManager.RaiseP1Input(inputButton);
-        //OnP1Input?.Invoke(inputButton);
 
         return inputButton;
     }
 
     public InputButton P2InputDown(InputButton inputButton)
     {
-        //StartCoroutine(AnimateButtonDown(inputButton, p2_controls));
         TweenButtonPress(inputButton, p2_controls);
 
         EventManager.RaiseP2Input(inputButton);

@@ -204,15 +204,11 @@ public class GameManager : MonoBehaviour
                 {
                     // Player 1 is correct
                     EventManager.RaisePlayerInputCorrect(p1ColorInputGO);
-                    //OnPlayerInputCorrect?.Invoke(p1ColorInputGO);
-                    //Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p1ColorInputGO.name + ").");
                 }
                 else
                 {
                     // Player 1 is wrong
                     EventManager.RaisePlayerInputWrong(p1ColorInputGO);
-                    //OnPlayerInputIncorrect?.Invoke(p1ColorInputGO);
-                    //Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p1ColorInputGO.name + ").");
                 }
             }
 
@@ -232,15 +228,11 @@ public class GameManager : MonoBehaviour
                 {
                     // Player 2 is correct
                     EventManager.RaisePlayerInputCorrect(p2ColorInputGO);
-                    //OnPlayerInputCorrect?.Invoke(p2ColorInputGO);
-                    //Debug.Log("Call Event: " + OnPlayerInputCorrect + " (" + p2ColorInputGO.name + ").");
                 }
                 else
                 {
                     // Player 2 is wrong
                     EventManager.RaisePlayerInputWrong(p2ColorInputGO);
-                    //OnPlayerInputIncorrect?.Invoke(p2ColorInputGO);
-                    //Debug.Log("Call Event: " + OnPlayerInputIncorrect + " (" + p2ColorInputGO.name + ").");
                 }
             }
 

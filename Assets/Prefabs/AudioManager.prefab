@@ -41,7 +41,7 @@ AudioSource:
   m_GameObject: {fileID: 1806700971}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1390013779908546702, guid: 27530180441f00842aa18269fba6d170, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.2
@@ -189,7 +189,7 @@ AudioSource:
   m_GameObject: {fileID: 5325424008773625392}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3963290702583337303, guid: 27530180441f00842aa18269fba6d170, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -288,7 +288,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b6e4b5d1783584791b4af75dcca263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 5325424008773625393}
   PromptUpdatedSound: {fileID: 8300000, guid: b558ef4bea15dde4bb8ae8928bb5846f, type: 3}
   InputCorrectSound: {fileID: 8300000, guid: b7861e738ccd7dc4a8d7949203ab07e8, type: 3}
   InputWrongSound: {fileID: 8300000, guid: fa37749a95d82d34ebfdf6e725246626, type: 3}
+  startupSoundbanks:
+  - idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: eb8d5e266a2713e4eb489f34f2552ea0, type: 2}
+  promptUpdated:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: e3702834b5746ba4d8789a6c53fb29c7, type: 2}
+  inputCorrect:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 91ddba5e2cad03e4a9b0f7da9f061cae, type: 2}
+  inputWrong:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: d4ebc26669701c64ab93c62bbf04dd54, type: 2}
+  explosion:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: e7bec1ad8aa5eb54faaf1fc12777b9f4, type: 2}

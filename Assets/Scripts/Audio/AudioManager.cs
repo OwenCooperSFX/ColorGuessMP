@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {
@@ -13,12 +14,29 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip InputCorrectSound;
     [SerializeField] AudioClip InputWrongSound;
 
+    [Header("Wwise Startup Soundbanks")]
+    [SerializeField] List<AK.Wwise.Bank> startupSoundbanks;
+
+    public List<AK.Wwise.Bank> StartupSoundBanks { get => startupSoundbanks; }
+
+    [Header("Wwise Events")]
+    [SerializeField] AK.Wwise.Event promptUpdated;
+    [SerializeField] AK.Wwise.Event inputCorrect;
+    [SerializeField] AK.Wwise.Event inputWrong;
+    [SerializeField] AK.Wwise.Event explosion;
+
+    public AK.Wwise.Event PromptUpdated { get => promptUpdated; }
+    public AK.Wwise.Event InputCorrect { get => inputCorrect; }
+    public AK.Wwise.Event InputWrong { get => inputWrong; }
+    public AK.Wwise.Event Explosion { get => explosion; }
+
 
     private void OnEnable()
     {
         EventManager.OnPromptUpdated += HandlePromptUpdated;
         EventManager.OnPlayerInputCorrect += PlayCorrectSound;
         EventManager.OnPlayerInputWrong += PlayWrongSound;
+        EventManager.OnExceededBoundary += PlayExplosionSound;
     }
 
     private void OnDisable()
@@ -26,6 +44,7 @@ public class AudioManager : MonoBehaviour
         EventManager.OnPromptUpdated -= HandlePromptUpdated;
         EventManager.OnPlayerInputCorrect -= PlayCorrectSound;
         EventManager.OnPlayerInputWrong -= PlayWrongSound;
+        EventManager.OnExceededBoundary -= PlayExplosionSound;
     }
 
     private void Awake()
@@ -54,6 +73,8 @@ public class AudioManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this);
         }
+
+        LoadSoundbanks(startupSoundbanks);
     }
 
     public void PlayInputSound(AudioClip in_audioClip = null, AudioSource in_audioSource = null)
@@ -69,32 +90,48 @@ public class AudioManager : MonoBehaviour
         in_audioSource.PlayOneShot(in_audioClip);
     }
 
+    public void PlayInputSound(AK.Wwise.Event wwiseEvent, GameObject source)
+    {
+        if (wwiseEvent.IsValid() && source)
+            wwiseEvent.Post(source);
+    }
+
     public void HandlePromptUpdated()
     {
-        PlayInputSound(PromptUpdatedSound);
+        //PlayInputSound(PromptUpdatedSound);
+
+        PlayInputSound(promptUpdated, gameObject);
     }
 
     public void PlayCorrectSound(GameObject playerGO)
     {
-        AudioSource playerAudioSource = playerGO.GetComponent<AudioSource>();
+        //AudioSource playerAudioSource = playerGO.GetComponent<AudioSource>();
+        //PlayInputSound(InputCorrectSound, playerAudioSource);
 
-        PlayInputSound(InputCorrectSound, playerAudioSource);
+        PlayInputSound(inputCorrect, playerGO);
     }
 
     public void PlayWrongSound(GameObject playerGO)
     {
-        AudioSource playerAudioSource = playerGO.GetComponent<AudioSource>();
+        //AudioSource playerAudioSource = playerGO.GetComponent<AudioSource>();
+        //PlayInputSound(InputWrongSound, playerAudioSource);
 
-        PlayInputSound(InputWrongSound, playerAudioSource);
+        PlayInputSound(inputWrong, playerGO);
     }
 
-    public void PlayUISliderMoveSound()
+    private void LoadSoundbanks(List<AK.Wwise.Bank> bankList = null)
     {
-        PlayInputSound();
+        if (bankList.Count > 0)
+        {
+            foreach (var bank in bankList)
+            {
+                bank.LoadAsync();
+            }
+        }
     }
 
-    public void PlayUISliderLockSound()
+    public void PlayExplosionSound()
     {
-        PlayInputSound();
+        explosion.Post(gameObject);
     }
 }
