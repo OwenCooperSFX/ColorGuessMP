@@ -12,14 +12,12 @@ public class PlayerController_new : MonoBehaviour
     public Control DownControl => _downControl;
     public Control RightControl => _rightControl;
 
-    private List<Control> _controls = new List<Control>();
-    public List<Control> Controls => _controls;
+    public List<Control> Controls { get; } = new List<Control>();
 
     [SerializeField] private List<Color> _colors = new List<Color>();
     private List<Color> _lastColorOrder = new List<Color>();
 
-    private List<Color> _colorAssignments = new List<Color>();
-    public List<Color> ColorAssignments => _colorAssignments;
+    public List<Color> ColorAssignments { get; private set; } = new List<Color>();
 
     // TODO: Fix color rendering. Separate color logic into separate component so that this class only handles inputs.
     // New component can respond to raised input events.
@@ -54,17 +52,17 @@ public class PlayerController_new : MonoBehaviour
         _colors.Add(Color.yellow);
 
         _lastColorOrder = _colors;
-        _colorAssignments = _colors;
+        ColorAssignments = _colors;
 
         AssignControlColors();
     }
 
     void InitializeControls()
     {
-        _controls.Add(_upControl);
-        _controls.Add(_leftControl);
-        _controls.Add(_downControl);
-        _controls.Add(_rightControl);
+        Controls.Add(_upControl);
+        Controls.Add(_leftControl);
+        Controls.Add(_downControl);
+        Controls.Add(_rightControl);
     }
 
     public ColorOption DoInput(ButtonInput buttonInput)
@@ -152,43 +150,21 @@ public class PlayerController_new : MonoBehaviour
         // logic for shuffling player control colors. Avoids repeating pattern most of the time (~85% different from last).
         // TODO: implement true avoid-last-pattern logic.
 
-        _colorAssignments = ShuffleColors(_colors);
+        ColorAssignments = ShuffleColors(_colors);
 
-        if (_colorAssignments == _lastColorOrder)
+        if (ColorAssignments == _lastColorOrder)
         {
-            _colorAssignments = ShuffleColors(_colors);
-            _lastColorOrder = _colorAssignments;
+            ColorAssignments = ShuffleColors(_colors);
+            _lastColorOrder = ColorAssignments;
         }
 
         //Rendering
-        for (int i = 0; i < _controls.Count; i++)
+        for (int i = 0; i < Controls.Count; i++)
         {
-            ColorObject_new colorObjectNew = _controls[i].ColorObjectNew;
-            Material material = colorObjectNew.GetComponent<MeshRenderer>().material;
+            ColorObject_new colorObjectNew = Controls[i].ColorObjectNew;
 
-            material.color = _colorAssignments[i];
-            colorObjectNew.CurrentColor = GetColorOptionFromMaterialColor(colorObjectNew);
+            colorObjectNew.UpdateCurrentColor(ColorAssignments[i]);
         }
-    }
-
-    public ColorOption GetColorOptionFromMaterialColor(ColorObject_new colorObjectNew)
-    {
-        // When player inputs a control, check its color and assign it a ColorOptions value,
-        // TBD: Used for comparing against colorPrompt.
-
-        Color color = colorObjectNew.GetComponent<MeshRenderer>().material.color;
-        colorObjectNew.CurrentColor = ColorOption.invalid;
-
-        if (color == Color.red)
-            colorObjectNew.CurrentColor = ColorOption.red;
-        if (color == Color.blue)
-            colorObjectNew.CurrentColor = ColorOption.blue;
-        if (color == Color.yellow)
-            colorObjectNew.CurrentColor = ColorOption.yellow;
-        if (color == Color.green)
-            colorObjectNew.CurrentColor = ColorOption.green;
-
-        return colorObjectNew.CurrentColor;
     }
 
     [System.Serializable]

@@ -1,76 +1,49 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Light))]
 public class ColorLight : MonoBehaviour
 {
+    [SerializeField] private ColorLightDataSO _colorLightDataSO;
+
     private Light _light;
-    public ColorOption _currentColor;
-
-    private float _timer = 0;
-
-    [SerializeField] private float _lightFlashTime = 0.2f;
-    public float LightFlashTime { get => _lightFlashTime; set => _lightFlashTime = value; }
-
-    private bool _lightOn;
-
-    [SerializeField] private float _defaultMaxIntensity = 5.0f;
     private float _maxIntensity;
+    private float _baseIntensity;
 
-    [SerializeField] private float _range = 1.8f;
+    private ColorLightDataSO.IntensityMultipliers _multipliers;
 
-    Coroutine flashLightCR;
+    private ColorObject_new _parentColorObjectNew;
+    private ColorOption _currentColor;
+    private Coroutine _flashLightCR;
+
+    public float LightFlashTime { get; set; }
 
     private void Awake()
     {
-        Construct();
+        Initialize();
     }
 
-    private void DoTimer()
-    {
-        if (_lightOn)
-            _timer += Time.deltaTime;
-        else { }
-            //EndLight();
-    }
-
-    private void Update()
-    {
-        DoTimer();
-    }
-
-    private void Construct()
+    private void Initialize()
     {
         _light = GetComponent<Light>();
         _light.intensity = 0;
-        _light.range = _range;
 
-        _maxIntensity = _defaultMaxIntensity;
+        if (_colorLightDataSO)
+            UpdateColorLightData();
 
-        _timer = _lightFlashTime;
+        _maxIntensity = _baseIntensity;
+
+        _parentColorObjectNew = transform.GetComponentInParent<ColorObject_new>();
     }
 
-    private void StartLight()
+    private void UpdateColorLightData()
     {
-        if (!_light)
-            return;
-
-        if (_timer < _lightFlashTime)
         {
-            _lightOn = true;
+            _light.range = _colorLightDataSO.LightRange;
 
-            if (_light.intensity < _maxIntensity)
-                _light.intensity += (_maxIntensity / _lightFlashTime) * Time.deltaTime;
-            return;
-        }
-        else
-            _lightOn = false;
-    }
-
-    private void EndLight()
-    {
-        if (_light.intensity > 0)
-        {
-            _light.intensity -= (2 * _maxIntensity / _lightFlashTime) * Time.deltaTime;
+            LightFlashTime = _colorLightDataSO.LightFlashTime;
+            _baseIntensity = _colorLightDataSO.BaseIntensity;
+            _multipliers = _colorLightDataSO.Multipliers;
         }
     }
 
@@ -78,60 +51,55 @@ public class ColorLight : MonoBehaviour
     {
         if (_light)
         {
-            _maxIntensity = _defaultMaxIntensity;
+            UpdateColorLightData();
+            UpdateColor();
 
-            _currentColor = transform.GetComponentInParent<ColorObject_new>().CurrentColor;
+            _flashLightCR = StartCoroutine(FlashLightCR());
+        }
+    }
 
-            switch (_currentColor)
-            {
-                case ColorOption.blue:
-                    _light.color = Color.blue;
-                    _maxIntensity += (.5f * _defaultMaxIntensity);
-                    break;
-                case ColorOption.green:
-                    _light.color = Color.green;
-                    _maxIntensity -= (.25f * _defaultMaxIntensity);
-                    break;
-                case ColorOption.red:
-                    _light.color = Color.red;
-                    break;
-                case ColorOption.yellow:
-                    _light.color = Color.yellow;
-                    _maxIntensity -= (.25f * _defaultMaxIntensity);
-                    break;
-                case ColorOption.invalid:
-                    Debug.LogWarning("Invalid color!");
-                    break;
-            }
+    private void UpdateColor()
+    {
+        _currentColor = _parentColorObjectNew.CurrentColor;
 
-            flashLightCR = StartCoroutine(FlashLightCR());
+        switch (_currentColor)
+        {
+            case ColorOption.blue:
+                _light.color = Color.blue;
+                _maxIntensity = (_multipliers.Blue * _baseIntensity);
+                break;
+            case ColorOption.green:
+                _light.color = Color.green;
+                _maxIntensity = (_multipliers.Green * _baseIntensity);
+                break;
+            case ColorOption.red:
+                _light.color = Color.red;
+                _maxIntensity = (_multipliers.Red * _baseIntensity);
+                break;
+            case ColorOption.yellow:
+                _light.color = Color.yellow;
+                _maxIntensity = (_multipliers.Yellow * _baseIntensity);
+                break;
+            case ColorOption.invalid:
+                Debug.LogWarning("Invalid color!");
+                break;
         }
     }
 
     private IEnumerator FlashLightCR()
     {
-        if (flashLightCR != null)
-            StopCoroutine(flashLightCR);
+        if (_flashLightCR != null)
+            StopCoroutine(_flashLightCR);
 
         _light.intensity = _maxIntensity;
 
         while (_light.intensity > 0)
         {
-            _light.intensity -= (_maxIntensity / _lightFlashTime) * Time.deltaTime;
+            _light.intensity -= (_maxIntensity / LightFlashTime) * Time.deltaTime;
             yield return null;
         }
 
         _light.intensity = 0;
         yield break;
-    }
-
-    private IEnumerator EndLightCR(float delay = 0)
-    {
-        while (_light.intensity > 0)
-        {
-            _light.intensity -= (2 * _maxIntensity / _lightFlashTime) * Time.deltaTime;
-        }
-
-        yield return null;
     }
 }

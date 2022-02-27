@@ -3,12 +3,11 @@
 public class ColorObject_new : MonoBehaviour
 {
     private ColorLight _colorLight;
-    public ColorLight ColorLighti => _colorLight;
+    public ColorLight ColourLight => _colorLight;
 
     public ColorOption CurrentColor;
 
     private Tweener_Simple _tweenerSimple;
-    public Tweener_Simple TweenerSimple => _tweenerSimple;
 
     private void Awake()
     {
@@ -31,5 +30,30 @@ public class ColorObject_new : MonoBehaviour
             _colorLight.LightFlashTime = flashDuration;
             _colorLight.FlashLight();
         }
+    }
+
+    public void UpdateCurrentColor(Color newColor)
+    {
+        Material material = GetComponent<MeshRenderer>().material;
+        material.color = newColor;
+
+        CurrentColor = GetColorOptionFromMaterialColor();
+    }
+
+    public ColorOption GetColorOptionFromMaterialColor()
+    {
+        Color color = GetComponent<MeshRenderer>().material.color;
+        CurrentColor = ColorOption.invalid;
+
+        if (color == Color.red)
+            CurrentColor = ColorOption.red;
+        if (color == Color.blue)
+            CurrentColor = ColorOption.blue;
+        if (color == Color.yellow)
+            CurrentColor = ColorOption.yellow;
+        if (color == Color.green)
+            CurrentColor = ColorOption.green;
+
+        return CurrentColor;
     }
 }
