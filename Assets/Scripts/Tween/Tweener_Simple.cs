@@ -2,160 +2,174 @@
 using UnityEngine;
 using System.Collections;
 
-public enum TweenAnimType { Scale, Move, Rotate }
 public class Tweener_Simple : MonoBehaviour
 {
     [Tooltip("Defaults to owning GameObject if left empty.")]
-    public GameObject targetObject;
+    public GameObject TargetObject;
 
-    [SerializeField]
+    public TweenDataSO TweenDataSoRef;
+
     private TweenAnimType _tweenAnimType;
-    public TweenAnimType tweenAnimType { get { return _tweenAnimType; } }
 
-    [Tooltip("Scale: start transform scale, Move: start transform position, Rotate: start transform rotation.")]
-    public Vector3 startOffset = Vector3.one;
-    [Tooltip("Scale: end transform scale, Move: end transform position, Rotate: end transform rotation.")]
-    public Vector3 destination = Vector3.one;
-    [Tooltip("Time in seconds for tween to complete one loop.")]
-    public float duration = 1f;
+    public Tween TweenInstance { get; private set; }
 
-    public Ease ease = Ease.Linear;
-
-    public LoopType loopType = LoopType.Restart;
-    [Tooltip("Set to -1 for infinite looping")]
-    public int loops = 0;
-
-    public float startDelay = 0f;
-
-    public bool playOnEnable = true;
-    public bool resetOnDisable =  false;
-
-    public Tween tween { get; private set; }
-    public Transform startTransform { get; private set; }
-    private Vector3 startScale;
-    private Vector3 startPosition;
-    private Vector3 startRotation;
+    public Transform StartTransform { get; private set; }
+    private Vector3 _startScale;
+    private Vector3 _startPosition;
+    private Vector3 _startRotation;
 
     private void Awake()
     {
-        if (!targetObject)
-            targetObject = gameObject;
+        if (!TargetObject)
+            TargetObject = gameObject;
 
-        startTransform = targetObject.GetComponent<Transform>();
-
-        startScale = startTransform.localScale;
-        startPosition = startTransform.localPosition;
-        startRotation = startTransform.localRotation.eulerAngles;
+        InitializeTweenData(TargetObject);
     }
 
     private void OnEnable()
     {
-        SetDOTweenType(_tweenAnimType);
-
-        if (playOnEnable)
+        if (TweenDataSoRef.PlayOnEnable)
             PlayTween();
     }
 
     private void OnDisable()
     {
-        tween.Kill();
+        TweenInstance.Kill();
 
-        if (resetOnDisable)
+        if (TweenDataSoRef.ResetOnDisable)
             ResetTransform();
-    }
-
-    void CreateScaleTween()
-    {
-        tween = targetObject.transform.DOScale(destination, duration).SetEase(ease).SetLoops(loops, loopType).SetAutoKill(false);
-        tween.Pause();
-    }
-
-    void CreateMoveTween()
-    {
-        tween = targetObject.transform.DOLocalMove(destination, duration).SetEase(ease).SetLoops(loops, loopType).SetAutoKill(false);
-        tween.Pause();
-    }
-
-    void CreateRotateTween()
-    {
-        tween = targetObject.transform.DOLocalRotate(destination, duration).SetEase(ease).SetLoops(loops, loopType).SetAutoKill(false);
-        tween.Pause();
-    }
-
-    public void SetDOTweenType(TweenAnimType tweenAnim)
-    {
-        switch (tweenAnim)
-        {
-            case TweenAnimType.Scale:
-                CreateScaleTween();
-                break;
-            case TweenAnimType.Move:
-                CreateMoveTween();
-                break;
-            case TweenAnimType.Rotate:
-                CreateRotateTween();
-                break;
-        }
-
-        _tweenAnimType = tweenAnim;
     }
 
     public void PlayTween()
     {
-        if (startDelay > 0)
-            StartCoroutine(PlayTweenWithDelay(startDelay));
+        TweenInstance = CreateTween();
+
+        ResetTransform();
+
+        if (TweenDataSoRef.StartDelay > 0)
+            StartCoroutine(PlayTweenWithDelay(TweenDataSoRef.StartDelay));
         else
         {
-            tween.Rewind();
-            tween.Play();
+            TweenInstance.Play();
         }
     }
 
     public void PauseTween()
     {
-        if (tween.IsPlaying())
-            tween.Pause();
+        if (TweenInstance.IsPlaying())
+            TweenInstance.Pause();
     }
 
     IEnumerator PlayTweenWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        if (!tween.IsPlaying())
-            tween.Play();
+        if (!TweenInstance.IsPlaying())
+            TweenInstance.Play();
     }
 
     void ResetTransform()
     {
-        switch (_tweenAnimType)
+        switch (TweenDataSoRef.TweenAnimType)
         {
             case TweenAnimType.Scale:
-                targetObject.transform.localScale = startScale;
+                TargetObject.transform.localScale = _startScale;
                 break;
             case TweenAnimType.Move:
-                targetObject.transform.localPosition = startPosition;
+                TargetObject.transform.localPosition = _startPosition;
                 break;
             case TweenAnimType.Rotate:
-                targetObject.transform.localRotation = Quaternion.Euler(startRotation);
+                TargetObject.transform.localRotation = Quaternion.Euler(_startRotation);
                 break;
         }
     }
 
-    protected void SetStartOffset(Vector3 _offset)
+    public void InitializeTweenData(GameObject gameObject)
     {
-        _offset += startOffset;
+        StartTransform = gameObject.transform;
+        _tweenAnimType = TweenDataSoRef.TweenAnimType;
+
+        SetStartTransformValues();
+        SetStartOffset();
+    }
+
+    private void SetStartTransformValues()
+    {
+        _startScale = StartTransform.localScale;
+        _startPosition = StartTransform.localPosition;
+        _startRotation = StartTransform.localRotation.eulerAngles;
+    }
+
+    private void SetStartOffset()
+    {
+        Vector3 startOffset = TweenDataSoRef.StartOffset;
 
         switch (_tweenAnimType)
         {
             case TweenAnimType.Scale:
-                targetObject.transform.localScale = startOffset;
+                _startScale += startOffset;
                 break;
             case TweenAnimType.Move:
-                targetObject.transform.localPosition = startOffset;
+                _startPosition += startOffset;
                 break;
             case TweenAnimType.Rotate:
-                targetObject.transform.localRotation = Quaternion.Euler(startOffset);
+                _startRotation += startOffset;
                 break;
         }
     }
+
+    private Tween CreateTween()
+    {
+        if (TweenInstance != null)
+            TweenInstance.Kill();
+
+        Vector3 destination = TweenDataSoRef.Destination;
+        float duration = TweenDataSoRef.Duration;
+        Ease easeSetting = TweenDataSoRef.EaseSetting;
+        int loops = TweenDataSoRef.Loops;
+        LoopType loopSetting = TweenDataSoRef.LoopSetting;
+
+        Tween tween = null;
+
+        switch (_tweenAnimType)
+        {
+            case TweenAnimType.Scale:
+                tween = CreateScaleTween(destination, duration, easeSetting, loops, loopSetting);
+                break;
+            case TweenAnimType.Move:
+                tween = CreateMoveTween(destination, duration, easeSetting, loops, loopSetting);
+                break;
+            case TweenAnimType.Rotate:
+                tween = CreateRotateTween(destination, duration, easeSetting, loops, loopSetting);
+                break;
+        }
+
+        return tween;
+    }
+
+    #region Tween Creation Methods
+    private Tween CreateScaleTween(Vector3 destination, float duration, Ease easeSetting, int loops, LoopType loopSetting)
+    {
+        var tween = StartTransform.DOScale(destination, duration).SetEase(easeSetting).SetLoops(loops, loopSetting).SetAutoKill(false);
+        tween.Pause();
+
+        return tween;
+    }
+
+    private Tween CreateMoveTween(Vector3 destination, float duration, Ease easeSetting, int loops, LoopType loopSetting)
+    {
+        var tween = StartTransform.DOLocalMove(destination, duration).SetEase(easeSetting).SetLoops(loops, loopSetting).SetAutoKill(false);
+        tween.Pause();
+
+        return tween;
+    }
+
+    private Tween CreateRotateTween(Vector3 destination, float duration, Ease easeSetting, int loops, LoopType loopSetting)
+    {
+        var tween = StartTransform.DOLocalRotate(destination, duration).SetEase(easeSetting).SetLoops(loops, loopSetting).SetAutoKill(false);
+        tween.Pause();
+
+        return tween;
+    }
+    #endregion
 }

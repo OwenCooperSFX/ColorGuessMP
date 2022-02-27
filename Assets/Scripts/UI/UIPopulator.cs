@@ -12,8 +12,8 @@ public class UIPopulator : Tweener_Simple
 
     private void Awake()
     {
-        if (!targetObject)
-            targetObject = gameObject;
+        if (!TargetObject)
+            TargetObject = gameObject;
     }
 
     private void Start()
@@ -23,42 +23,48 @@ public class UIPopulator : Tweener_Simple
 
     void PopuplateUI()
     {
-        foreach (GameObject uiElement in uiElements)
-        {
-            targetObject = uiElement;
-            
-            Tweener_Simple targetTweener = targetObject.AddComponent<Tweener_Simple>();
-            
-            targetObject.SetActive(false);
-            
-            targetTweener.startDelay = delayBetween * ( 1 + uiElements.IndexOf(uiElement));
-            targetTweener.destination = targetObject.transform.localPosition;
-            targetTweener.duration = duration;
-            targetTweener.loopType = loopType;
-            targetTweener.loops = loops;
-            targetTweener.ease = ease;
+        //Revisit this after refactoring dependencies.
 
-            targetObject.transform.localPosition += startOffset;
-            targetObject.SetActive(true);
+        //foreach (GameObject uiElement in uiElements)
+        //{
+        //    TargetObject = uiElement;
             
-            targetTweener.SetDOTweenType(tweenAnimType);
-            print(uiElements.IndexOf(uiElement));
-            print(targetTweener.startDelay);
-        }
+        //    Tweener_Simple targetTweener = TargetObject.AddComponent<Tweener_Simple>();
+        //    TweenDataSO tweenData = targetTweener.TweenDataSoRef;
+
+        //    TargetObject.SetActive(false);
+
+            
+        //    tweenData.StartDelay = delayBetween * ( 1 + uiElements.IndexOf(uiElement));
+        //    tweenData.Destination = TargetObject.transform.localPosition;
+        //    tweenData.Duration = Duration;
+        //    targetTweener.LoopSetting = LoopSetting;
+        //    targetTweener.Loops = Loops;
+        //    targetTweener.EaseSetting = EaseSetting;
+
+        //    TargetObject.transform.localPosition += StartOffset;
+        //    TargetObject.SetActive(true);
+            
+        //    targetTweener.SetDOTweenType(TweenAnimType);
+        //    print(uiElements.IndexOf(uiElement));
+        //    print(targetTweener.StartDelay);
+        //}
     }
 
     void SetDirection()
     {
-        switch (direction)
-        {
-            case Direction.Up:
-                break;
-            case Direction.Down:
-                break;
-            case Direction.Left:
-                break;
-            case Direction.Right:
-                break;
-        }
+        //Revisit this after refactoring dependencies.
+
+        //switch (direction)
+        //    {
+        //        case Direction.Up:
+        //            break;
+        //        case Direction.Down:
+        //            break;
+        //        case Direction.Left:
+        //            break;
+        //        case Direction.Right:
+        //            break;
+        //    }
     }
 }

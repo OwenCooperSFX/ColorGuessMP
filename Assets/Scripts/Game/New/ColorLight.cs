@@ -18,6 +18,8 @@ public class ColorLight : MonoBehaviour
 
     [SerializeField] private float _range = 1.8f;
 
+    Coroutine flashLightCR;
+
     private void Awake()
     {
         Construct();
@@ -102,23 +104,24 @@ public class ColorLight : MonoBehaviour
                     break;
             }
 
-            StartCoroutine(FlashLightCR());
+            flashLightCR = StartCoroutine(FlashLightCR());
         }
     }
     private IEnumerator FlashLightCR()
     {
-        WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
+        if (flashLightCR != null)
+            StopCoroutine(flashLightCR);
 
-        while (_light.intensity < _maxIntensity)
+        _light.intensity = _maxIntensity;
+
+        while (_light.intensity > 0)
         {
-            _light.intensity += (_maxIntensity / _lightFlashTime) * Time.deltaTime;
-            yield return waitForEndOfFrame;
+            _light.intensity -= (_maxIntensity / _lightFlashTime) * Time.deltaTime;
+            yield return null;
         }
-        if (_light.intensity >= _maxIntensity)
-        {
-            _light.intensity = 0;
-            yield break;
-        }
+
+        _light.intensity = 0;
+        yield break;
     }
 
     private IEnumerator EndLightCR(float delay = 0)

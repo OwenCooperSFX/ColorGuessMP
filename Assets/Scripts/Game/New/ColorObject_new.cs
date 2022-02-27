@@ -23,7 +23,7 @@ public class ColorObject_new : MonoBehaviour
         if (_tweenerSimple)
         {
             _tweenerSimple.PlayTween();
-            flashDuration = 2 * _tweenerSimple.duration;
+            flashDuration = 2 * _tweenerSimple.TweenDataSoRef.Duration;
         }
 
         if (_colorLight)
