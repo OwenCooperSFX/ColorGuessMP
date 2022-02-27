@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetObject: {fileID: 7957708070622338064}
-  TweenDataSoRef: {fileID: 11400000, guid: f6e97d81893ca6647b5c3b8f970707bd, type: 2}
+  TweenData: {fileID: 11400000, guid: f6e97d81893ca6647b5c3b8f970707bd, type: 2}
 --- !u!33 &7957708070622338076
 MeshFilter:
   m_ObjectHideFlags: 0

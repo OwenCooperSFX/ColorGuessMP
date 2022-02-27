@@ -7,7 +7,7 @@ public class Tweener_Simple : MonoBehaviour
     [Tooltip("Defaults to owning GameObject if left empty.")]
     public GameObject TargetObject;
 
-    public TweenDataSO TweenDataSoRef;
+    public TweenDataSO TweenData;
 
     private TweenAnimType _tweenAnimType;
 
@@ -28,7 +28,7 @@ public class Tweener_Simple : MonoBehaviour
 
     private void OnEnable()
     {
-        if (TweenDataSoRef.PlayOnEnable)
+        if (TweenData.PlayOnEnable)
             PlayTween();
     }
 
@@ -36,7 +36,7 @@ public class Tweener_Simple : MonoBehaviour
     {
         TweenInstance.Kill();
 
-        if (TweenDataSoRef.ResetOnDisable)
+        if (TweenData.ResetOnDisable)
             ResetTransform();
     }
 
@@ -46,12 +46,10 @@ public class Tweener_Simple : MonoBehaviour
 
         ResetTransform();
 
-        if (TweenDataSoRef.StartDelay > 0)
-            StartCoroutine(PlayTweenWithDelay(TweenDataSoRef.StartDelay));
+        if (TweenData.StartDelay > 0)
+            StartCoroutine(PlayTweenWithDelay(TweenData.StartDelay));
         else
-        {
             TweenInstance.Play();
-        }
     }
 
     public void PauseTween()
@@ -70,7 +68,7 @@ public class Tweener_Simple : MonoBehaviour
 
     void ResetTransform()
     {
-        switch (TweenDataSoRef.TweenAnimType)
+        switch (TweenData.TweenAnimType)
         {
             case TweenAnimType.Scale:
                 TargetObject.transform.localScale = _startScale;
@@ -87,7 +85,7 @@ public class Tweener_Simple : MonoBehaviour
     public void InitializeTweenData(GameObject gameObject)
     {
         StartTransform = gameObject.transform;
-        _tweenAnimType = TweenDataSoRef.TweenAnimType;
+        _tweenAnimType = TweenData.TweenAnimType;
 
         SetStartTransformValues();
         SetStartOffset();
@@ -102,7 +100,7 @@ public class Tweener_Simple : MonoBehaviour
 
     private void SetStartOffset()
     {
-        Vector3 startOffset = TweenDataSoRef.StartOffset;
+        Vector3 startOffset = TweenData.StartOffset;
 
         switch (_tweenAnimType)
         {
@@ -123,11 +121,11 @@ public class Tweener_Simple : MonoBehaviour
         if (TweenInstance != null)
             TweenInstance.Kill();
 
-        Vector3 destination = TweenDataSoRef.Destination;
-        float duration = TweenDataSoRef.Duration;
-        Ease easeSetting = TweenDataSoRef.EaseSetting;
-        int loops = TweenDataSoRef.Loops;
-        LoopType loopSetting = TweenDataSoRef.LoopSetting;
+        Vector3 destination = TweenData.Destination;
+        float duration = TweenData.Duration;
+        Ease easeSetting = TweenData.EaseSetting;
+        int loops = TweenData.Loops;
+        LoopType loopSetting = TweenData.LoopSetting;
 
         Tween tween = null;
 

@@ -19,7 +19,7 @@ public class PlayerController_new : MonoBehaviour
 
     public List<Color> ColorAssignments { get; private set; } = new List<Color>();
 
-    // TODO: Fix color rendering. Separate color logic into separate component so that this class only handles inputs.
+    // Separate color logic into separate component so that this class only handles inputs.
     // New component can respond to raised input events.
 
     private void Awake()
@@ -78,22 +78,18 @@ public class PlayerController_new : MonoBehaviour
 
         if (Input.GetKeyDown(_upControl.Button))
         {
-            // Do top color
             buttonInput = ButtonInput.Up;
         }
         if (Input.GetKeyDown(_leftControl.Button))
         {
-            // Do left color
             buttonInput = ButtonInput.Left;
         }
         if (Input.GetKeyDown(_rightControl.Button))
         {
-            // Do bottom color
             buttonInput = ButtonInput.Right;
         }
         if (Input.GetKeyDown(_downControl.Button))
         {
-            // Do right color
             buttonInput = ButtonInput.Down;
         }
 
@@ -127,18 +123,16 @@ public class PlayerController_new : MonoBehaviour
             control.ColorObjectNew.Pressed();
     }
 
-    List<Color> ShuffleColors(List<Color> colorList)
+    List<Color> ShuffleColors()
     {
-        List<Color> assignments = colorList;
+        List<Color> assignments = _colors;
 
-        int colorsCount = _colors.Count;
-
-        for (int i = 0; i < colorsCount; i++)
+        for (int i = 0; i < assignments.Count; i++)
         {
-            Color color = _colors[i];
+            Color color = assignments[i];
             int rndInt = Random.Range(0, i);
 
-            assignments[i] = _colors[rndInt];
+            assignments[i] = assignments[rndInt];
             assignments[rndInt] = color;
         }
 
@@ -147,18 +141,19 @@ public class PlayerController_new : MonoBehaviour
 
     void AssignControlColors()
     {
-        // logic for shuffling player control colors. Avoids repeating pattern most of the time (~85% different from last).
-        // TODO: implement true avoid-last-pattern logic.
-
-        ColorAssignments = ShuffleColors(_colors);
+        ColorAssignments = ShuffleColors();
 
         if (ColorAssignments == _lastColorOrder)
         {
-            ColorAssignments = ShuffleColors(_colors);
+            ColorAssignments = ShuffleColors();
             _lastColorOrder = ColorAssignments;
         }
 
-        //Rendering
+        RenderMaterialColors();
+    }
+
+    private void RenderMaterialColors()
+    {
         for (int i = 0; i < Controls.Count; i++)
         {
             ColorObject_new colorObjectNew = Controls[i].ColorObjectNew;

@@ -33,7 +33,10 @@ public class ColorLight : MonoBehaviour
 
         _maxIntensity = _baseIntensity;
 
-        _parentColorObjectNew = transform.GetComponentInParent<ColorObject_new>();
+        if (transform.parent)
+            _parentColorObjectNew = transform.GetComponentInParent<ColorObject_new>();
+        else
+            Debug.LogError(this + " requires a parent GameObject of type " + _parentColorObjectNew.GetType() + ".");
     }
 
     private void UpdateColorLightData()
@@ -60,7 +63,8 @@ public class ColorLight : MonoBehaviour
 
     private void UpdateColor()
     {
-        _currentColor = _parentColorObjectNew.CurrentColor;
+        if (_parentColorObjectNew)
+            _currentColor = _parentColorObjectNew.CurrentColor;
 
         switch (_currentColor)
         {
