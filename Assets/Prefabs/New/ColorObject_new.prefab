@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344ba2af48c7ce644a9b40eb5b63e851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetObject: {fileID: 0}
+  TargetObject: {fileID: 7957708070622338064}
   TweenDataSoRef: {fileID: 11400000, guid: f6e97d81893ca6647b5c3b8f970707bd, type: 2}
 --- !u!33 &7957708070622338076
 MeshFilter:
