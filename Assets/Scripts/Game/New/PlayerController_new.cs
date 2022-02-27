@@ -26,8 +26,8 @@ public class PlayerController_new : MonoBehaviour
 
     private void Awake()
     {
-        InitializeColors();
         InitializeControls();
+        InitializeColors();
     }
 
     private void Update()
@@ -100,7 +100,7 @@ public class PlayerController_new : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
-            ShuffleColors(_colorAssignments);
+            AssignControlColors();
 
         return DoInput(buttonInput);
     }
@@ -163,9 +163,32 @@ public class PlayerController_new : MonoBehaviour
         //Rendering
         for (int i = 0; i < _controls.Count; i++)
         {
-            Material material = _controls[i].ColorObjectNew.GetComponent<MeshRenderer>().material;
+            ColorObject_new colorObjectNew = _controls[i].ColorObjectNew;
+            Material material = colorObjectNew.GetComponent<MeshRenderer>().material;
+
             material.color = _colorAssignments[i];
+            colorObjectNew.CurrentColor = GetColorOptionFromMaterialColor(colorObjectNew);
         }
+    }
+
+    public ColorOption GetColorOptionFromMaterialColor(ColorObject_new colorObjectNew)
+    {
+        // When player inputs a control, check its color and assign it a ColorOptions value,
+        // TBD: Used for comparing against colorPrompt.
+
+        Color color = colorObjectNew.GetComponent<MeshRenderer>().material.color;
+        colorObjectNew.CurrentColor = ColorOption.invalid;
+
+        if (color == Color.red)
+            colorObjectNew.CurrentColor = ColorOption.red;
+        if (color == Color.blue)
+            colorObjectNew.CurrentColor = ColorOption.blue;
+        if (color == Color.yellow)
+            colorObjectNew.CurrentColor = ColorOption.yellow;
+        if (color == Color.green)
+            colorObjectNew.CurrentColor = ColorOption.green;
+
+        return colorObjectNew.CurrentColor;
     }
 
     [System.Serializable]

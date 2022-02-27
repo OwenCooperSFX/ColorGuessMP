@@ -3,7 +3,7 @@
 public class ColorObject_new : MonoBehaviour
 {
     private ColorLight _colorLight;
-    public ColorLight ColorLight => _colorLight;
+    public ColorLight ColorLighti => _colorLight;
 
     public ColorOption CurrentColor;
 

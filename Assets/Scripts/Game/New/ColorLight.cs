@@ -107,6 +107,7 @@ public class ColorLight : MonoBehaviour
             flashLightCR = StartCoroutine(FlashLightCR());
         }
     }
+
     private IEnumerator FlashLightCR()
     {
         if (flashLightCR != null)
