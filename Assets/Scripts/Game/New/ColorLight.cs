@@ -41,13 +41,12 @@ public class ColorLight : MonoBehaviour
 
     private void UpdateColorLightData()
     {
-        {
-            _light.range = _colorLightDataSO.LightRange;
+        _light.range = _colorLightDataSO.LightRange;
 
-            LightFlashTime = _colorLightDataSO.LightFlashTime;
-            _baseIntensity = _colorLightDataSO.BaseIntensity;
-            _multipliers = _colorLightDataSO.Multipliers;
-        }
+        _baseIntensity = _colorLightDataSO.BaseIntensity;
+        _multipliers = _colorLightDataSO.Multipliers;
+
+        LightFlashTime = _colorLightDataSO.LightFlashTime;
     }
 
     public void FlashLight()

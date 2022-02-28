@@ -14,16 +14,14 @@ public class Tweener_Simple : MonoBehaviour
     public Tween TweenInstance { get; private set; }
 
     public Transform StartTransform { get; private set; }
+
     private Vector3 _startScale;
     private Vector3 _startPosition;
     private Vector3 _startRotation;
 
     private void Awake()
     {
-        if (!TargetObject)
-            TargetObject = gameObject;
-
-        InitializeTweenData(TargetObject);
+        Initialize();
     }
 
     private void OnEnable()
@@ -40,51 +38,18 @@ public class Tweener_Simple : MonoBehaviour
             ResetTransform();
     }
 
-    public void PlayTween()
+    private void Initialize()
     {
-        TweenInstance = CreateTween();
-
-        ResetTransform();
-
-        if (TweenData.StartDelay > 0)
-            StartCoroutine(PlayTweenWithDelay(TweenData.StartDelay));
-        else
-            TweenInstance.Play();
+        UpdateTweenData();
     }
 
-    public void PauseTween()
+    public void UpdateTweenData()
     {
-        if (TweenInstance.IsPlaying())
-            TweenInstance.Pause();
-    }
+        if (!TargetObject)
+            TargetObject = gameObject;
 
-    IEnumerator PlayTweenWithDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
+        StartTransform = TargetObject.transform;
 
-        if (!TweenInstance.IsPlaying())
-            TweenInstance.Play();
-    }
-
-    void ResetTransform()
-    {
-        switch (TweenData.TweenAnimType)
-        {
-            case TweenAnimType.Scale:
-                TargetObject.transform.localScale = _startScale;
-                break;
-            case TweenAnimType.Move:
-                TargetObject.transform.localPosition = _startPosition;
-                break;
-            case TweenAnimType.Rotate:
-                TargetObject.transform.localRotation = Quaternion.Euler(_startRotation);
-                break;
-        }
-    }
-
-    public void InitializeTweenData(GameObject gameObject)
-    {
-        StartTransform = gameObject.transform;
         _tweenAnimType = TweenData.TweenAnimType;
 
         SetStartTransformValues();
@@ -112,6 +77,50 @@ public class Tweener_Simple : MonoBehaviour
                 break;
             case TweenAnimType.Rotate:
                 _startRotation += startOffset;
+                break;
+        }
+    }
+
+    public void PlayTween()
+    {
+        UpdateTweenData();
+
+        TweenInstance = CreateTween();
+        
+        ResetTransform();
+
+        if (TweenData.StartDelay > 0)
+            StartCoroutine(PlayTweenWithDelay(TweenData.StartDelay));
+        else
+            TweenInstance.Play();
+    }
+
+    public void PauseTween()
+    {
+        if (TweenInstance.IsPlaying())
+            TweenInstance.Pause();
+    }
+
+    IEnumerator PlayTweenWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (!TweenInstance.IsPlaying())
+            TweenInstance.Play();
+    }
+
+    public void ResetTransform()
+    {
+        switch (TweenData.TweenAnimType)
+        {
+            case TweenAnimType.Scale:
+                TargetObject.transform.localScale = _startScale;
+                break;
+            case TweenAnimType.Move:
+                TargetObject.transform.localPosition = _startPosition;
+                break;
+            case TweenAnimType.Rotate:
+                TargetObject.transform.localRotation = Quaternion.Euler(_startRotation);
                 break;
         }
     }

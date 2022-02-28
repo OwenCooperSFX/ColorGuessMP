@@ -15,7 +15,7 @@ MonoBehaviour:
   _baseIntensity: 3.2
   _range: 1.8
   _intensityMultiplers:
-    _blue: 14.44
-    _green: 4.9
-    _red: 7.1
-    _yellow: 3.95
+    _blue: 8.1
+    _green: 4.4
+    _red: 9.6
+    _yellow: 5.3

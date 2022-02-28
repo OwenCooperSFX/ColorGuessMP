@@ -3,9 +3,10 @@
 public class ColorObject_new : MonoBehaviour
 {
     private ColorLight _colorLight;
-    public ColorLight ColourLight => _colorLight;
+    public ColorLight ClrLight => _colorLight;
 
     public ColorOption CurrentColor;
+    public ButtonInput ButtonAssignment { get; set; }
 
     private Tweener_Simple _tweenerSimple;
 
@@ -15,8 +16,21 @@ public class ColorObject_new : MonoBehaviour
         _tweenerSimple = GetComponent<Tweener_Simple>();
     }
 
-    public void Pressed()
+    private void OnEnable()
     {
+        EventManager.OnButtonInput += Pressed;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnButtonInput -= Pressed;
+    }
+
+    public void Pressed(ButtonInput buttonInput)
+    {
+        if (buttonInput != ButtonAssignment)
+            return;
+
         float flashDuration = 0.2f;
 
         if (_tweenerSimple)
@@ -37,10 +51,10 @@ public class ColorObject_new : MonoBehaviour
         Material material = GetComponent<MeshRenderer>().material;
         material.color = newColor;
 
-        CurrentColor = GetColorOptionFromMaterialColor();
+        CurrentColor = GetColorOptionFromMaterial();
     }
 
-    public ColorOption GetColorOptionFromMaterialColor()
+    public ColorOption GetColorOptionFromMaterial()
     {
         Color color = GetComponent<MeshRenderer>().material.color;
         CurrentColor = ColorOption.invalid;

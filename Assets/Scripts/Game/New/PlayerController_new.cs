@@ -14,18 +14,13 @@ public class PlayerController_new : MonoBehaviour
 
     public List<Control> Controls { get; } = new List<Control>();
 
-    [SerializeField] private List<Color> _colors = new List<Color>();
-    private List<Color> _lastColorOrder = new List<Color>();
+    private ControlColorHandler _controlColorHandler;
 
-    public List<Color> ColorAssignments { get; private set; } = new List<Color>();
-
-    // Separate color logic into separate component so that this class only handles inputs.
-    // New component can respond to raised input events.
 
     private void Awake()
     {
         InitializeControls();
-        InitializeColors();
+        InitializeControlColorHandler();
     }
 
     private void Update()
@@ -34,142 +29,69 @@ public class PlayerController_new : MonoBehaviour
             GetInput();
     }
 
-    private void OnEnable()
-    {
-        EventManager.OnButtonInput += HandleButtonInput;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.OnButtonInput -= HandleButtonInput;
-    }
-
-    void InitializeColors()
-    {
-        _colors.Add(Color.red);
-        _colors.Add(Color.green);
-        _colors.Add(Color.blue);
-        _colors.Add(Color.yellow);
-
-        _lastColorOrder = _colors;
-        ColorAssignments = _colors;
-
-        AssignControlColors();
-    }
-
-    void InitializeControls()
+    private void InitializeControls()
     {
         Controls.Add(_upControl);
         Controls.Add(_leftControl);
         Controls.Add(_downControl);
         Controls.Add(_rightControl);
+
+        foreach (var control in Controls)
+        {
+            control.ColorObjectNew.ButtonAssignment = control.InputAssignment;
+        }
     }
 
-    public ColorOption DoInput(ButtonInput buttonInput)
+    private void InitializeControlColorHandler()
+    {
+        if (!_controlColorHandler)
+        {
+            _controlColorHandler = GetComponent<ControlColorHandler>();
+            if (!_controlColorHandler)
+            {
+                _controlColorHandler = new ControlColorHandler();
+            }
+        }
+
+        _controlColorHandler.AssignControlColors();
+        _controlColorHandler.RenderMaterialColors(Controls);
+    }
+
+    public void DoInput(ButtonInput buttonInput)
     {
         EventManager.RaiseButtonInput(buttonInput);
-
-        return ColorOption.invalid;
     }
 
-    private ColorOption GetInput()
+    private void GetInput()
     {
-        ButtonInput buttonInput = ButtonInput.invalid;
-
         if (Input.GetKeyDown(_upControl.Button))
         {
-            buttonInput = ButtonInput.Up;
+            DoInput(_upControl.InputAssignment);
         }
         if (Input.GetKeyDown(_leftControl.Button))
         {
-            buttonInput = ButtonInput.Left;
+            DoInput(_leftControl.InputAssignment);
         }
         if (Input.GetKeyDown(_rightControl.Button))
         {
-            buttonInput = ButtonInput.Right;
+            DoInput(_rightControl.InputAssignment);
         }
         if (Input.GetKeyDown(_downControl.Button))
         {
-            buttonInput = ButtonInput.Down;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            AssignControlColors();
-
-        return DoInput(buttonInput);
-    }
-
-    void HandleButtonInput(ButtonInput buttonInput)
-    {
-        var control = new Control();
-
-        switch (buttonInput)
-        {
-            case ButtonInput.Up:
-                control = _upControl;
-                break;
-            case ButtonInput.Left:
-                control = _leftControl;
-                break;
-            case ButtonInput.Down:
-                control = _downControl;
-                break;
-            case ButtonInput.Right:
-                control = _rightControl;
-                break;
-        }
-
-        if (control.ColorObjectNew)
-            control.ColorObjectNew.Pressed();
-    }
-
-    List<Color> ShuffleColors()
-    {
-        List<Color> assignments = _colors;
-
-        for (int i = 0; i < assignments.Count; i++)
-        {
-            Color color = assignments[i];
-            int rndInt = Random.Range(0, i);
-
-            assignments[i] = assignments[rndInt];
-            assignments[rndInt] = color;
-        }
-
-        return assignments;
-    }
-
-    void AssignControlColors()
-    {
-        ColorAssignments = ShuffleColors();
-
-        if (ColorAssignments == _lastColorOrder)
-        {
-            ColorAssignments = ShuffleColors();
-            _lastColorOrder = ColorAssignments;
-        }
-
-        RenderMaterialColors();
-    }
-
-    private void RenderMaterialColors()
-    {
-        for (int i = 0; i < Controls.Count; i++)
-        {
-            ColorObject_new colorObjectNew = Controls[i].ColorObjectNew;
-
-            colorObjectNew.UpdateCurrentColor(ColorAssignments[i]);
+            DoInput(_downControl.InputAssignment);
         }
     }
+}
 
-    [System.Serializable]
-    public struct Control
-    {
-        [SerializeField] ButtonInput _assignment;
-        public ButtonInput Assignment => _assignment;
-        [SerializeField] KeyCode _button;
-        public KeyCode Button => _button;
-        [SerializeField] ColorObject_new _colorObject;
-        public ColorObject_new ColorObjectNew => _colorObject;
-    }
+[System.Serializable]
+public struct Control
+{
+    [SerializeField] private ButtonInput _inputAssignment;
+    public ButtonInput InputAssignment => _inputAssignment;
+
+    [SerializeField] private KeyCode _button;
+    public KeyCode Button => _button;
+
+    [SerializeField] private ColorObject_new _colorObject;
+    public ColorObject_new ColorObjectNew => _colorObject;
 }
