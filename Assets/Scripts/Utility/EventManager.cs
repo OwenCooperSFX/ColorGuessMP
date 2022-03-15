@@ -59,11 +59,34 @@ public static class EventManager
         }
         else
         {
-            PrintNullEventWarning("InputEvent");
+            PrintNullEventWarning("ButtonInputEvent");
         }
     }
 
     public static void RaiseButtonInput(PlayerController_new callingPlayer, KeyCode keyCode, ButtonInput buttonInput) => RaiseEventButtonInput(OnButtonInput, callingPlayer, keyCode, buttonInput);
+
+
+    public delegate void CompareColorsEvent(PlayerController_new player);
+    public static event CompareColorsEvent OnColorMatch;
+    public static event CompareColorsEvent OnColorMismatch;
+
+    static void RaiseEventCompareColors(CompareColorsEvent in_Event, PlayerController_new player)
+    {
+        if (in_Event != null)
+        {
+            in_Event(player);
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event);
+        }
+        else
+        {
+            PrintNullEventWarning("CompareColorsEvent");
+        }
+    }
+
+    public static void RaiseColorMatch(PlayerController_new player) => RaiseEventCompareColors(OnColorMatch, player);
+    public static void RaiseColorMismatch(PlayerController_new player) => RaiseEventCompareColors(OnColorMismatch, player);
 
     /*
     ============================

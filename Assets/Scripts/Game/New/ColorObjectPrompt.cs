@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum RepetitionOption { TrueRandom, ReduceRepeat, NoRepeat }
 
-public class ColorObjectPrompt : ColorObjectBase, IReadInput
+public class ColorObjectPrompt : ColorObjectBase
 {
     [SerializeField] RepetitionOption _repetitionOption = RepetitionOption.NoRepeat;
 
@@ -11,6 +11,16 @@ public class ColorObjectPrompt : ColorObjectBase, IReadInput
 
     private int _length = 0;
     private ColorOption _lastColor;
+
+    public void OnEnable()
+    {
+        EventManager.OnColorObjectButtonSelected += HandleColorObjectButtonSelected;
+    }
+
+    public void OnDisable()
+    {
+        EventManager.OnColorObjectButtonSelected -= HandleColorObjectButtonSelected;
+    }
 
     private void Awake()
     {
@@ -46,51 +56,36 @@ public class ColorObjectPrompt : ColorObjectBase, IReadInput
 
         switch (_repetitionOption)
         {
-            case RepetitionOption.TrueRandom:          /*already shuffled*/ ; break;
-            case RepetitionOption.ReduceRepeat:        RandomizeReduceRepeat(rndColor); break;
-            case RepetitionOption.NoRepeat:            RandomizeNoRepeat(rndColor); break;
-            default:                                   RandomizeNoRepeat(rndColor); break;
+            case RepetitionOption.TrueRandom:           /*already shuffled*/ ; break;
+            case RepetitionOption.ReduceRepeat:         RandomizeReduceRepeat(rndColor); break;
+            case RepetitionOption.NoRepeat:             RandomizeNoRepeat(rndColor); break;
+            default:                                    RandomizeNoRepeat(rndColor); break;
         }
-    }
-
-    public void OnEnable()
-    {
-        EventManager.OnButtonInput += HandleInputPressed;
-        EventManager.OnColorObjectButtonSelected += HandleColorObjectButtonSelected;
-    }
-
-    public void OnDisable()
-    {
-        EventManager.OnButtonInput -= HandleInputPressed;
-        EventManager.OnColorObjectButtonSelected -= HandleColorObjectButtonSelected;
-    }
-
-    public void HandleInputPressed(PlayerController_new callingPlayer, KeyCode keyCode, ButtonInput buttonInput)
-    {
-
     }
 
     private void HandleColorObjectButtonSelected(ColorObjectBase callingColorObject)
     {
-        print(callingColorObject);
+        string message = callingColorObject.ToString();
 
         ColorOption promptColor = GetColorOptionFromMaterial();
 
         if (callingColorObject.CurrentColor == promptColor)
         {
+            EventManager.RaiseColorMatch(callingColorObject.OwningPlayer);
+            message += " SUCCESS!";
             AssignRandomColor();
         }
         else
         {
-            //Owning player fails
+            EventManager.RaiseColorMismatch(callingColorObject.OwningPlayer);
+            message += " FAIL!";
         }
+
+        print(message);
     }
 
     private void RandomizeReduceRepeat(Color newColor)
     {
-        newColor = _colors[Random.Range(0, _length)];
-        UpdateCurrentColor(newColor);
-
         if (CurrentColor == _lastColor)
         {
             newColor = _colors[Random.Range(0, _length)];

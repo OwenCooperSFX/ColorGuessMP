@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ColorObjectButton : ColorObjectBase, IReadInput
+public class ColorObjectButton : ColorObjectBase
 {
     private void OnEnable()
     {
