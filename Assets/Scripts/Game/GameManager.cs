@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    #region
+    #endregion
     public ColorOption colorOption;
 
     private AudioSource p1AudioSource;
@@ -170,11 +172,7 @@ public class GameManager : MonoBehaviour
         }
         else if (!_p1InputEnabled && !_p2InputEnabled)
         {
-            nextRoundTimer = 0;
-            AudioManager.Instance.HandlePromptUpdated();
-            AnimateScorePopup(p1ScorePopup, 0);
-            AnimateScorePopup(p2ScorePopup, 0);
-            _isBetweenRounds = true;
+            HandleRoundTransition();
         }
 
         if (roundTimer < roundTimeLimit)
@@ -185,58 +183,15 @@ public class GameManager : MonoBehaviour
         {
             StartNewRound();
         }
+    }
 
-        // Don't continue if we are between rounds
-        if (_isBetweenRounds)
-            return;
-
-        // Handle player inputs
-        if (PlayerController.Instance.GetPlayer1Input() != ColorOption.invalid)
-        {
-            if (_isBetweenRounds)
-                return;
-
-            IncreaseP1Attempts();
-
-            if (_p1InputEnabled)
-            {
-                if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
-                {
-                    // Player 1 is correct
-                    EventManager.RaisePlayerInputCorrect(p1ColorInputGO);
-                }
-                else
-                {
-                    // Player 1 is wrong
-                    EventManager.RaisePlayerInputWrong(p1ColorInputGO);
-                }
-            }
-
-        }
-
-
-        if (PlayerController.Instance.GetPlayer2Input() != ColorOption.invalid)
-        {
-            if (_isBetweenRounds)
-                return;
-
-            IncreaseP2Attempts();
-
-            if (_p2InputEnabled)
-            {
-                if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
-                {
-                    // Player 2 is correct
-                    EventManager.RaisePlayerInputCorrect(p2ColorInputGO);
-                }
-                else
-                {
-                    // Player 2 is wrong
-                    EventManager.RaisePlayerInputWrong(p2ColorInputGO);
-                }
-            }
-
-        }
+    private void HandleRoundTransition()
+    {
+        nextRoundTimer = 0;
+        AudioManager.Instance.HandlePromptUpdated();
+        AnimateScorePopup(p1ScorePopup, 0);
+        AnimateScorePopup(p2ScorePopup, 0);
+        _isBetweenRounds = true;
     }
 
     public void UpdateColor(GameObject colorGO)
@@ -498,16 +453,48 @@ public class GameManager : MonoBehaviour
             p2Attempts++;
     }
 
-    private InputButton HandleP2Input(InputButton in_Button)
+    private void HandleP2Input(InputButton in_Button)
     {
-        //TODO: Use this to get away from handling things in Update.
-        return InputButton.invalid;
+        if (PlayerController.Instance.GetPlayer2Input() != ColorOption.invalid)
+        {
+            if (_isBetweenRounds)
+                return;
+
+            IncreaseP2Attempts();
+
+            if (_p2InputEnabled)
+            {
+                if (InputEqualsPrompt(PlayerController.Instance.GetPlayer2Input()))
+                {
+                    // Player 2 is correct
+                    EventManager.RaisePlayerInputCorrect(p2ColorInputGO);
+                }
+                else
+                {
+                    // Player 2 is wrong
+                    EventManager.RaisePlayerInputWrong(p2ColorInputGO);
+                }
+            }
+        }
     }
 
-    private InputButton HandleP1Input(InputButton in_Button)
+    private void HandleP1Input(InputButton in_Button)
     {
-        //TODO: Use this to get away from handling things in Update.
-        return InputButton.invalid;
+        if (PlayerController.Instance.GetPlayer1Input() != ColorOption.invalid)
+        {
+            if (_isBetweenRounds)
+                return;
+
+            IncreaseP1Attempts();
+
+            if (_p1InputEnabled)
+            {
+                if (InputEqualsPrompt(PlayerController.Instance.GetPlayer1Input()))
+                    EventManager.RaisePlayerInputCorrect(p1ColorInputGO);
+                else
+                    EventManager.RaisePlayerInputWrong(p1ColorInputGO);
+            }
+        }
     }
 
     public void ResetGame()

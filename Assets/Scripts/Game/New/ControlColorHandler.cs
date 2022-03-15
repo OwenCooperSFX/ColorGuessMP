@@ -46,17 +46,21 @@ public class ControlColorHandler : MonoBehaviour
     {
         if (ColorAssignments == _lastColorOrder)
         {
+            ColorAssignments = ShuffleColors();
             _lastColorOrder = ColorAssignments;
         }
     }
 
     public void RenderMaterialColors(List<Control> controls)
     {
+        if (controls.Count <= 0)
+            return;
+
         for (int i = 0; i < controls.Count; i++)
         {
-            ColorObject_new colorObjectNew = controls[i].ColorObjectNew;
+            ColorObjectBase colorObject = controls[i].ColorObjectBase;
 
-            colorObjectNew.UpdateCurrentColor(ColorAssignments[i]);
+            colorObject.UpdateCurrentColor(ColorAssignments[i]);
         }
     }
 }

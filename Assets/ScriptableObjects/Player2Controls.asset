@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaaf009b2cbcdd44aac2aa39912b2019, type: 3}
+  m_Name: Player2Controls
+  m_EditorClassIdentifier: 
+  _upControl:
+    _inputAssignment: 0
+    _button: 0
+    _colorObject: {fileID: 0}
+  _leftControl:
+    _inputAssignment: 0
+    _button: 0
+    _colorObject: {fileID: 0}
+  _downControl:
+    _inputAssignment: 0
+    _button: 0
+    _colorObject: {fileID: 0}
+  _rightControl:
+    _inputAssignment: 0
+    _button: 0
+    _colorObject: {fileID: 0}

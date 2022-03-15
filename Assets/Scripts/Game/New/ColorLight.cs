@@ -12,7 +12,7 @@ public class ColorLight : MonoBehaviour
 
     private ColorLightDataSO.IntensityMultipliers _multipliers;
 
-    private ColorObject_new _parentColorObjectNew;
+    private ColorObjectBase _parentColorObjectNew;
     private ColorOption _currentColor;
     private Coroutine _flashLightCR;
 
@@ -34,7 +34,7 @@ public class ColorLight : MonoBehaviour
         _maxIntensity = _baseIntensity;
 
         if (transform.parent)
-            _parentColorObjectNew = transform.GetComponentInParent<ColorObject_new>();
+            _parentColorObjectNew = transform.GetComponentInParent<ColorObjectBase>();
         else
             Debug.LogError(this + " requires a parent GameObject of type " + _parentColorObjectNew.GetType() + ".");
     }

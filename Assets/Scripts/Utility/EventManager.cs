@@ -22,7 +22,7 @@ public static class EventManager
     ============================
     */
 
-    public delegate InputButton InputEvent(InputButton in_Button);
+    public delegate void InputEvent(InputButton in_Button);
     public static event InputEvent OnP1Input;
     public static event InputEvent OnP2Input;
 
@@ -45,14 +45,14 @@ public static class EventManager
     public static void RaiseP2Input(InputButton in_Button)=> RaiseEventInput(OnP2Input, in_Button);
 
 
-    public delegate void ButtonInputEvent(ButtonInput in_button);
+    public delegate void ButtonInputEvent(PlayerController_new callingPlayer, KeyCode in_key, ButtonInput in_button);
     public static event ButtonInputEvent OnButtonInput;
 
-    static void RaiseEventButtonInput(ButtonInputEvent in_Event, ButtonInput in_Button)
+    static void RaiseEventButtonInput(ButtonInputEvent in_Event, PlayerController_new callingPlayer, KeyCode in_Key, ButtonInput in_Button)
     {
         if (in_Event != null)
         {
-            in_Event(in_Button);
+            in_Event(callingPlayer, in_Key, in_Button);
 
             if (bPrintDebug)
                 Debug.Log("Event: " + in_Event);
@@ -63,7 +63,7 @@ public static class EventManager
         }
     }
 
-    public static void RaiseButtonInput(ButtonInput buttonInput) => RaiseEventButtonInput(OnButtonInput, buttonInput);
+    public static void RaiseButtonInput(PlayerController_new callingPlayer, KeyCode keyCode, ButtonInput buttonInput) => RaiseEventButtonInput(OnButtonInput, callingPlayer, keyCode, buttonInput);
 
     /*
     ============================
@@ -131,7 +131,7 @@ public static class EventManager
 
     /*
     ============================
-    GAME MANAGER EVENTS 
+    GAME EVENTS 
     ============================
     */
 
@@ -211,11 +211,10 @@ public static class EventManager
     ============================
     */
 
-    public delegate void ColorObjectEvent(ColorObject callingColorObject);
-    public static event ColorObjectEvent OnChangeColor;
-    public static event ColorObjectEvent OnLightStart;
+    public delegate void ColorObjectEvent(ColorObjectBase callingColorObject);
+    public static event ColorObjectEvent OnColorObjectButtonSelected;
 
-    static void RaiseEvent(ColorObjectEvent in_Event, ColorObject callingColorObject)
+    static void RaiseEvent(ColorObjectEvent in_Event, ColorObjectBase callingColorObject)
     {
         if (in_Event != null)
         {
@@ -230,7 +229,33 @@ public static class EventManager
         }
     }
 
-    public static void RaiseColorObjectEvent(ColorObjectEvent colorObjectEvent, ColorObject callingColorObject)=> RaiseEvent(colorObjectEvent, callingColorObject);
+    public static void RaiseColorObjectButtonSelected(ColorObjectBase callingColorObject)=> RaiseEvent(OnColorObjectButtonSelected, callingColorObject);
+
+    /*
+    ============================
+    PLAYER CONTROLLER EVENTS 
+    ============================
+    */
+
+    public delegate void PlayerControllerEvent(PlayerController_new playerController);
+    public static event PlayerControllerEvent OnControlsInitialized;
+
+    static void RaiseEvent(PlayerControllerEvent in_Event, PlayerController_new playerController)
+    {
+        if (in_Event != null)
+        {
+            in_Event(playerController);
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
+        }
+        else
+        {
+            PrintNullEventWarning(in_Event.ToString());
+        }
+    }
+
+    public static void RaisePlayerControllerEvent(PlayerControllerEvent playerControllerEvent, PlayerController_new playerController_New) => RaiseEvent(playerControllerEvent, playerController_New);
 }
 
 

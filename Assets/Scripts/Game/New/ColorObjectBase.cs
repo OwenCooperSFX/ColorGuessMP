@@ -1,49 +1,21 @@
 ﻿using UnityEngine;
 
-public class ColorObject_new : MonoBehaviour
+public abstract class ColorObjectBase : MonoBehaviour
 {
-    private ColorLight _colorLight;
+    protected ColorLight _colorLight;
     public ColorLight ClrLight => _colorLight;
 
     public ColorOption CurrentColor;
-    public ButtonInput ButtonAssignment { get; set; }
+    public ButtonInput ButtonAssignment { get; set; } = ButtonInput.invalid;
 
-    private Tweener_Simple _tweenerSimple;
+    protected Tweener_Simple _tweenerSimple;
+
+    public PlayerController_new OwningPlayer { get; set; } = null;
 
     private void Awake()
     {
         _colorLight = GetComponentInChildren<ColorLight>();
         _tweenerSimple = GetComponent<Tweener_Simple>();
-    }
-
-    private void OnEnable()
-    {
-        EventManager.OnButtonInput += Pressed;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.OnButtonInput -= Pressed;
-    }
-
-    public void Pressed(ButtonInput buttonInput)
-    {
-        if (buttonInput != ButtonAssignment)
-            return;
-
-        float flashDuration = 0.2f;
-
-        if (_tweenerSimple)
-        {
-            _tweenerSimple.PlayTween();
-            flashDuration = 2 * _tweenerSimple.TweenData.Duration;
-        }
-
-        if (_colorLight)
-        {
-            _colorLight.LightFlashTime = flashDuration;
-            _colorLight.FlashLight();
-        }
     }
 
     public void UpdateCurrentColor(Color newColor)

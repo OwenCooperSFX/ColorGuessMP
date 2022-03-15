@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ButtonTween
   m_EditorClassIdentifier: 
   _tweenAnimType: 0
-  _startOffset: {x: 0, y: 0, z: -1.69}
+  _startOffset: {x: -0.2, y: -0.2, z: -1.69}
   _destination: {x: 1, y: 1, z: 1}
-  _duration: 0.3
+  _duration: 0.5
   _easeSetting: 18
   _loopSetting: 0
   _loops: 1

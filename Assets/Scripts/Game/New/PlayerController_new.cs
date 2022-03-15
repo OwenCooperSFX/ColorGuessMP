@@ -19,6 +19,11 @@ public class PlayerController_new : MonoBehaviour
 
     private void Awake()
     {
+
+    }
+
+    private void Start()
+    {
         InitializeControls();
         InitializeControlColorHandler();
     }
@@ -38,47 +43,45 @@ public class PlayerController_new : MonoBehaviour
 
         foreach (var control in Controls)
         {
-            control.ColorObjectNew.ButtonAssignment = control.InputAssignment;
+            control.ColorObjectBase.ButtonAssignment = control.InputAssignment;
+            control.ColorObjectBase.OwningPlayer = this;
         }
     }
 
     private void InitializeControlColorHandler()
     {
+        _controlColorHandler = GetComponent<ControlColorHandler>();
         if (!_controlColorHandler)
         {
-            _controlColorHandler = GetComponent<ControlColorHandler>();
-            if (!_controlColorHandler)
-            {
-                _controlColorHandler = new ControlColorHandler();
-            }
+            _controlColorHandler = new ControlColorHandler();
         }
 
         _controlColorHandler.AssignControlColors();
         _controlColorHandler.RenderMaterialColors(Controls);
     }
 
-    public void DoInput(ButtonInput buttonInput)
+    public void DoInput(KeyCode keyCode, ButtonInput buttonInput)
     {
-        EventManager.RaiseButtonInput(buttonInput);
+        EventManager.RaiseButtonInput(this, keyCode, buttonInput);
     }
 
     private void GetInput()
     {
         if (Input.GetKeyDown(_upControl.Button))
         {
-            DoInput(_upControl.InputAssignment);
+            DoInput(_upControl.Button, _upControl.InputAssignment);
         }
         if (Input.GetKeyDown(_leftControl.Button))
         {
-            DoInput(_leftControl.InputAssignment);
+            DoInput(_leftControl.Button, _leftControl.InputAssignment);
         }
         if (Input.GetKeyDown(_rightControl.Button))
         {
-            DoInput(_rightControl.InputAssignment);
+            DoInput(_rightControl.Button, _rightControl.InputAssignment);
         }
         if (Input.GetKeyDown(_downControl.Button))
         {
-            DoInput(_downControl.InputAssignment);
+            DoInput(_downControl.Button, _downControl.InputAssignment);
         }
     }
 }
@@ -92,6 +95,6 @@ public struct Control
     [SerializeField] private KeyCode _button;
     public KeyCode Button => _button;
 
-    [SerializeField] private ColorObject_new _colorObject;
-    public ColorObject_new ColorObjectNew => _colorObject;
+    [SerializeField] private ColorObjectBase _colorObject;
+    public ColorObjectBase ColorObjectBase => _colorObject;
 }
