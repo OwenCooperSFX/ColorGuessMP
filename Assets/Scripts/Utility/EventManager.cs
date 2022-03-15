@@ -9,6 +9,8 @@ public static class EventManager
      * Avoid needing script ordering to subscribe to and raise events.
     */
 
+    static bool bPrintDebug = false;
+
     static void PrintNullEventWarning(string in_EventName)
     {
         Debug.LogWarning("Tried to announce " + in_EventName + ", but no subscriptions are active.");
@@ -29,6 +31,9 @@ public static class EventManager
         if (in_Event != null)
         {
             in_Event(in_Button);
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event);
         }
         else
         {
@@ -62,6 +67,9 @@ public static class EventManager
         if (in_Event != null)
         {
             in_Event();
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
         }
         else
         {
@@ -106,6 +114,9 @@ public static class EventManager
         if (in_Event != null)
         {
             in_Event();
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
         }
         else
         {
@@ -148,6 +159,9 @@ public static class EventManager
         if (in_Event != null)
         {
             in_Event();
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
         }
         else
         {
@@ -159,6 +173,9 @@ public static class EventManager
         if (in_Event != null)
         {
             in_Event(in_GO);
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
         }
         else
         {
@@ -194,6 +211,9 @@ public static class EventManager
         if (in_Event != null)
         {
             in_Event();
+
+            if (bPrintDebug)
+                Debug.Log("Event: " + in_Event.Method);
         }
         else
         {
