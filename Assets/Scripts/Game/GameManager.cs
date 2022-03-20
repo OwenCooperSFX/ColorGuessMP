@@ -181,10 +181,10 @@ public class GameManager : MonoBehaviour
             roundTimer += Time.deltaTime;
 
         //temp setup to get things going manually
-        if (PlayerController.Instance.InitialSpaceInput() != ColorOption.invalid)
-        {
-            StartNewRound();
-        }
+        //if (PlayerController.Instance.InitialSpaceInput() != ColorOption.invalid)
+        //{
+        //    StartNewRound();
+        //}
 
         // Don't continue if we are between rounds
         if (_isBetweenRounds)
