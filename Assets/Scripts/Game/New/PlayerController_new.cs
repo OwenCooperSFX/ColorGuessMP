@@ -17,9 +17,14 @@ public class PlayerController_new : MonoBehaviour
     private ControlColorHandler _controlColorHandler;
 
 
-    private void Awake()
+    private void OnEnable()
     {
+        EventManager.OnColorMatch += HandleColorMatch;
+    }
 
+    private void OnDisable()
+    {
+        EventManager.OnColorMatch -= HandleColorMatch;
     }
 
     private void Start()
@@ -56,6 +61,12 @@ public class PlayerController_new : MonoBehaviour
             _controlColorHandler = new ControlColorHandler();
         }
 
+        _controlColorHandler.AssignControlColors();
+        _controlColorHandler.RenderMaterialColors(Controls);
+    }
+
+    private void HandleColorMatch(PlayerController_new player)
+    {
         _controlColorHandler.AssignControlColors();
         _controlColorHandler.RenderMaterialColors(Controls);
     }
